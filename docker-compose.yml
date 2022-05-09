@@ -1,0 +1,49 @@
+version: "3.9"
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./backend/tmp/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+    networks:
+      hunt3r_network:
+          aliases:
+              - db
+    logging:
+      options:
+        max-file: "1"
+        max-size: "5m"
+
+  backend:
+    build: ./backend
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - ./backend:/hunt3r
+    ports:
+      - "3000:3000"
+    networks:
+      hunt3r_network:
+    logging:
+      options:
+        max-file: "1"
+        max-size: "2m"
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    command: ng serve --host 0.0.0.0
+    volumes:
+      - ./frontend:/hunt3r
+    ports:
+      - "4200:4200"
+    logging:
+      options:
+        max-file: "1"
+        max-size: "2m"
+
+networks:
+   hunt3r_network:
+volumes:
+  db:

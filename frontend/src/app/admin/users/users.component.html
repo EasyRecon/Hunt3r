@@ -1,0 +1,87 @@
+<nb-layout>
+
+  <nb-layout-header>
+    <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
+  </nb-layout-header>
+
+  <nb-sidebar left tag="left" state="expanded">
+    <nb-menu-services></nb-menu-services>
+  </nb-sidebar>
+
+
+
+
+  <nb-layout-column>
+
+    <nb-card  [nbSpinner]="loading" nbSpinnerStatus="primary" >
+      <nb-card-body class="example-items-col">
+        <h2>Users list</h2>
+        <button type="button" nbButton status="success"  (click)="open(dialog)"><nb-icon icon="plus-outline" ></nb-icon>Create user</button>
+      <br>
+        <table >
+          <tr>
+            <th>ID</th>
+            <th>Mail</th>
+            <th>Role</th>
+            <th>Creation date</th>
+            <th>Actions</th>
+          </tr>
+          <tr *ngFor="let item of this.users">
+            <td>{{ item.id }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ item.role }}</td>
+            <td>{{ item.created_at }}</td>
+            <td>
+              <div class="row actionGrp" >
+                <div class="col">
+                  <button type="button" (click)="deleteUser(item.id)" nbButton status="danger"><nb-icon icon="trash-outline" ></nb-icon></button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </nb-card-body>
+    </nb-card>
+    <ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card [nbSpinner]="loadingModal" nbSpinnerStatus="primary" >
+    <nb-card-header>Add user</nb-card-header>
+    <nb-card-body>
+      <nb-form-field>
+        <form  [formGroup]="createUserFrom" (ngSubmit)="createUser($event)">
+          <div class="form-group row">
+            <label for="inputEmail1" class="label col-sm-3 col-form-label">Email</label>
+            <div class="col-sm-9">
+              <input class="col" nbInput type="email" name="email" formControlName="email"  id="email">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail1" class="label col-sm-3 col-form-label">Password</label>
+            <div class="col-sm-9">
+              <input class="col" nbInput type="password" name="password" id="password" formControlName="password" > 
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail1" class="label col-sm-3 col-form-label">Password confirmation</label>
+            <div class="col-sm-9">
+              <input class="col" nbInput type="password" name="password_confirmation" formControlName="password_confirmation" id="password_confirmation">
+            </div>
+          </div>
+          <hr style="width: calc(100% + 48px);margin-left: -24px;">
+          <div class=" modaleBth row">
+            <div class="col">
+              <button nbButton (click)="ref.close()">Cancel</button>
+            </div>
+            <div class="col">
+              <button type="submit" nbButton status="success">Create</button>
+            </div>
+          </div>
+        </form>
+      </nb-form-field>
+    </nb-card-body>
+  </nb-card>
+</ng-template>
+  </nb-layout-column>
+
+
+
+</nb-layout>

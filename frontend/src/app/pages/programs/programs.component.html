@@ -1,0 +1,158 @@
+<nb-layout>
+
+  <nb-layout-header>
+    <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
+  </nb-layout-header>
+
+  <nb-sidebar left tag="left" state="expanded">
+    <nb-menu-services></nb-menu-services>
+  </nb-sidebar>
+
+
+
+
+  <nb-layout-column>
+
+      <nb-flip-card [showToggleButton]="false" [flipped]="flipped" [nbSpinner]="loading" nbSpinnerStatus="primary">
+        <nb-card-front>
+          <nb-card>
+            <nb-card-header><h3>Programs information</h3><br>
+              <button type="submit" class="col" (click)="syncProg()" [nbSpinner]="loadingRefreshProgram" nbSpinnerStatus="primary" nbButton status="basic"><nb-icon icon="sync-outline"></nb-icon></button>
+            </nb-card-header>
+            <nb-card-body>
+           
+            <br><br>
+            <input nbInput type="text" #searchText>
+            <nb-select placeholder="Select platform"   [(selected)]="selectedPlateform">
+              <nb-option selected value="all">All</nb-option>
+              <nb-option value="intigriti">Intigriti</nb-option>
+              <nb-option value="yeswehack">YesWeHack</nb-option>
+            </nb-select>
+            <button type="button" class="col" (click)="getProgram(searchText.value,selectedPlateform)"  nbButton status="success"><nb-icon icon="search-outline"></nb-icon></button>
+
+            <table >
+              <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Link</th>
+                <th>Bounty ?</th>
+                <th>Number of scopes</th>
+                <th>Platform</th>
+                <th>Scope actions</th> 
+    
+                
+              </tr>
+              <tr *ngFor="let item of this.listeProgramYwh ">
+                <td>{{ item.id }}</td>
+                <td>{{ item.name}}</td>
+                <td><a target="_blank" href="https://yeswehack.com/programs/{{item.slug}}">Link to the program</a></td>
+                <td><nb-icon icon="{{ item.vdp==true ? 'close-square-outline' :'checkmark-square-2-outline'}}"></nb-icon></td>
+                <td>{{ item.scopes}}</td>
+                <td>YesWeHack</td>
+                <td>
+                  <div class="row actionGrp" >
+                    <div class="col">
+                      <button type="button" (click)="getScope(item.id)" nbButton status="success"><nb-icon icon="eye-outline" ></nb-icon></button>
+                    </div>
+                    <div class="col">
+                      <button type="button" (click)="syncScope(item.id)" nbButton status="success"><nb-icon icon="sync-outline" ></nb-icon></button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngFor="let item of this.listeProgramInti ">
+                <td>{{ item.id }}</td>
+                <td>{{ item.name}}</td>
+                <td><a target="_blank" href="{{ item.slug}}"></a></td>
+                <td><nb-icon icon="{{ item.vdp==true ? 'close-square-outline' :'checkmark-square-2-outline'}}"></nb-icon></td>
+                <td>{{ item.scopes}}</td>
+                <td>Intigriti</td>
+                <td>
+                  <div class="row actionGrp" >
+                    <div class="col">
+                      <button type="button" (click)="getScope(item.id)" nbButton status="success"><nb-icon icon="eye-outline" ></nb-icon></button>
+                    </div>
+                    <div class="col">
+                      <button type="button" (click)="syncScope(item.id)" nbButton status="success"><nb-icon icon="sync-outline" ></nb-icon></button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+
+
+          </nb-card-body>
+          </nb-card>
+        </nb-card-front>
+        <nb-card-back>
+          <nb-card>
+            <nb-card-header><h3>Scope information</h3><br><button status="basic" type="button" nbButton (click)="back()"><nb-icon icon="arrow-back-outline"></nb-icon>Return to programs</button><br> <button status="success" type="button" nbButton (click)="openModal(scopeModal,scopeAsString(this.scopeTemp))" ><nb-icon icon="eye-outline"></nb-icon>Scan options</button> </nb-card-header>
+           <br>
+          
+            <nb-card-body>
+              <div class=" modaleBth row">
+                <table >
+                  <tr>
+                    <th>Scope</th>
+                    <th>Type</th>
+                    <th>LastScan</th>
+                    <th>Leaks</th>
+                    <th>Actions</th>
+                  </tr>
+                  <tr *ngFor="let item of this.scopeTemp">
+                    <td>{{ item.scope }}</td>
+                    <td>{{ item.scope_type }}</td>
+                    <td>{{ item.last_scan}}</td>
+                    <td>{{ item.leaks}}</td>
+                    <td>
+                      <button status="success" type="button" nbButton (click)="openModal(scopeModal,[item.scope])" ><nb-icon icon="eye-outline"></nb-icon>Scan options</button>
+                    </td>
+                  </tr>
+                 
+                </table>
+               </div>
+            </nb-card-body>
+          </nb-card>
+        </nb-card-back>
+      </nb-flip-card>
+
+
+
+        <ng-template #scopeModal let-data let-ref="scopeModal"  >
+              <nb-card  [nbSpinner]="loadingModal" nbSpinnerStatus="primary" >
+                <nb-card-header>Launch scan</nb-card-header>
+                <nb-card-body>
+  
+                   
+                      <div class=" modaleBth row">
+                 
+                        <table >
+                          <tr>
+                            <th>Scope</th>
+                            <th>Engine</th>
+                            <th>Actions</th>
+                          </tr>
+                          <tr *ngFor="let item of data">
+                            <td><input type="text" nbInput value="{{item}}"></td>
+                            <td>
+                              <nb-select placeholder="Select engine" (selectedChange)="toggle($event,item)">
+                                <nb-option *ngFor="let engine of this.listEngines" value="{{engine.id}}">{{engine.name}}</nb-option>
+                              </nb-select>
+                            </td>
+                            <td><button type="button" (click)="lauchScan(data)" nbButton status="success"><nb-icon icon="log-out-outline"></nb-icon></button></td>
+                          </tr>
+                        </table>
+                        <br>
+                        <div class="col">
+                          <button type="button" nbButton (click)="closeModal()">Cancel</button>
+                        </div>
+                      </div>
+
+                </nb-card-body>
+              </nb-card>
+            </ng-template>
+  </nb-layout-column>
+
+
+
+</nb-layout>

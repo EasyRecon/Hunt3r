@@ -1,0 +1,162 @@
+# Files in the config/locales directory are used for internationalization
+# and are automatically loaded by Rails. If you want to use locales other
+# than English, add the necessary files in this directory.
+#
+# To use the locales, use `I18n.t`:
+#
+#     I18n.t "hello"
+#
+# In views, this is aliased to just `t`:
+#
+#     <%= t("hello") %>
+#
+# To use a different locale, set it with `I18n.locale`:
+#
+#     I18n.locale = :es
+#
+# This would use the information in config/locales/es.yml.
+#
+# The following keys must be escaped otherwise they will not be retrieved by
+# the default I18n backend:
+#
+# true, false, on, off, yes, no
+#
+# Instead, surround them with single quotes.
+#
+# en:
+#   "true": "foo"
+#
+# To learn more, please read the Rails Internationalization guide
+# available at https://guides.rubyonrails.org/i18n.html.
+
+en:
+  success:
+    controllers:
+      admin:
+        users:
+          created: "New user added successfully"
+          deleted: "The user has been deleted"
+        providers:
+          created: "New provider added successfully"
+          deleted: "The provider has been deleted"
+          updated: "The provider has been updated"
+        platforms:
+          created: "New platform added successfully"
+          deleted: "The platform has been deleted"
+          updated: "The platform has been updated"
+        platformstats:
+          updated: "The platform reports has been updated"
+        invoices:
+          updated: "The invoice information has been updated"
+        tools:
+          created: "The tool information has been recorded"
+        meshs:
+          created: "New mesh added successfully"
+          deleted: "The mesh has been deleted"
+          updated: "The mesh has been updated"
+          unknown: "The specified mesh does not exist"
+      programs:
+        sync_in_progress: "Synchronization in progress, refresh in a few seconds"
+      scopes:
+        updated: "The scope has been updated"
+      nuclei:
+        deleted: "The template has been deleted"
+        created: "New template added successfully"
+      servers:
+        deleted: "Server deletion is in progress"
+      notifications:
+        created: "Notification added successfully"
+      scans:
+        launched: "Scan launched"
+      domains:
+        deleted: "Domain deleted"
+      vulnerabilities:
+        deleted: "Vulnerability deleted"
+      engines:
+        deleted: "Engine deleted"
+        created: "Engine added successfully"
+
+  errors:
+    models:
+      user:
+        format_email: "is not valid. Please provide valid email to continue."
+        format_password: "is not valid. Password must be 8 to 72 characters long."
+      mesh:
+        uniqueness: "is already registered."
+        format_token: "is not valid. Token must be 15 to 72 characters long."
+
+    controllers:
+      insufficient_privileges: "You do not have the required privileges"
+      insufficient_params: "All required parameters are not provided to perform this action."
+      auth:
+        token_not_created: "There was some error creating auth token. Please try again."
+        invalid_credentials: "Email/Password is not correct. Please try again."
+        unauthenticated: "You need to be signed into app to perform this action."
+      admin:
+        users:
+          created: "Problem with adding user"
+          unknown: "The specified user does not exist"
+        providers:
+          already_present: "The provider is already registered"
+          invalid_informations: "The provider information is not valid"
+          unknown: "The specified provider does not exist"
+        platforms:
+          already_present: "The platform is already registered"
+          invalid_informations: "The platform information is not valid."
+          unknown: "The specified platform does not exist"
+          empty: "Add a platform before launching a sync"
+        invoices:
+          unsupported_platform: "Only Intigriti is supported for the moment"
+          missing_params: "The parameters 'from', 'to' and 'invoice_id' are required"
+          no_payouts: "No payouts found for this range"
+          informations_missing: "Please fill in the billing information first"
+        tools:
+          not_valid: "The information in the tool is not valid or your API key is exhausted"
+        meshs:
+          created: "Problem with adding mesh. A strong token is needed"
+          unknown: "The specified mesh does not exist"
+        platformstats:
+          rate_limit: "The previous refresh was performed less than 30 minutes ago"
+      programs:
+        unknown: "The selected program does not exist"
+        rate_limited: "One or more platforms cannot be updated at the moment"
+      nuclei:
+        unknown: "The specified template does not exist"
+        not_valid: "The template content sent is not valid"
+      servers:
+        unknown: "The specified server does not exist"
+        invalid: "The server information is not valid"
+      scans:
+        invalid: "The scan information is not valid"
+        hunt3r_token: "A scan can't be launched without hunt3r_token configured"
+        dehashed_credentials: "A scan with leak search is desired but the Dehashed information has not been entered"
+        parse_error: "JSON Parse Error. Unable to start scan, check provider settings"
+        missing_webhook: "You have selected notifications but the slack webhook is not filled in"
+        missing_intel: "The recon in intel mode is selected but C99 and/or Whoxy information are not filled in"
+        missing_meshs: "The meshes are selected but none are recorded"
+        missing_interactsh: "Custom InteractSH is selected but you have not entered your information"
+        missing_template: "At least one of the indicated templates does not exist"
+        no_nuclei_templates: "Nuclei is selected but without the option all_templates and/or custom templates"
+        unknown_provider: "The specified provider does not exist"
+        empty_subdomains: "The list of domains is empty, impossible to launch the scan"
+      notifications:
+        invalid: "The notification information is not valid"
+      screenshots:
+        invalid: "The screenshot information is not valid"
+      subdomains:
+        invalid: "The subdomains information is not valid"
+      leaks:
+        invalid: "The leaks information is not valid"
+      vulnerabilities:
+        unknown: "The specified vulnerability does not exist"
+        invalid: "The vulnerability information is not valid"
+      domains:
+        unknown: "The specified domain does not exist"
+      engines:
+        unknown: "The specified engine does not exist"
+        invalid_informations: "The engine information is not valid."
+
+    lib:
+      get_platform_jwt:
+        unknown: "Request for JWT impossible, unknown platform"
+        invalid_credentials: "Problem with the JWT application, try again or check your credentials"

@@ -1,0 +1,78 @@
+<nb-layout>
+
+  <nb-layout-header>
+    <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
+  </nb-layout-header>
+
+  <nb-sidebar left tag="left" state="expanded">
+    <nb-menu-services></nb-menu-services>
+  </nb-sidebar>
+
+
+
+
+  <nb-layout-column>
+
+    <nb-card  [nbSpinner]="loading" nbSpinnerStatus="primary">
+      
+      <nb-card-body>
+        <h3>Scan list</h3>
+        <button type="button" nbButton status="success"  (click)="open(dialogAddScan)"><nb-icon icon="plus-outline" ></nb-icon>Create scan</button>
+
+        <br>
+            <table >
+              <tr>
+                <th>ID</th>
+                <th>Domain</th>
+                <th>Scan type</th>
+                <th>Model of server</th>
+                <th>Cloud provider</th>
+                <th>State</th>
+              </tr>
+              <tr *ngFor="let item of this.scans">
+                <td>{{ item.id }}</td>
+                <td>{{ item.domain }}</td>
+                <td>{{ item.type_scan }}</td>
+                <td>{{ item.instance_type}}</td>
+                <td>{{ item.provider}}</td>
+                <td> <nb-badge class="badgeSub" text="{{ item.state }}" status="{{ item.state.toLowerCase()=='stopped' ? 'danger' : 'success' }}"></nb-badge></td>
+              </tr>
+             
+            </table>
+      </nb-card-body>
+    </nb-card>
+    <ng-template #dialogAddScan let-data let-ref="dialogAddScan"  >
+      <nb-card   [nbSpinner]="loadingModal" nbSpinnerStatus="primary">
+        <nb-card-header>Create new scan</nb-card-header>
+        <nb-card-body>
+              <div class=" modaleBth row">
+                <div class="form-group row">
+                  <label for="inputEmail1" class="label col-sm-3 col-form-label">Domain</label>
+                  <div class="col-sm-9">
+                    <input class="col" nbInput type="text" #domain>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="inputEmail1" class="label col-sm-3 col-form-label">Select engine</label>
+                  <div class="col-sm-9">
+                    <nb-select placeholder="Select engine" (selectedChange)="onChange($event)">
+                      <nb-option *ngFor="let item of this.enginesList" value="{{item.id}}">{{item.name}}</nb-option>
+
+                    </nb-select>
+                  </div>
+                </div>
+                <div class="col">
+                  <button nbButton (click)="closeModal()">Cancel</button>
+                </div>
+                <div class="col">
+                  <button type="button" (click)="addScan(domain.value)" nbButton status="success">Launch</button>
+                </div>
+              </div>
+        </nb-card-body>
+      </nb-card>
+    </ng-template>
+  </nb-layout-column>
+
+
+
+</nb-layout>

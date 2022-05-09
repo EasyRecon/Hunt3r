@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+<style>
+    .clearfix:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    a {
+        color: #5D6975;
+        text-decoration: underline;
+    }
+
+    body {
+        position: relative;
+        width: 21cm;
+        height: 29.7cm;
+        margin: 0 auto;
+        color: #001028;
+        background: #FFFFFF;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        font-family: Arial;
+    }
+
+    header {
+        padding: 10px 0;
+        margin-bottom: 30px;
+    }
+
+    #logo {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    #logo img {
+        width: 90px;
+    }
+
+    h1 {
+        border-top: 1px solid  #5D6975;
+        border-bottom: 1px solid  #5D6975;
+        color: #5D6975;
+        font-size: 2.4em;
+        line-height: 1.4em;
+        font-weight: normal;
+        text-align: center;
+        margin: 0 0 20px 0;
+        background: url(dimension.png);
+    }
+
+    #project {
+        float: left;
+    }
+
+    #project span {
+        color: #5D6975;
+        text-align: right;
+        width: 52px;
+        margin-right: 10px;
+        display: inline-block;
+        font-size: 0.8em;
+    }
+
+    #company {
+        float: right;
+        text-align: right;
+    }
+
+    #project div,
+    #company div {
+        white-space: nowrap;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        margin-bottom: 20px;
+    }
+
+    table tr:nth-child(2n-1) td {
+        background: #F5F5F5;
+    }
+
+    table th,
+    table td {
+        text-align: center;
+    }
+
+    table th {
+        padding: 5px 20px;
+        color: #5D6975;
+        border-bottom: 1px solid #C1CED9;
+        white-space: nowrap;
+        font-weight: normal;
+    }
+
+    table .service,
+    table .desc {
+        text-align: left;
+    }
+
+    table td {
+        padding: 20px;
+        text-align: right;
+    }
+
+    table td.service,
+    table td.desc {
+        vertical-align: top;
+    }
+
+    table td.unit,
+    table td.qty,
+    table td.total {
+        font-size: 1.2em;
+    }
+
+    table td.grand {
+        border-top: 1px solid #5D6975;;
+    }
+
+    #notices .notice {
+        color: #5D6975;
+        font-size: 1.2em;
+    }
+
+    footer {
+        color: #5D6975;
+        width: 100%;
+        height: 30px;
+        position: absolute;
+        bottom: 0;
+        border-top: 1px solid #C1CED9;
+        padding: 8px 0;
+        text-align: center;
+    }
+</style>
+<header class="clearfix">
+  <div id="logo">
+    <h2><%= @invoice_data.user_name %> <%= @invoice_data.user_lastname %></h2>
+  </div>
+  <h1>INVOICE <%= @invoice_id %></h1>
+  <div id="company" class="clearfix">
+    <div><%= @invoice_data.user_name %> <%= @invoice_data.user_lastname %></div>
+    <div><%= @invoice_data.user_address %></div>
+    <div><%= @invoice_data.user_phone %></div>
+    <div><%= @invoice_data.user_email %></div>
+    <div><span>SIRET :</span> <%= @invoice_data.user_siret %></div>
+    <div><span>VAT :</span> <%= @invoice_data.user_vat_number %></div>
+  </div>
+  <div id="project">
+    <div><span>PROJECT</span> <%= @invoice_data.client_project %></div>
+    <div><span>CLIENT</span> <%= @invoice_data.client_name %></div>
+    <div><span>BTW</span> <%= @invoice_data.client_btw %></div>
+    <div><span>ADDRESS</span><%= @invoice_data.client_address %></div>
+    <div><span>EMAIL</span> <%= @invoice_data.client_email %></div>
+    <div><span>DATE</span> <%= @invoice_date %></div>
+  </div>
+</header>
+<main>
+  <table>
+    <thead>
+    <tr>
+      <th class="service">DATE</th>
+      <th class="desc">DESCRIPTION</th>
+      <th>PRICE EXCL.</th>
+      <th>QTY</th>
+      <th>TOTAL EXCL.</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% max_amount = 0 %>
+    <% @payouts.each do |id, value| %>
+      <% max_amount = (max_amount + value[:amount]).round(2) %>
+      <tr>
+        <td style="width: 20%;" class="service"><%= value[:date] %></td>
+        <td style="width: 50%;" class="desc"><%= id %> : <%= value[:title] %></td>
+        <td style="width: 10%;" class="unit"><%= value[:amount] %>€</td>
+        <td style="width: 10%;" class="qty">1</td>
+        <td style="width: 10%;" class="total"><%= value[:amount] %>€</td>
+      </tr>
+    <% end %>
+
+    <tr>
+      <td colspan="4">SUBTOTAL EXCL.</td>
+      <td class="total"><%= max_amount %>€</td>
+    </tr>
+    <tr>
+      <% if @invoice_data.user_vat %>
+        <% vat_amount = (max_amount * 0.2).round(2) %>
+        <td colspan="4">VAT 20%</td>
+        <td class="total"><%= vat_amount %>€</td>
+      <% else %>
+        <% vat_amount = 0 %>
+        <td colspan="4">VAT 0%</td>
+        <td class="total"><%= vat_amount %>€</td>
+      <% end %>
+    </tr>
+    <tr>
+      <td colspan="4" class="grand total">TOTAL</td>
+      <td class="grand total"><%= max_amount + vat_amount %>€<br /></td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div id="notices">
+    <div>NOTICE:</div>
+    <div class="notice">This invoice is subject to the EU-reverse charge tax mechanism</div>
+  </div><br /><br /><br />
+
+  <table>
+    <thead>
+    <tr>
+      <th class="service"></th>
+      <th class="desc">BANK</th>
+      <th>IBAN</th>
+      <th>BIC</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td class="service"></td>
+      <td class="desc"><%= @invoice_data.user_bank %></td>
+      <td class="unit"><%= @invoice_data.user_iban %></td>
+      <td class="qty"><%= @invoice_data.user_bic %></td>
+    </tr>
+    </tbody>
+  </table>
+</main>
+</body>
+</html>

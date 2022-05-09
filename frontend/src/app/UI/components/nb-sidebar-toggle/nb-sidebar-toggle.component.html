@@ -1,0 +1,35 @@
+
+
+   
+
+    <div class="header-container">
+      <div class="logo-container">
+        <a (click)="toggleLeft($event)" href="#" class="sidebar-toggle">
+          <nb-icon class="icon-menu" icon="menu-2-outline"></nb-icon>
+        </a>
+      </div>
+      <nb-select [selected]="currentTheme" (selectedChange)="changeTheme($event)" status="primary">
+        <nb-option *ngFor="let theme of themes" [value]="theme.value"> {{ theme.name }}</nb-option>
+      </nb-select>
+    </div>
+    
+    <div class="header-container">
+      <nb-actions size="small" >
+        <nb-action class="user-action"  >
+          <nb-action  icon="bell-outline" badgeDot="{{notif.length>1}}" disbled="true"  nbContextMenuTag="notif-context-menu" [nbContextMenu]="notif" nbContextMenuTrigger="click" badgePosition="top right" badgeText="{{notif.length>1 ? (notif.length-1) : '' }}" badgeStatus="danger"  size="large"></nb-action>
+          <nb-user [nbContextMenu]="userMenu" nbContextMenuTag="user-context-menu" name="{{user.user_email}}" >
+          </nb-user>
+        </nb-action>
+      </nb-actions>
+    </div>
+
+
+<!--<button nbButton status="info" size="small" (click)="toggleRight()"><nb-icon icon="credit-card-outline"></nb-icon>Filtr</button>-->
+
+
+
+
+  
+
+ 
+   

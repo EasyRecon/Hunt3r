@@ -1,0 +1,156 @@
+<nb-layout>
+
+  <nb-layout-header>
+    <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
+  </nb-layout-header>
+
+  <nb-sidebar left tag="left" state="expanded">
+    <nb-menu-services></nb-menu-services>
+  </nb-sidebar>
+
+
+
+
+
+  <nb-layout-column>
+    <nb-card [nbSpinner]="loadingSubomain" nbSpinnerStatus="primary">
+        <nb-card-body class="example-items-col">
+          <h2><nb-icon icon="arrow-back-outline" (click)="back()" class="backIcon"></nb-icon>Subdomain list</h2>
+          <br>
+          <nb-card >
+            <nb-card-body>
+              <div class="row">
+                <h6>Filter options</h6>
+                  <div class="form-group col">
+                    <label for="inputEmail1" class="label col-sm-6 col-form-label">Technologie used</label>
+                    <div class="col-sm-9">
+                      <input class="col" nbInput type="text" #technologieSearch>
+                    </div>
+                  </div>
+                  <div class="form-group col">
+                    <label for="inputEmail1" class="label col-sm-6 col-form-label">URL</label>
+                    <div class="col-sm-9">
+                      <input class="col" nbInput type="text" #urlSearch > 
+                    </div>
+                  </div>
+                  <div class="form-group col">
+                    <label for="inputEmail1" class="label col-sm-6 col-form-label">Status code</label>
+                    <div class="col-sm-9">
+                      <input class="col" nbInput type="text" #statusCodeSearch>
+                    </div>
+                  </div>
+                  <div class="form-group col">
+                    <label for="inputEmail1" class="label col-sm-6 col-form-label">Domain</label>
+                    <div class="col-sm-9">
+                      <input class="col" nbInput type="text" #domainSearchInput>
+                    </div>
+                  </div>
+                </div>
+                <div class="searchButton">
+                  <button type="button"  nbButton status="success" (click)="searchSubomainInit(technologieSearch.value,urlSearch.value,statusCodeSearch.value,domainSearchInput.value)"><nb-icon icon="search-outline" ></nb-icon></button>
+                </div>
+            </nb-card-body>
+          </nb-card>
+          <div class="page">
+            page {{page}} of {{total_pages}} pages
+          </div>
+          <div class="pagination col-md-4 offset-md-8">
+            <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
+              <nb-option value="1">1</nb-option>
+              <nb-option value="50">50</nb-option>
+              <nb-option value="100">100</nb-option>
+              <nb-option value="">All</nb-option>
+            </nb-select>
+            <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
+              <nb-icon icon="arrow-left-outline"></nb-icon>
+            </button>
+            <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
+              <nb-icon icon="arrow-right-outline"></nb-icon>
+            </button>
+          </div>
+
+          <table class="subdomainTable">
+            <tr>
+              <th>ID</th>
+              <th>URL</th>
+              <th>IP</th>
+              <th>Ports</th>
+              <th>Status code</th>
+              <th>Content length</th>
+              <th>Technologies</th>
+              <th>Screenshot</th>
+  
+              
+            </tr>
+            <tr *ngFor="let item of this.subdomainsList">
+              <td>{{ item.id }}</td>
+              <td>
+                <a href="{{ item.url }}" target="_blank">{{ item.url }}</a>
+                <br *ngIf="item.infos.title">
+                <nb-badge *ngIf="item.infos.title" class="badgeSub" text="Title: {{item.infos.title}}" status="info" >
+
+                </nb-badge>
+                <br *ngIf="item.infos.location">
+                <nb-badge *ngIf="item.infos.location" class="badgeSub" text="Redirect to: {{item.infos.location}}" status="warning" >
+
+                </nb-badge>
+              </td>
+              <td>{{ item.infos.ip }}
+                <br *ngIf="item.infos.cname">
+                <div *ngIf="item.infos.cname" class="p5">
+                  <nb-badge *ngIf="item.infos.cname" class="badgeSub" text="CNAME: {{item.infos.cname}}" status="warning" ></nb-badge>
+                </div>
+                <br *ngIf="item.infos.cdn">
+                <div *ngIf="item.infos.cdn" class="p5">
+                  <nb-badge *ngIf="item.infos.cdn" class="badgeSub" text="CDN: {{item.infos.cdn}}" status="basic" >
+
+                  </nb-badge>
+                  </div>
+                </td>
+              <td ><nb-badge  *ngFor="let port of item.infos.ports"  class="badgeSub" text="{{port}}" status="primary" ></nb-badge></td>
+              <td> <nb-badge class="badgeSub" text="{{ item.infos.status_code }}" status="{{ item.infos.status_code> 399 ? 'danger' : item.infos.status_code> 299 ? 'warning' : 'success' }}" ></nb-badge></td>
+              <td>{{ item.infos.content_length }}</td>
+              <td  *ngFor="let techno of item.infos.technologies"><nb-badge class="badgeSub" text="{{techno}}" status="primary" ></nb-badge></td>
+              <td><img (click)="screenModal(apiUrl+'/screenshots/'+item.id)" id='screen{{item.id}}' [src]="apiUrl+'/screenshots/'+item.id | useHttpImgSrc:'/assets/img/loading.gif':'/assets/img/not-found.png'" loading="lazy"></td>
+            </tr>
+          </table>
+          <div class="pagination col-md-4 offset-md-8">
+            <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
+              <nb-option value="1">1</nb-option>
+              <nb-option value="50">50</nb-option>
+              <nb-option value="100">100</nb-option>
+              <nb-option value="">All</nb-option>
+            </nb-select>
+            <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
+              <nb-icon icon="arrow-left-outline"></nb-icon>
+            </button>
+            <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
+              <nb-icon icon="arrow-right-outline"></nb-icon>
+            </button><br>
+             
+          </div>
+          <div class="page">
+            page {{page}} of {{total_pages}} pages
+          </div>
+      </nb-card-body>
+
+
+    </nb-card>
+    <ng-template #dialogScreen let-data let-ref="dialogScreen"  >
+      <nb-card >
+        <nb-card-header>Create new scan</nb-card-header>
+        <nb-card-body>
+          <img id="modalImgSRC" [src]="data | useHttpImgSrc:'/assets/img/loading.gif':'/assets/img/not-found.png'" loading="lazy" >    
+                <div class="col">
+                  <button nbButton (click)="closeModal()">Close</button>
+                </div>
+
+        </nb-card-body>
+      </nb-card>
+    </ng-template>
+
+  </nb-layout-column>
+
+
+
+</nb-layout>

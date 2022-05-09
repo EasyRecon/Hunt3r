@@ -1,0 +1,73 @@
+@import '~bootstrap/scss/bootstrap-grid';
+
+
+.control-status-example {
+    padding: 0.25rem;
+    margin: 0.25rem;
+  }
+
+  .metric nb-card {
+      margin : 10px;
+      height: 80px;
+      padding:8px;
+      display: -webkit-inline-box;
+
+  }
+
+  .donutsGlobal nb-card {
+    margin : 10px;
+    height: 300px;
+    padding:8px;
+    display: -webkit-inline-box;
+
+}
+.inline{
+    display: inline-flex;
+}
+.barreGlobal nb-card {
+  margin-bottom:0px;
+}
+.pie-chart {
+  height: 100%;
+  width: 100%;
+}
+
+  .globalIcon {
+    height: 40px!important;
+    width: 40px!important;
+  }
+  .barre-chart{
+    height: 300px;
+    width: 100%;
+  }
+  .barreGlobal {
+
+    padding:8px;
+
+  }
+
+  .icon-card-global {
+    background-color: #36f;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 5.75rem;
+    height: 100%;
+    transition: width .4s ease;
+    transform: translateZ(0);
+    -webkit-transform-style: preserve-3d;
+    -webkit-backface-visibility: hidden;
+    color: white;
+    font-size: 40px;
+}
+  .dataCard .globalData {
+      text-align:center;
+      padding: 20px;
+      padding-top: 15px;
+      font-size: 40px;
+  }
+  .dataCard .globalTitle{
+    text-align:center;
+
+}

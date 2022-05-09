@@ -1,0 +1,126 @@
+<nb-layout>
+
+  <nb-layout-header>
+    <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
+  </nb-layout-header>
+
+  <nb-sidebar left tag="left" state="expanded">
+    <nb-menu-services></nb-menu-services>
+  </nb-sidebar>
+
+
+
+
+  <nb-layout-column>
+    
+    <nb-card  [nbSpinner]="loading" nbSpinnerStatus="primary" >
+      <nb-card-body>
+        <h3>Meshs settings</h3><br>
+        <button type="button" nbButton status="success"  (click)="meshCreateModal(dialogCreate)"><nb-icon icon="plus-outline" ></nb-icon>Create mesh</button>
+        <br>
+        <table >
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>URL</th>
+            <th>Actions</th>
+          </tr>
+          <tr *ngFor="let item of this.meshs">
+            <td>{{ item.id }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.url }}</td>
+            <td>
+              <div class="row actionGrp" >
+                <div class="col">
+                  <button type="button" (click)="meshUpdateModal(dialogUpdate,item.id)" nbButton status="success"><nb-icon icon="edit-outline" ></nb-icon></button>
+                </div>
+                <div class="col">
+                  <button type="button" (click)="deleteMesh(item.id)" nbButton status="danger"><nb-icon icon="trash-outline" ></nb-icon></button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </nb-card-body>
+  </nb-card>
+  <ng-template #dialogUpdate let-data let-ref="dialogUpdate">
+    <nb-card [nbSpinner]="loadingModalCreate" nbSpinnerStatus="primary" >
+      <nb-card-header>Update mesh</nb-card-header>
+      <nb-card-body>
+        <nb-form-field>
+          <form  [formGroup]="updateMeshForm" (ngSubmit)="updateMesh($event)">
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">Name</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="text" name="name"  formControlName="name"  id="name">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">URL</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="url" name="url" id="url" formControlName="url" > 
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">Token</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="password" name="token" formControlName="token" id="token">
+              </div>
+            </div>
+            <hr style="width: calc(100% + 48px);margin-left: -24px;">
+            <div class=" modaleBth row">
+              <div class="col">
+                <button nbButton (click)="closeUpdate()">Cancel</button>
+              </div>
+              <div class="col">
+                <button type="submit" nbButton status="success">Update</button>
+              </div>
+            </div>
+          </form>
+        </nb-form-field>
+      </nb-card-body>
+    </nb-card>
+  </ng-template>
+  <ng-template #dialogCreate let-data let-ref="dialogCreate">
+    <nb-card [nbSpinner]="loadingModalUpdate" nbSpinnerStatus="primary" >
+      <nb-card-header>Create new mesh link</nb-card-header>
+      <nb-card-body>
+        <nb-form-field>
+          <form  [formGroup]="createMeshForm" (ngSubmit)="createMesh($event)">
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">Name</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="text" name="name" formControlName="name"  id="name">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">URL</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="url" name="url" id="url" formControlName="url" > 
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">Token</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="password" name="token" formControlName="token" id="token">
+              </div>
+            </div>
+            <hr style="width: calc(100% + 48px);margin-left: -24px;">
+            <div class=" modaleBth row">
+              <div class="col">
+                <button nbButton (click)="closeCreate()">Cancel</button>
+              </div>
+              <div class="col">
+                <button type="submit" nbButton status="success">Update</button>
+              </div>
+            </div>
+          </form>
+        </nb-form-field>
+      </nb-card-body>
+    </nb-card>
+  </ng-template>
+  </nb-layout-column>
+
+
+
+</nb-layout>

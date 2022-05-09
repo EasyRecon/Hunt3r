@@ -1,0 +1,157 @@
+<nb-layout>
+
+  <nb-layout-header>
+    <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
+  </nb-layout-header>
+
+  <nb-sidebar left tag="left" state="expanded">
+    <nb-menu-services></nb-menu-services>
+  </nb-sidebar>
+
+
+
+
+  <nb-layout-column>
+    <nb-card [nbSpinner]="loading" nbSpinnerStatus="primary">
+      <nb-card-body>
+       <h3>Intigriti invoice</h3>
+       <!--<button type="button" nbButton status="success" (click)="open(dialog)"><nb-icon icon="plus-outline"></nb-icon>Add cloud configuration</button>-->
+       <nb-tabset>
+        <nb-tab tabTitle="Generate invoice">
+          <div class="inline">
+            <div class="padding20">
+              <input nbInput placeholder="From Date" [nbDatepicker]="fromPicker" #from>
+              <nb-datepicker #fromPicker></nb-datepicker>
+            </div>
+            <div class="padding20">
+              <input nbInput placeholder="To" [nbDatepicker]="toPicker" #to>
+              <nb-datepicker #toPicker></nb-datepicker>
+            </div>
+            <div class="padding20">
+              <input class="col" nbInput type="text" #invoice_id >
+            </div>
+            <div class="padding20">
+              <button type="submit" class="col" (click)="getInvoice(from.value,to.value,invoice_id.value)" nbButton status="success">Generate</button>
+            </div>
+            
+          </div>
+
+        </nb-tab>
+
+        <nb-tab tabTitle="Invoice settings">
+          <form  [formGroup]="invoiceForm" (ngSubmit)="updateinvoiceSettings($event)">
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">User name</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="text" name="user_name"  formControlName="user_name" id="user_name">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">User lastname</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="text" name="user_lastname"formControlName="user_lastname" id="user_lastname">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">User address</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="text" name="user_address"  formControlName="user_address" id="user_address">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">User phone</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="text" name="user_phone" formControlName="user_phone" id="user_phone">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">User mail</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="mail" name="user_email"  formControlName="user_email" id="user_email">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">User siret</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="mail" name="user_siret"  formControlName="user_siret" id="user_siret">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">User bic</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="text" name="user_bic"  formControlName="user_bic" id="user_bic">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">User bank</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="text" name="user_bank" formControlName="user_bank" id="user_bank">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">User iban</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="text" name="user_iban" formControlName="user_iban" id="user_iban">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">User vat</label>
+              <div class="col-sm-9">
+                <nb-checkbox (checkedChange)="toggle($event)" [checked]="invoice.user_vat"></nb-checkbox>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">User vat number</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="text" name="user_vat_number" [disabled]="!checked_user_vat"  formControlName="user_vat_number" id="user_vat_number">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">Client project</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="text" name="client_project" formControlName="client_project" id="client_project">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">Client name</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="text" name="client_name"  formControlName="client_name" id="client_name">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">Client btw</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="text" name="client_btw"  formControlName="client_btw" id="client_btw">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">Client address</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="text" name="client_address" formControlName="client_address" id="client_address">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputEmail1" class="label col-sm-3 col-form-label">Client mail</label>
+              <div class="col-sm-9">
+                <input class="col" nbInput type="mail" name="client_email"  formControlName="client_email" id="client_email">
+              </div>
+            </div>
+   
+            <div class="form-group row">
+                <div class="col">
+                  <button type="submit" class="col" nbButton status="success">Update</button>
+                </div>
+                
+              </div>
+         
+          </form>
+        </nb-tab>
+       </nb-tabset>
+      </nb-card-body>
+    </nb-card>
+  </nb-layout-column>
+
+
+
+</nb-layout>
+

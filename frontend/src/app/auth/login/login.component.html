@@ -1,0 +1,94 @@
+<div class="form-control-group">
+  <img src="assets/img/logo.png" id="logo">
+  </div>
+
+<nb-alert *ngIf="showMessages.error && errors?.length && !submitted" outline="danger" role="alert">
+  <p class="alert-title"><b>Error</b></p>
+  <ul class="alert-message-list">
+    <li *ngFor="let error of errors" class="alert-message">{{ error }}</li>
+  </ul>
+</nb-alert>
+
+<nb-alert *ngIf="showMessages.success && messages?.length && !submitted" outline="success" role="alert">
+  <p class="alert-title"><b>Here we go</b></p>
+  <ul class="alert-message-list">
+    <li *ngFor="let message of messages" class="alert-message">{{ message }}</li>
+  </ul>
+</nb-alert>
+
+<form #form="ngForm" (ngSubmit)="login()" aria-labelledby="title">
+
+  <div class="form-control-group">
+    <label class="label" for="input-email">Email address:</label>
+    <input #email="ngModel"
+           [(ngModel)]="user.email"
+           [attr.aria-invalid]="email.invalid && email.touched ? true : null"
+           [required]="getConfigValue('forms.validation.email.required')"
+           [status]="email.dirty ? (email.invalid  ? 'danger' : 'success') : 'basic'"
+           autocomplete="email"
+           autofocus
+           fieldSize="large"
+           fullWidth
+           id="input-email"
+           name="email"
+           nbInput
+           pattern=".+@.+\..+" 
+           placeholder="Email address">
+    <ng-container *ngIf="email.invalid && email.touched">
+      <p *ngIf="email.errors?.['required']" class="caption status-danger">
+        Email is required!
+      </p>
+      <p *ngIf="email.errors?.['pattern']" class="caption status-danger">
+        Email should be the real one!
+      </p>
+    </ng-container>
+  </div>
+
+  <div class="form-control-group">
+    <span class="label-with-link">
+      <label class="label" for="input-password">Password:</label>
+      <!--<a class="forgot-password caption-2" routerLink="../request-password">Forgot Password?</a>-->
+    </span>
+    <input #password="ngModel"
+           [(ngModel)]="user.password"
+           [attr.aria-invalid]="password.invalid && password.touched ? true : null"
+           [maxlength]="getConfigValue('forms.validation.password.maxLength')"
+           [minlength]="getConfigValue('forms.validation.password.minLength')"
+           [required]="getConfigValue('forms.validation.password.required')"
+           [status]="password.dirty ? (password.invalid  ? 'danger' : 'success') : 'basic'"
+           autocomplete="current-password"
+           fieldSize="large"
+           fullWidth
+           id="input-password"
+           name="password"
+           nbInput
+           placeholder="Password"
+           type="password">
+    <ng-container *ngIf="password.invalid && password.touched ">
+      <p *ngIf="password.errors?.['required']" class="caption status-danger">
+        Password is required!
+      </p>
+      <p *ngIf="password.errors?.['minlength'] || password.errors?.['maxlength']" class="caption status-danger">
+        Password should contain
+        from {{ getConfigValue('forms.validation.password.minLength') }}
+        to {{ getConfigValue('forms.validation.password.maxLength') }}
+        characters
+      </p>
+    </ng-container>
+  </div>
+
+  <div class="form-control-group accept-group">
+    <nb-checkbox *ngIf="rememberMe" [(ngModel)]="user.rememberMe" name="rememberMe">Remember me</nb-checkbox>
+  </div>
+
+  <button [class.btn-pulse]="submitted"
+          [disabled]="submitted || !form.valid"
+          fullWidth
+          nbButton
+          size="large"
+          status="primary">
+    Log In
+  </button>
+</form>
+
+

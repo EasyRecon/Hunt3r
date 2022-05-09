@@ -1,0 +1,86 @@
+<nb-layout>
+
+  <nb-layout-header>
+    <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
+  </nb-layout-header>
+
+  <nb-sidebar left tag="left" state="expanded">
+    <nb-menu-services></nb-menu-services>
+  </nb-sidebar>
+
+
+
+
+  <nb-layout-column>
+
+    <nb-card  [nbSpinner]="loading" nbSpinnerStatus="primary">
+      <nb-card-body class="example-items-col">
+        <h2>Nuclei template</h2>
+        <br>
+        <button type="button" nbButton status="success"  (click)="openUploadModal(dialogUploadTemplate)"><nb-icon icon="plus-outline" ></nb-icon>Upload private nuclei template</button>
+        <br>
+        <table >
+          <tr>
+            <th>Name</th>
+            
+            <th>Action</th>
+
+            
+          </tr>
+          <tr *ngFor="let item of this.templateList">
+            <td>{{ item }}</td>
+
+
+            <td>
+              <div class="row actionGrp" >
+                <div class="col">
+                   <button type="button" (click)="deleteTemplate(item)" nbButton status="danger"><nb-icon icon="trash-outline" ></nb-icon></button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </nb-card-body>
+    </nb-card>
+
+
+    <ng-template #dialogUploadTemplate let-data let-ref="dialogUploadTemplate"  >
+      <nb-card  >
+        <nb-card-header>Create tool config</nb-card-header>
+        <nb-card-body>
+          <nb-form-field>
+            <form  (ngSubmit)="uploadTemplate($event)" [formGroup]="uploadTemplateForm">
+              <hr style="width: calc(100% + 48px);margin-left: -24px;">
+              <div class=" modaleBth row">
+                <div class="form-group row">
+                  <label for="inputEmail1" class="label col-sm-3 col-form-label">Template name</label>
+                  <div class="col-sm-9">
+                    <input class="col" nbInput type="text"  formControlName="name" >
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="inputEmail1" class="label col-sm-3 col-form-label">Template file</label>
+                  <div class="col-sm-9">
+                    <input class="col" (change)="onFileSelected($event)" nbInput type="file"  formControlName="value" >
+                  </div>
+                </div>
+                <div class="col">
+                  <button nbButton (click)="closeUploadModal()">Cancel</button>
+                </div>
+                <div class="col">
+                  <button type="submit" nbButton status="success">Update</button>
+                </div>
+              </div>
+            </form>
+          </nb-form-field>
+        </nb-card-body>
+      </nb-card>
+    </ng-template>
+
+
+
+  </nb-layout-column>
+
+
+
+</nb-layout>

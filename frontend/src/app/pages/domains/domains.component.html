@@ -1,0 +1,136 @@
+<nb-layout>
+
+  <nb-layout-header>
+    <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
+  </nb-layout-header>
+
+  <nb-sidebar left tag="left" state="expanded">
+    <nb-menu-services></nb-menu-services>
+  </nb-sidebar>
+
+
+
+
+
+  <nb-layout-column>
+    <nb-card [nbSpinner]="loadingDomain" nbSpinnerStatus="primary">
+        <nb-card-body class="example-items-col">
+          <h2> Domain list</h2>
+          <br>
+          <nb-card >
+            <nb-card-body>
+              <div class="row">
+                <h6>Filter options</h6>
+                  <div class="form-group col">
+                    <label for="inputEmail1" class="label col-sm-6 col-form-label">Technologie used</label>
+                    <div class="col-sm-9">
+                      <input class="col" nbInput type="text" #technologieSearch>
+                    </div>
+                  </div>
+                  <div class="form-group col">
+                    <label for="inputEmail1" class="label col-sm-6 col-form-label">URL</label>
+                    <div class="col-sm-9">
+                      <input class="col" nbInput type="text" #urlSearch > 
+                    </div>
+                  </div>
+                  <div class="form-group col">
+                    <label for="inputEmail1" class="label col-sm-6 col-form-label">Status code</label>
+                    <div class="col-sm-9">
+                      <input class="col" nbInput type="text" #statusCodeSearch>
+                    </div>
+                  </div>
+                  <div class="form-group col">
+                    <label for="inputEmail1" class="label col-sm-6 col-form-label">Domain</label>
+                    <div class="col-sm-9">
+                      <input class="col" nbInput type="text" #domainSearchInput>
+                    </div>
+                  </div>
+                </div>
+                <div class="searchButton">
+                  <button type="button"  nbButton status="success" (click)="searchDomainInit(technologieSearch.value,urlSearch.value,statusCodeSearch.value,domainSearchInput.value)"><nb-icon icon="search-outline" ></nb-icon></button>
+                </div>
+            </nb-card-body>
+          </nb-card>
+          <div class="page">
+            page {{page}} of {{total_pages}} pages
+          </div>
+          <div class="pagination col-md-4 offset-md-8">
+            <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
+              <nb-option value="1">1</nb-option>
+              <nb-option value="50">50</nb-option>
+              <nb-option value="100">100</nb-option>
+              <nb-option value="">All</nb-option>
+            </nb-select>
+            <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
+              <nb-icon icon="arrow-left-outline"></nb-icon>
+            </button>
+            <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
+              <nb-icon icon="arrow-right-outline"></nb-icon>
+            </button>
+          </div>
+          <table >
+            <tr>
+              <th>Name</th>
+              <th>Number of subdomains</th>
+              <th>Update date</th>
+              <th>Action</th>
+            </tr>
+            <tr *ngFor="let item of this.domainsList">
+              <td>{{ item.name }}</td>
+              <td> <nb-badge class="badgeSub" text="{{ item.nb_subdomain }}" status="info" ></nb-badge></td>
+              <td>{{ item.updated_at }}</td>
+              <td>
+                <div class="row actionGrp" >
+                  <div class="col">
+                    <button type="button" (click)="goToSubdomain(item.name)" nbButton status="success"><nb-icon icon="globe-2-outline" ></nb-icon></button>
+                 </div>
+                  <div class="col">
+                     <button type="button" (click)="deleteDomainModale(item.id)" nbButton status="danger"><nb-icon icon="trash-outline" ></nb-icon></button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
+          <div class="pagination col-md-4 offset-md-8">
+            <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
+              <nb-option value="1">1</nb-option>
+              <nb-option value="50">50</nb-option>
+              <nb-option value="100">100</nb-option>
+              <nb-option value="">All</nb-option>
+            </nb-select>
+            <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
+              <nb-icon icon="arrow-left-outline"></nb-icon>
+            </button>
+            <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
+              <nb-icon icon="arrow-right-outline"></nb-icon>
+            </button>
+          </div>
+          <div class="page">
+            page {{page}} of {{total_pages}} pages
+          </div>
+      </nb-card-body>
+
+      <ng-template #dialogConfirm let-data let-ref="dialogRef">
+        <nb-card>
+          <nb-card-header>Confirm domain deletion</nb-card-header>
+          <nb-card-body>
+
+                <div class=" modaleBth row">
+                  <div class="col">
+                    <input type="hidden" #idDomainDeletion value="{{data}}">
+                    <button nbButton status="danger" (click)="ref.close()">Cancel</button>
+                  </div>
+                  <div class="col">
+                    <button type="button" (click)="deleteDomain(idDomainDeletion.value)" nbButton status="success">Confirm</button>
+                  </div>
+                </div>
+            
+          </nb-card-body>
+        </nb-card>
+      </ng-template>
+    </nb-card>
+  </nb-layout-column>
+
+
+
+</nb-layout>

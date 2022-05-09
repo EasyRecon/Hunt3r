@@ -1,0 +1,87 @@
+<nb-layout>
+
+  <nb-layout-header>
+    <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
+  </nb-layout-header>
+
+  <nb-sidebar left tag="left" state="expanded">
+    <nb-menu-services></nb-menu-services>
+  </nb-sidebar>
+
+
+
+
+  <nb-layout-column>
+
+    <nb-card  [nbSpinner]="loading" nbSpinnerStatus="primary">
+      <nb-card-body class="example-items-col">
+        <h2>Vulnerabilities</h2>
+       <br>
+       <div class="page">
+        page {{page}} of {{total_pages}} pages
+      </div>
+      <div class="pagination col-md-4 offset-md-8">
+        <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
+          <nb-option value="1">1</nb-option>
+          <nb-option value="50">50</nb-option>
+          <nb-option value="100">100</nb-option>
+          <nb-option value="">All</nb-option>
+        </nb-select>
+        <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
+          <nb-icon icon="arrow-left-outline"></nb-icon>
+        </button>
+        <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
+          <nb-icon icon="arrow-right-outline"></nb-icon>
+        </button>
+      </div>
+
+       <table >
+        <tr>
+          <th>Name</th>
+          <th>Severity</th>
+          <th>Domain</th>
+          <th>Creation date</th>
+          <th>Actions</th>
+        </tr>
+        <tr *ngFor="let item of this.vulnerabilitiesList">
+          <td>{{ item.name }}</td>
+          <td><nb-badge class="badgeSub" text="{{item.severity}}" status="{{item.severity=='critique'? 'danger' : item.severity=='high'? 'warning':item.severity=='medium'? 'primary':item.severity=='low'? 'info':'basic' }}" ></nb-badge></td>
+          <td>{{ item.matched_at }}</td>
+          <td>{{ item.created_at }}</td>
+          <td>
+            <div class="row actionGrp" >
+              <div class="col">
+                 <button type="button" (click)="deleteVulnerabilities(item.id)" nbButton status="danger"><nb-icon icon="trash-outline" ></nb-icon></button>
+              </div>
+            </div>
+          </td>
+
+        </tr>
+       
+      </table>
+
+      <div class="pagination col-md-4 offset-md-8">
+        <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
+          <nb-option value="1">1</nb-option>
+          <nb-option value="50">50</nb-option>
+          <nb-option value="100">100</nb-option>
+          <nb-option value="">All</nb-option>
+        </nb-select>
+        <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
+          <nb-icon icon="arrow-left-outline"></nb-icon>
+        </button>
+        <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
+          <nb-icon icon="arrow-right-outline"></nb-icon>
+        </button>
+      </div>
+      <div class="page">
+        page {{page}} of {{total_pages}} pages
+      </div>
+
+      </nb-card-body>
+    </nb-card>
+  </nb-layout-column>
+
+
+
+</nb-layout> 

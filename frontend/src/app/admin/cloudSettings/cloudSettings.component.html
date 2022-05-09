@@ -1,0 +1,180 @@
+<nb-layout>
+
+  <nb-layout-header>
+    <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
+  </nb-layout-header>
+
+  <nb-sidebar left tag="left" state="expanded">
+    <nb-menu-services></nb-menu-services>
+  </nb-sidebar>
+
+ <!-- <nb-sidebar right tag="right" state="collapsed">
+    <nb-accordion>
+      <nb-accordion-item>
+        <nb-accordion-item-header>Product Details</nb-accordion-item-header>
+        <nb-accordion-item-body>
+          Item Content
+
+          <button nbButton outline status="warning">Active</button>
+          <button nbButton disabled>Disabled</button>
+        </nb-accordion-item-body>
+      </nb-accordion-item>
+    </nb-accordion>
+    <nb-card>
+
+
+    </nb-card>
+  </nb-sidebar>-->
+
+
+  <ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card>
+      <nb-card-header>Template Dialog</nb-card-header>
+      <nb-card-body> 
+        <nb-tabset>
+          <nb-tab tabTitle="Scaleway">
+            Tab content 1
+          </nb-tab>
+          <nb-tab tabTitle="AWS">
+            Tab content 2
+          </nb-tab>
+         </nb-tabset>
+        </nb-card-body>
+      <nb-card-footer>
+        <button nbButton (click)="ref.close()">Close Dialog</button>
+      </nb-card-footer>
+    </nb-card>
+  </ng-template>
+
+
+  <nb-layout-column>
+    <nb-card [nbSpinner]="loading" nbSpinnerStatus="primary">
+      <nb-card-body>
+       <h3>Cloud settings</h3>
+       <!--<button type="button" nbButton status="success" (click)="open(dialog)"><nb-icon icon="plus-outline"></nb-icon>Add cloud configuration</button>-->
+       <nb-tabset>
+        <nb-tab tabTitle="Scaleway">
+          <nb-form-field>
+            <form  [formGroup]="scalewayForm" (ngSubmit)="updatescaleway($event)">
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Access key</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="text" name="access_key" [value]="scaleway.access_key" formControlName="access_key" id="access_key">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Secret Key</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="text" name="secret_key" id="secret_key" formControlName="secret_key"  [value]="scaleway.secret_key"> 
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Organization id</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="text" name="organisation_id" id="organisation_id" formControlName="organization_id" [value]="scaleway.organization_id">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Project ID</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="text"  name="created_at" id="created_at"  formControlName="project_id" [value]="scaleway.project_id">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Region</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="text"  name="region" id="region"  formControlName="region"  [value]="scaleway.region">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Zone</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="text"  name="zone" id="zone"  formControlName="zone"   [value]="scaleway.zone">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">SSH key (public)</label>
+                <div class="col-sm-9">
+                  <textarea nbInput fullWidth  formControlName="ssh_key" >{{scaleway.ssh_key}}</textarea>
+                </div>
+              </div>
+
+
+                <div class="form-group row">
+                  <div class="col">
+                    <button type="submit" class="col" nbButton status="success">Update</button>
+                  </div>
+                  <div class="col end">
+                    <button type="button" class="col " (click)="deletescaleway()" nbButton status="danger">Delete</button>
+                  </div>
+                </div>
+           
+            </form>
+          </nb-form-field>
+        </nb-tab>
+        <nb-tab tabTitle="AWS">
+          <nb-form-field>
+            <form  [formGroup]="awsForm" (ngSubmit)="updateaws($event)">
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Access key</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="text" name="access_key" [value]="aws.access_key" id="access_key">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Secret Key</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="text" name="secret_key" id="secret_key" formControlName="secret_key"  [value]="aws.secret_key"> 
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Role</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="text" name="organisation_id" id="organisation_id" [value]="aws.organization_id">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Project ID</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="text"  name="created_at" id="created_at"  [value]="aws.project_id">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Creation date</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="text"  name="region" id="region"  [value]="aws.region">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Creation date</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="text"  name="zone" id="zone"  [value]="aws.zone">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">SSH key (public)</label>
+                <div class="col-sm-9">
+                  <textarea nbInput fullWidth  formControlName="ssh_key" >{{scaleway.ssh_key}}</textarea>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="offset-sm-3 col-sm-9">
+                  <button type="submit" nbButton status="success">Update</button>
+                </div>
+              </div>
+            </form>
+          </nb-form-field>
+        </nb-tab>
+       </nb-tabset>
+      </nb-card-body>
+    </nb-card>
+
+
+
+
+  </nb-layout-column>
+
+
+
+</nb-layout>
+

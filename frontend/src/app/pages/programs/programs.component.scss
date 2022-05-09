@@ -1,0 +1,57 @@
+@import '~bootstrap/scss/bootstrap-grid';
+.form-group {
+    padding: 20px;
+}
+  table {
+    margin-top:20px;
+    line-height: 1.5em;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: table;
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+    word-break: normal;
+    word-break: keep-all;
+  }
+
+table tr th {
+    position: relative;
+    padding: 0.875rem 1.25rem;
+    border: 1px solid #edf1f7;
+    vertical-align: middle;
+}
+
+table tr td, table tr th {
+    position: relative;
+    padding: 0.875rem 1.25rem;
+    border: 1px solid #edf1f7;
+    vertical-align: middle;
+}
+.actionGrp div {
+text-align: center;
+} 
+
+
+
+hr { display: block; 
+    height: 1px;
+    border: 0; 
+    border-top: 1px solid #edf1f7;
+    margin: 1em 0; 
+    padding: 0; 
+}
+.modaleBth {
+    text-align: center;
+}
+
+.addGrp {
+    button{
+        border-radius: 0px 0.25rem 0.25rem 0px;
+        margin-top: -2px;
+    }
+    nb-select{
+        border-radius:  0.25rem 0px 0px 0.25rem;
+        
+    }
+}

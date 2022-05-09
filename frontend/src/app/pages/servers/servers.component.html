@@ -1,0 +1,61 @@
+<nb-layout>
+
+  <nb-layout-header>
+    <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
+  </nb-layout-header>
+
+  <nb-sidebar left tag="left" state="expanded">
+    <nb-menu-services></nb-menu-services>
+  </nb-sidebar>
+
+
+
+
+  <nb-layout-column>
+
+
+
+        <nb-card [nbSpinner]="loading" nbSpinnerStatus="primary">
+ 
+          <nb-card-body>
+            <h3>Servers</h3>
+            <br>
+            <table >
+              <tr>
+                <th>Name</th>
+                <th>domain</th>
+                <th>ip</th>
+                <th>Instance type</th>
+                <th>State</th>
+                <th>Cost</th>
+                <th>Scope actions</th> 
+              </tr>
+              <tr *ngFor="let item of this.serverList ">
+                <td>{{ item.name }}</td>
+                <td>{{ item.domain}}</td>
+                <td>{{ item.ip}}</td>
+                <td>{{ item.instance_type}}</td>
+                <td>{{ item.state}}</td>
+                <td>{{ item.cost}}</td>
+                
+                <td>
+                  <div class="row actionGrp" >
+                    <div class="col">
+                      <button type="button" (click)="deleteServer(item.uid)" nbButton status="danger"><nb-icon icon="trash-outline" ></nb-icon></button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </nb-card-body>
+        </nb-card>
+
+
+
+
+
+  </nb-layout-column>
+
+
+
+</nb-layout>

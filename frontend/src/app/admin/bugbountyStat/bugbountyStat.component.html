@@ -1,0 +1,162 @@
+<nb-layout>
+
+  <nb-layout-header>
+    <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
+  </nb-layout-header>
+
+  <nb-sidebar left tag="left" state="expanded">
+    <nb-menu-services></nb-menu-services>
+  </nb-sidebar>
+
+
+
+
+  <nb-layout-column>
+    <nb-card [nbSpinner]="loading" nbSpinnerStatus="primary">
+      <nb-card-body>
+       <h3>Bugbounty plateform statistics</h3>
+
+       <nb-tabset>
+        <nb-tab tabTitle="yeswehack">
+          <button type="submit" class="col" (click)="syncYWH()" [nbSpinner]="loadSyncYwh" nbSpinnerStatus="primary" nbButton status="success"><nb-icon icon="sync-outline"></nb-icon></button>
+          <div class="globalStat col-12">
+            <div class="inline col-12 metric">
+
+              <nb-card class="col" [nbSpinner]="loadingYWHGlobal" nbSpinnerStatus="primary">
+                <div class="icon-card-global col-4">
+                  <nb-icon class="globalIcon" icon="file-outline"></nb-icon>
+                </div>
+                <div class="dataCard col-8" >
+                  <div class="globalTitle">Total rapport</div>
+                  <div class="globalData">{{statYWH.total_rapports}}</div>
+                </div>
+              </nb-card>
+              <nb-card class="col" [nbSpinner]="loadingYWHGlobal" nbSpinnerStatus="primary">
+                <div class="icon-card-global col-4">
+                  <nb-icon class="globalIcon" icon="pie-chart-outline"></nb-icon>
+                </div>
+                <div class="dataCard col-8" >
+                  <div class="globalTitle">Average per rapport</div>
+                  <div class="globalData">{{statYWH.average_per_rapport}}</div>
+                </div>
+              </nb-card>
+              <nb-card class="col" [nbSpinner]="loadingYWHGlobal" nbSpinnerStatus="primary">
+   
+                <div class="icon-card-global col-4">
+                 $
+               </div>
+               <div class="dataCard col-8">
+                 <div class="globalTitle">Total earned</div>
+                 <div class="globalData">{{statYWH.earnedEuro}}</div>
+               </div>
+            </nb-card>
+              </div>
+            <div class="inline col-12">
+              <div class="col-8">
+                <div class="inline col-12 barreGlobal">
+                  <nb-card class="col" [nbSpinner]="loadingYWHGlobal" nbSpinnerStatus="primary">
+                    <div echarts  [options]="optionsYWHBarre" class="barre-chart"  ></div>
+                  </nb-card>
+                </div>
+                <div class="inline col-12 barreGlobal">
+                  <nb-card class="col" [nbSpinner]="loadingYWHGlobal" nbSpinnerStatus="primary">
+                    <div echarts  [options]="optionsYWHEarnedByMonth" class="barre-chart"  ></div>
+                  </nb-card>
+                </div>
+            
+     
+              </div>
+              <div class="col-4">
+                <div class="inline col-12 donutsGlobal">
+                  <nb-card  class="col" [nbSpinner]="loadingYWHGlobal" nbSpinnerStatus="primary">
+                    <div echarts  [options]="optionsYWHPie" class="pie-chart"  ></div>
+                  </nb-card>
+                </div>
+                 <div class="inline col-12 donutsGlobal">
+
+                
+                  <nb-card  class="col" [nbSpinner]="loadingYWHGlobal" nbSpinnerStatus="primary">
+                    <div echarts  [options]="optionsYWHPieReportStatus" class="pie-chart"  ></div>
+                  </nb-card>
+                </div>
+              </div>
+            </div>
+          </div>
+         
+        </nb-tab>
+        <nb-tab tabTitle="intigriti">
+          <button type="submit" class="col" (click)="syncINTI()" [nbSpinner]="loadSyncYwh" nbSpinnerStatus="primary" nbButton status="success"><nb-icon icon="sync-outline"></nb-icon></button>
+          <div class="globalStat col-12">
+            <div class="inline col-12 metric">
+
+              <nb-card class="col" [nbSpinner]="loadingINTIGlobal" nbSpinnerStatus="primary">
+                <div class="icon-card-global col-4">
+                  <nb-icon class="globalIcon" icon="file-outline"></nb-icon>
+                </div>
+                <div class="dataCard col-8" >
+                  <div class="globalTitle">Total rapport</div>
+                  <div class="globalData">{{statINTI.total_rapports}}</div>
+                </div>
+              </nb-card>
+              <nb-card class="col" [nbSpinner]="loadingINTIGlobal" nbSpinnerStatus="primary">
+                <div class="icon-card-global col-4">
+                  <nb-icon class="globalIcon" icon="pie-chart-outline"></nb-icon>
+                </div>
+                <div class="dataCard col-8" >
+                  <div class="globalTitle">Average per rapport</div>
+                  <div class="globalData">{{statINTI.average_per_rapport}}</div>
+                </div>
+              </nb-card>
+              <nb-card class="col" [nbSpinner]="loadingINTIGlobal" nbSpinnerStatus="primary">
+   
+                <div class="icon-card-global col-4">
+                 $
+               </div>
+               <div class="dataCard col-8">
+                 <div class="globalTitle">Total earned</div>
+                 <div class="globalData">{{statINTI.earnedEuro}}</div>
+               </div>
+            </nb-card>
+              </div>
+            <div class="inline col-12">
+              <div class="col-8">
+                <div class="inline col-12 barreGlobal">
+                  <nb-card class="col" [nbSpinner]="loadingINTIGlobal" nbSpinnerStatus="primary">
+                    <div echarts  [options]="optionsINTIBarre" class="barre-chart"  ></div>
+                  </nb-card>
+                </div>
+                <div class="inline col-12 barreGlobal">
+                  <nb-card class="col" [nbSpinner]="loadingINTIGlobal" nbSpinnerStatus="primary">
+                    <div echarts  [options]="optionsINTIEarnedByMonth" class="barre-chart"  ></div>
+                  </nb-card>
+                </div>
+            
+     
+              </div>
+              <div class="col-4">
+                <div class="inline col-12 donutsGlobal">
+                  <nb-card  class="col" [nbSpinner]="loadingINTIGlobal" nbSpinnerStatus="primary">
+                    <div echarts  [options]="optionsINTIPie" class="pie-chart"  ></div>
+                  </nb-card>
+                </div>
+                 <div class="inline col-12 donutsGlobal">
+
+                
+                  <nb-card  class="col" [nbSpinner]="loadingINTIGlobal" nbSpinnerStatus="primary">
+                    <div echarts  [options]="optionsINTIPieReportStatus" class="pie-chart"  ></div>
+                  </nb-card>
+                </div>
+              </div>
+            </div>
+          </div>
+         
+        </nb-tab>
+       </nb-tabset>
+      </nb-card-body>
+    </nb-card>
+  </nb-layout-column>
+
+
+
+</nb-layout>
+

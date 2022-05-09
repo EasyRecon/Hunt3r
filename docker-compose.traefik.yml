@@ -1,0 +1,62 @@
+version: "3.9"
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./backend/tmp/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+    networks:
+      hunt3r_network:
+        aliases:
+          - db
+    logging:
+      options:
+        max-file: "1"
+        max-size: "5m"
+
+  backend:
+    build: ./backend
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - ./backend:/hunt3r
+    networks:
+      - hunt3r_network
+      - traefik-global-proxy
+    logging:
+      options:
+        max-file: "1"
+        max-size: "2m"
+    depends_on:
+      - db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hunt3r.rule=Host(`api.domain.tld`)"
+      - "traefik.http.routers.hunt3r.entrypoints=websecure"
+      - "traefik.http.routers.hunt3r.tls.certresolver=letsencrypt"
+      - "traefik.http.services.hunt3r.loadbalancer.server.port=3000"
+
+  frontend:
+    build: ./frontend
+    command: ng serve --host 0.0.0.0
+    volumes:
+      - ./frontend:/hunt3r
+    networks:
+      - traefik-global-proxy
+    logging:
+      options:
+        max-file: "1"
+        max-size: "2m"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hunt3r.rule=Host(`hunt3r.domain.tld`)"
+      - "traefik.http.routers.hunt3r.entrypoints=websecure"
+      - "traefik.http.routers.hunt3r.tls.certresolver=letsencrypt"
+      - "traefik.http.services.hunt3r.loadbalancer.server.port=4200"
+
+networks:
+  hunt3r_network:
+  traefik-global-proxy:
+    external: true
+volumes:
+  db:

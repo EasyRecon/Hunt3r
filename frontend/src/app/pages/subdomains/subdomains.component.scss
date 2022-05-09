@@ -1,0 +1,96 @@
+@import '~bootstrap/scss/bootstrap-grid';
+@import '~bootstrap/scss/bootstrap';
+.form-group {
+    padding: 20px;
+}
+  table {
+    margin-top:20px;
+    line-height: 1.5em;
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: table;
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+    word-break: normal;
+    word-break: keep-all;
+  }
+
+table tr th {
+    position: relative;
+    padding: 0.875rem 1.25rem;
+    border: 1px solid #edf1f7;
+    vertical-align: middle;
+}
+
+table tr td, table tr th {
+    position: relative;
+    padding: 0.875rem 1.25rem;
+    border: 1px solid #edf1f7;
+    vertical-align: middle;
+}
+.actionGrp div {
+text-align: center;
+} 
+
+
+
+hr { display: block; 
+    height: 1px;
+    border: 0; 
+    border-top: 1px solid #edf1f7;
+    margin: 1em 0; 
+    padding: 0; 
+}
+.modaleBth {
+    text-align: center;
+}
+
+.addGrp {
+    button{
+        border-radius: 0px 0.25rem 0.25rem 0px;
+        margin-top: -2px;
+    }
+    nb-select{
+        border-radius:  0.25rem 0px 0px 0.25rem;
+        
+    }
+}
+
+.roundBadge {
+    background-color: var(--badge-success-background-color);
+    padding:3px;
+    border-radius: 5px;
+}
+.badgeSub {
+    position: relative;
+    border-radius: 10px;
+    margin: 2px;
+    font-size: 13px;
+    font-weight: 500;
+}
+.p5{
+    //padding:5px
+}
+.subdomainTable {
+    text-align: center;
+}
+.searchButton {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+.searchButton button {
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+.backIcon {
+    font-size:30px;
+}
+.page{
+    text-align: end;
+    padding:10px
+}
+.pagination{
+    margin-top: 20px;
+}

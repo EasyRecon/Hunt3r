@@ -1,0 +1,78 @@
+<nb-layout>
+
+  <nb-layout-header>
+    <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
+  </nb-layout-header>
+
+  <nb-sidebar left tag="left" state="expanded">
+    <nb-menu-services></nb-menu-services>
+  </nb-sidebar>
+
+
+
+
+  <nb-layout-column>
+
+    <nb-card  [nbSpinner]="loading" nbSpinnerStatus="primary">
+      <nb-card-body class="example-items-col">
+        <h2>Leaks data</h2>
+        <br>
+        <input nbInput type="text" #searchText>
+        <button type="button" class="col" (click)="getLeaks(searchText.value)"  nbButton status="success"><nb-icon icon="search-outline"></nb-icon></button>
+        <br>
+        <div class="page">
+          page {{page}} of {{total_pages}} pages
+        </div>
+        <div class="pagination col-md-4 offset-md-8">
+          <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
+            <nb-option value="1">1</nb-option>
+            <nb-option value="50">50</nb-option>
+            <nb-option value="100">100</nb-option>
+            <nb-option value="">All</nb-option>
+          </nb-select>
+          <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
+            <nb-icon icon="arrow-left-outline"></nb-icon>
+          </button>
+          <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
+            <nb-icon icon="arrow-right-outline"></nb-icon>
+          </button>
+        </div>
+
+        <table >
+          <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Password</th>
+          </tr>
+          <tr *ngFor="let item of this.leaksList">
+            <td>{{ item.username }}</td>
+            <td>{{ item.email }}</td>
+            <td>{{ item.password }}</td>
+
+          </tr>
+         
+        </table>
+        <div class="pagination col-md-4 offset-md-8">
+          <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
+            <nb-option value="1">1</nb-option>
+            <nb-option value="50">50</nb-option>
+            <nb-option value="100">100</nb-option>
+            <nb-option value="">All</nb-option>
+          </nb-select>
+          <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
+            <nb-icon icon="arrow-left-outline"></nb-icon>
+          </button>
+          <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
+            <nb-icon icon="arrow-right-outline"></nb-icon>
+          </button>
+        </div>
+        <div class="page">
+          page {{page}} of {{total_pages}} pages
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </nb-layout-column>
+
+
+
+</nb-layout>

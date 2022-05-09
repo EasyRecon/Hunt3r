@@ -1,0 +1,125 @@
+<nb-layout>
+
+  <nb-layout-header>
+    <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
+  </nb-layout-header>
+
+  <nb-sidebar left tag="left" state="expanded">
+    <nb-menu-services></nb-menu-services>
+  </nb-sidebar>
+
+
+
+
+  <nb-layout-column>
+    <nb-card [nbSpinner]="loading" nbSpinnerStatus="primary">
+      <nb-card-body>
+       <h3>Bugbounty plateform settings</h3>
+       <!--<button type="button" nbButton status="success" (click)="open(dialog)"><nb-icon icon="plus-outline"></nb-icon>Add cloud configuration</button>-->
+       <nb-tabset>
+        <nb-tab tabTitle="yeswehack">
+          <nb-form-field>
+            <form  [formGroup]="yeswehackForm" (ngSubmit)="updateYeswehack($event)">
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="text" name="email" [value]="yeswehack.email" formControlName="email" id="email">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Password</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="password" name="password" id="password" formControlName="password"  [value]="yeswehack.password"> 
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Otp</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="password" name="otp" id="otp" formControlName="otp" [value]="yeswehack.otp">
+                </div>
+              </div>
+              <div class="form-group row">
+                  <div class="col">
+                    <button type="submit" class="col" nbButton status="success">Update</button>
+                  </div>
+                  <div class="col end">
+                    <button type="button" class="col " (click)="deleteYeswehack()" nbButton status="danger">Delete</button>
+                  </div>
+                </div>
+           
+            </form>
+          </nb-form-field>
+        </nb-tab>
+        <nb-tab tabTitle="intigriti">
+          <nb-form-field>
+            <form  [formGroup]="intigritiForm" (ngSubmit)="updateIntigriti($event)">
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="text" name="email" [value]="intigriti.email" formControlName="email" id="email">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Password</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="password" name="password" id="password" formControlName="password"  [value]="intigriti.password"> 
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Otp</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="password" name="otp" id="otp" formControlName="otp" [value]="intigriti.otp">
+                </div>
+              </div>
+              <div class="form-group row"> 
+                <div class="col">
+                  <button type="submit" class="col" nbButton status="success">Update</button>
+                </div>
+                <div class="col end">
+                  <button type="button" class="col " (click)="deleteIntigriti()" nbButton status="danger">Delete</button>
+                </div>
+              </div>
+            </form>
+          </nb-form-field>
+        </nb-tab>
+        <nb-tab tabTitle="hackerone">
+          <nb-form-field>
+            <form  [formGroup]="hackeroneForm" (ngSubmit)="updateHackerone($event)">
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="text" name="email" [value]="hackerone.email" formControlName="email">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Password</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="password" name="password"formControlName="password"  [value]="hackerone.password"> 
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Otp</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="password" name="otp" formControlName="otp" [value]="hackerone.otp">
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col">
+                  <button type="submit" class="col" nbButton status="success">Update</button>
+                </div>
+                <div class="col end">
+                  <button type="button" class="col " (click)="deleteHackerone()" nbButton status="danger">Delete</button>
+                </div>
+              </div>
+            </form>
+          </nb-form-field>
+        </nb-tab>
+       </nb-tabset>
+      </nb-card-body>
+    </nb-card>
+  </nb-layout-column>
+
+
+
+</nb-layout>
+
