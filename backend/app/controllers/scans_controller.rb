@@ -45,6 +45,9 @@ class ScansController < ApplicationController
     end
 
     if scan.type_scan == 'recon'
+      # If launched from the scope page we remove the wildcard
+      scan.domain.gsub!('*.', '')
+
       if scan.leak
         dehashed = Tool.find_by(name: 'dehashed')
         if dehashed.nil?
