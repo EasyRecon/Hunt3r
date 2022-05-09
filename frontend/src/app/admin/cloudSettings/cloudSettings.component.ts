@@ -1,16 +1,8 @@
-import {Component, OnInit,TemplateRef } from '@angular/core';
-
-import {UserService} from '../../core/user/user.service';
-import { HttpClient } from '@angular/common/http';
-import {NbDialogService } from '@nebular/theme'
+import {Component, OnInit } from '@angular/core';
 import { FormGroup,FormBuilder  } from '@angular/forms';
 import { DataCloudProvider } from '../../core/cloudProvider/cloudProvider'
 import { CloudProviderService } from '../../core/cloudProvider/cloudProvider.service'
-import {
-  NbToastrService,
-  NbComponentStatus
-
-} from '@nebular/theme';
+import { MessageService  } from '../../shared/message.service';
 
 
 @Component({
@@ -47,8 +39,8 @@ export class CloudSettingsComponent implements OnInit {
 
   loading = true;
   constructor(private fbuilder: FormBuilder,
-    private toastrService: NbToastrService,
-    private cloudService : CloudProviderService) {
+              private messageService: MessageService,
+              private cloudService : CloudProviderService) {
 
 
       this.scalewayForm = this.fbuilder.group({
@@ -97,7 +89,7 @@ export class CloudSettingsComponent implements OnInit {
       this.loading = false;
     },(err) =>{
       this.loading = false;
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
 
@@ -115,20 +107,20 @@ export class CloudSettingsComponent implements OnInit {
       });
       this.cloudService.updateScaleway(finalData).subscribe( (result) => {
         this.loading = false;
-        this.showToast('Cloud provider scaleway has been updated','success')
+        this.messageService.showToast('Cloud provider scaleway has been updated','success')
         this.getCloudProvider()
       },(err) =>{
         this.loading = false;
-        this.showToast(err.message,'danger')
+        this.messageService.showToast(err.message,'danger')
       })
     } else {
       this.cloudService.createScaleway(finalData).subscribe( (result) => {
         this.scalewayExist=true
         this.loading = false;
-        this.showToast('Cloud provider scaleway has been created','success')
+        this.messageService.showToast('Cloud provider scaleway has been created','success')
       },(err) =>{
         this.loading = false;
-        this.showToast(err.message,'danger')
+        this.messageService.showToast(err.message,'danger')
       })
     }
 
@@ -136,25 +128,18 @@ export class CloudSettingsComponent implements OnInit {
   deletescaleway() {
     this.loading = true;
     this.cloudService.deleteScaleway().subscribe( (result) => {
-      this.showToast('Cloud provider scaleway has been deleted','success')
+      this.messageService.showToast('Cloud provider scaleway has been deleted','success')
       this.scalewayExist=false
       this.loading = false;
       this.getCloudProvider()
     },(err) =>{
       this.loading = false;
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
 
   updateaws(event:any) {
     event.preventDefault()
 
-  }
-
-
-
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
   }
 }

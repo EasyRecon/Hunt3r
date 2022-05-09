@@ -7,7 +7,7 @@ import {EnginesService} from '../../core/engines/engines.service';
 import {Engine} from '../../core/engines/engines';
 import {ScanService} from '../../core/scan/scan.service';
 import {AddScanData} from '../../core/scan/scan';
-
+import { MessageService  } from '../../shared/message.service';
 import {
   NbToastrService,
   NbComponentStatus,
@@ -41,7 +41,7 @@ export class ProgramsComponent  {
   listEngines:Engine[]=<any>[]
   currentScope=0
   engineByDomain:any[]=[]
-  constructor(private toastrService: NbToastrService,
+  constructor(private messageService: MessageService,
               private programsService:ProgramsService,
               private scopeService:ScopeService,
               private dialogService:NbDialogService,
@@ -70,11 +70,11 @@ export class ProgramsComponent  {
 
         this.scansService.addScans({"scan":scanAttr}).subscribe((result)=>{
           this.loadingModal=false
-          this.showToast(result.message,'success')
+          this.messageService.showToast(result.message,'success')
           this.getScope(this.currentScope)
         },(err)=>{
           this.loadingModal=false
-          this.showToast(err.message,'danger')
+          this.messageService.showToast(err.message,'danger')
         })
       }
     })
@@ -83,11 +83,11 @@ export class ProgramsComponent  {
     this.loadingRefreshProgram=true
     this.programsService.syncPrograms().subscribe((result)=> {
       this.loadingRefreshProgram=false
-      this.showToast(result.message,'success')
+      this.messageService.showToast(result.message,'success')
 
     },(err)=> {
       this.loadingRefreshProgram=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   toggle(event:any,domain:any){
@@ -96,9 +96,9 @@ export class ProgramsComponent  {
   }
   syncScope(id:number){
     this.scopeService.syncScope(id).subscribe( (result) => {
-      this.showToast(result.message,'success')
+      this.messageService.showToast(result.message,'success')
     },(err)=>{
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   getScope(id:number,search:string=''){
@@ -109,7 +109,7 @@ export class ProgramsComponent  {
       this.loading=false
     },(err)=>{
       this.loading=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
     //this.scopeModal = this.dialogService.open(dialog, { context: '' });
     this.flipped=true
@@ -122,7 +122,7 @@ export class ProgramsComponent  {
       this.listEngines=result.data
     },(err)=>{
       this.loadingModal=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
     this.scopeModal=this.dialogService.open(dialog, { context: domains });
   }
@@ -153,7 +153,7 @@ export class ProgramsComponent  {
 
       },(err)=>{
         this.loading=false
-        this.showToast(err.message,'danger')
+        this.messageService.showToast(err.message,'danger')
       })
     }
     if(platfrom=='intigriti' || platfrom=='all'){
@@ -164,7 +164,7 @@ export class ProgramsComponent  {
         this.listeProgramInti=result.data
       },(err)=>{
 
-        this.showToast(err.message,'danger')
+        this.messageService.showToast(err.message,'danger')
       })
     }
     
@@ -176,7 +176,7 @@ export class ProgramsComponent  {
         this.listeProgramHackerone=result.data
       },(err)=>{
 
-        this.showToast(err.message,'danger')
+        this.messageService.showToast(err.message,'danger')
       })
     }
 
@@ -184,10 +184,4 @@ export class ProgramsComponent  {
   back(){
     this.flipped=false
   }
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
-  }
-
-
 }

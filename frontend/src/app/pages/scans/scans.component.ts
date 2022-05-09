@@ -3,10 +3,9 @@ import {ScanService} from '../../core/scan/scan.service';
 import {Scan,AddScanData} from '../../core/scan/scan';
 import {Engine} from '../../core/engines/engines';
 import {EnginesService} from '../../core/engines/engines.service';
-import { FormGroup,FormBuilder,FormControl,Validators   } from '@angular/forms';
+import { FormGroup,FormBuilder} from '@angular/forms';
+import { MessageService  } from '../../shared/message.service';
 import {
-  NbToastrService,
-  NbComponentStatus,
   NbDialogService
 
 } from '@nebular/theme';
@@ -26,7 +25,11 @@ export class ScansComponent implements OnInit {
   addScanModal:any;
   engine:number=0
   engineForm:FormGroup = <FormGroup> {};
-  constructor(private fbuilder: FormBuilder,private scansService : ScanService,private toastrService: NbToastrService,private engineService: EnginesService,private dialogService: NbDialogService) {
+  constructor(private fbuilder: FormBuilder,
+    private scansService : ScanService,
+    private messageService: MessageService,
+    private engineService: EnginesService,
+    private dialogService: NbDialogService) {
     
     this.engineForm = this.fbuilder.group({
       "scan_id": "",
@@ -37,7 +40,7 @@ export class ScansComponent implements OnInit {
 
   }
   open(dialog: TemplateRef<any>){
-    this.addScanModal=this.dialogService.open(dialog, { context: '' });+
+    this.addScanModal=this.dialogService.open(dialog, { context: '' });
     this.getEngine()
   } 
   closeModal(){
@@ -50,7 +53,7 @@ export class ScansComponent implements OnInit {
       this.enginesList=result.data
     },(err)=>{
       this.loadingModal=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
 
@@ -70,7 +73,7 @@ export class ScansComponent implements OnInit {
 
     },(err)=>{
       this.loading=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   addScan(domain:any){
@@ -83,18 +86,12 @@ export class ScansComponent implements OnInit {
         this.scansService.addScans({"scan":scanProperties}).subscribe((result)=>{
           this.loadingModal=false
           this.closeModal()
-          this.showToast(result.message,'success')
+          this.messageService.showToast(result.message,'success')
         },(err)=>{
           this.loadingModal=false
-          this.showToast(err.message,'danger')
+          this.messageService.showToast(err.message,'danger')
         })
       }
     })
   }
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
-  }
-
-
 }

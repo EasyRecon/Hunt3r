@@ -1,13 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {LeaksService} from '../../core/leaks/leaks.service';
 import {Leak} from '../../core/leaks/leaks';
-
-import {
-  NbToastrService,
-  NbComponentStatus
-
-} from '@nebular/theme';
-
+import { MessageService  } from '../../shared/message.service';
 
 
 @Component({
@@ -24,7 +18,7 @@ export class LeaksComponent implements OnInit {
   page=1
   total_pages=1
 
-  constructor(private leaksService : LeaksService,private toastrService: NbToastrService) {
+  constructor(private leaksService : LeaksService,private messageService: MessageService) {
 
 
     this.getLeaks()
@@ -42,7 +36,7 @@ export class LeaksComponent implements OnInit {
       this.total_pages=result.total_pages
     },(err)=> {
       this.loading=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   changeLimit(event:any){
@@ -54,12 +48,4 @@ export class LeaksComponent implements OnInit {
     this.page=page
     this.getLeaks('')
   }
-
-  
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
-  }
-
-
 }

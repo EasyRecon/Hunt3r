@@ -1,7 +1,7 @@
 import {Component, OnInit,TemplateRef,ViewChild,AfterViewInit } from '@angular/core';
 import {ToolsService} from '../../core/tools/tools.service';
+import { MessageService  } from '../../shared/message.service';
 import {
-  NbToastrService,
   NbComponentStatus,
   NbDialogService
 
@@ -46,7 +46,10 @@ toolsFormWebhook: FormGroup = <FormGroup> {};
   dialogueRefCreate:any;
 
 
-  constructor(private toastrService: NbToastrService,private toolsService:ToolsService,private fbuilder: FormBuilder,private dialogService: NbDialogService) {
+  constructor(private messageService: MessageService,
+              private toolsService:ToolsService,
+              private fbuilder: FormBuilder,
+              private dialogService: NbDialogService) {
     this.toolsFormUserPassword= this.fbuilder.group({ name: '',user: '', password: ''});
     this.toolsFormApikey= this.fbuilder.group({ name: '',api_key: ''  });
     this.toolsFormUserApiKey= this.fbuilder.group({ name: '',api_key: '',user:''  });
@@ -64,13 +67,6 @@ toolsFormWebhook: FormGroup = <FormGroup> {};
   }
   ngAfterViewInit() {
 
-  }
-
-
-
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
   }
 
   closeModal() {
@@ -226,11 +222,11 @@ toolsFormWebhook: FormGroup = <FormGroup> {};
     this.toolsService.updateTools(finalData).subscribe( (result) => {
         this.closeModal()
         this.loading=false
-        this.showToast(result.message,'success')
+        this.messageService.showToast(result.message,'success')
         this.getTools()
     },(err) => {
       this.loading=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   getTools(){
@@ -241,7 +237,7 @@ toolsFormWebhook: FormGroup = <FormGroup> {};
       
     },(err) => {
       this.loading=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   getKey(tool:any){
@@ -262,7 +258,7 @@ toolsFormWebhook: FormGroup = <FormGroup> {};
       this.toolsList=Object.keys(result.data)
     },(err) => {
       this.loading=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
 

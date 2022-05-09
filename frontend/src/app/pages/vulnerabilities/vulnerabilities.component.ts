@@ -1,12 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {VulnerabilitiesService} from '../../core/vulnerabilities/vulnerabilities.service';
 import {Vulnerabilities} from '../../core/vulnerabilities/vulnerabilities';
-import { FormGroup,FormBuilder,FormControl,Validators   } from '@angular/forms';
-import {
-  NbToastrService,
-  NbComponentStatus
+import { MessageService  } from '../../shared/message.service';
 
-} from '@nebular/theme';
 
 
 
@@ -25,7 +21,7 @@ export class VulnerabilitiesComponent implements OnInit {
   total_pages=1
   
 
-  constructor(private vulnerabilitiesService : VulnerabilitiesService,private fbuilder: FormBuilder,private toastrService: NbToastrService) {
+  constructor(private vulnerabilitiesService : VulnerabilitiesService,private messageService: MessageService) {
    
     this.getVulnerabilities()
 
@@ -38,7 +34,7 @@ export class VulnerabilitiesComponent implements OnInit {
       this.total_pages=result.total_pages
     },(err)=> {
       this.loading=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message, 'danger');
     })
   }
 
@@ -49,7 +45,7 @@ export class VulnerabilitiesComponent implements OnInit {
       this.getVulnerabilities()
     },(err)=> {
       this.loading=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message, 'danger');
     })
   }
 
@@ -66,10 +62,4 @@ export class VulnerabilitiesComponent implements OnInit {
     this.page=page
     this.getVulnerabilities()
   }
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
-  }
-
-
 }

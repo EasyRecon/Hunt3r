@@ -1,7 +1,6 @@
 import {Component, OnInit,TemplateRef} from '@angular/core';
+import { MessageService  } from '../../shared/message.service';
 import {
-  NbToastrService,
-  NbComponentStatus,
   NbDialogService,
 } from '@nebular/theme';
 
@@ -41,7 +40,10 @@ export class MeshsComponent implements  OnInit  {
 
 
 
-  constructor(private toastrService: NbToastrService,private meshsService:MeshsService,private fbuilder: FormBuilder,private dialogService: NbDialogService) {
+  constructor(private messageService: MessageService,
+              private meshsService:MeshsService,
+              private fbuilder: FormBuilder,
+              private dialogService: NbDialogService) {
     this.updateMeshForm = this.fbuilder.group({
       name: '',
       url: '',
@@ -64,7 +66,7 @@ export class MeshsComponent implements  OnInit  {
       this.loading = false;
     },(err) => {
       this.loading=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
     
   }
@@ -76,12 +78,12 @@ export class MeshsComponent implements  OnInit  {
     let data = this.createMeshForm.value
     this.meshsService.createMeshs(data).subscribe( (result) => {
       this.loadingModalCreate = false 
-      this.showToast(result.message,'success')
+      this.messageService.showToast(result.message,'success')
       this.closeCreate()
       this.getMesh()
     },(err) => {
       this.loadingModalCreate = false 
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   updateMesh(event:any) {
@@ -90,12 +92,12 @@ export class MeshsComponent implements  OnInit  {
     let data = this.updateMeshForm.value
     this.meshsService.updateMeshs(data).subscribe( (result) => {
       this.loadingModalUpdate = false 
-      this.showToast(result.message,'success')
+      this.messageService.showToast(result.message,'success')
       this.closeUpdate()
       this.getMesh()
     },(err) => {
       this.loadingModalUpdate = false 
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   deleteMesh(id:number){
@@ -105,7 +107,7 @@ export class MeshsComponent implements  OnInit  {
       this.getMesh()
     },(err) => {
       this.loading=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
 
@@ -131,12 +133,6 @@ export class MeshsComponent implements  OnInit  {
     closeUpdate() {
     this.dialogueRefUpdate.close();
   }
-  
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
-  }
-
 }
 
 

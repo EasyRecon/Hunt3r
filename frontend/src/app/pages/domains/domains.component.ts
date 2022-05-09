@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { DomainsService } from '../../core/domains/domains.service';
 import { Domain } from '../../core/domains/domains';
 import { Router } from '@angular/router';
+import { MessageService  } from '../../shared/message.service';
 import {
   NbToastrService,
   NbComponentStatus,
@@ -33,7 +34,11 @@ export class DomainsComponent implements OnInit {
   page=1
   total_pages=1
 
-  constructor(private router:Router,private dialogService: NbDialogService,private domainService:DomainsService,private toastrService: NbToastrService,private httpClient: HttpClient) {
+  constructor(private router:Router,
+              private dialogService: NbDialogService,
+              private domainService:DomainsService,
+              private messageService: MessageService,
+              private httpClient: HttpClient) {
   this.getDomains()
   }
 
@@ -45,7 +50,7 @@ export class DomainsComponent implements OnInit {
       this.total_pages=result.total_pages
     },(err)=>{
       this.loadingDomain=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   deleteDomainModale(id:number){
@@ -77,11 +82,11 @@ export class DomainsComponent implements OnInit {
     this.loadingDomain=true
     this.domainService.deleteDomain(parseInt(id)).subscribe( (result)=>{
       this.loadingDomain=false
-      this.showToast(result.message,'success')
+      this.messageService.showToast(result.message,'success')
       this.getDomains()
     },(err)=>{
       this.loadingDomain=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   goToSubdomain(name:any){
@@ -91,10 +96,4 @@ export class DomainsComponent implements OnInit {
 
 
   }
-
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
-  }
-
 }
