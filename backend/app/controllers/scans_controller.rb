@@ -203,7 +203,7 @@ class ScansController < ApplicationController
           #ssh.exec!("screen -dm -S Scan #{cmd}")
         end
       rescue Net::SSH::AuthenticationFailed
-        server_delete(server)
+        server_delete(server, 'Stopped')
         scan.destroy
 
         Notification.create(type_message: 'danger', message: 'Unable to run a scan, check your SSH key')

@@ -13,9 +13,9 @@ class ApplicationController < ActionController::API
   end
 
   # TODO : See if it can be implemented in a cleaner way on another file
-  def server_delete(server)
+  def server_delete(server, state)
     server.destroy
-    server.scan.update(state: 'Stopped')
+    server.scan.update(state: state)
 
     if server.name.downcase.start_with?('scw-')
       Thread.start { `scw instance server terminate #{server.uid} with-ip=true` }
