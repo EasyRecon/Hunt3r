@@ -11,6 +11,8 @@ Tool.create(name: 'hunt3r_token', infos: { api_key: SecureRandom.alphanumeric(32
 
 
 ## DEV DATA
+return unless Rails.env == 'development'
+
 scan = Scan.create(domain: 'www.domain.tld', state: 'Finished', type_scan: 'recon', meshs: false, instance_type: 'DEV1-S', provider: 'Scaleway', notifs: false, active_recon: false, intel: false, leak: false, nuclei: true, all_templates: false, custom_templates: ['xxx'], permutation: false, gau: true)
 domain = Domain.create(name: 'domain.tld', scan_id: scan.id)
 Domain.create(name: 'domain2.tld', scan_id: scan.id)
