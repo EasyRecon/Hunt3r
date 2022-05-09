@@ -19,7 +19,7 @@ class VulnerabilitiesController < ApplicationController
 
     @vulnerability.destroy
 
-    render status: 422, json: { message: I18n.t('success.controllers.vulnerabilities.deleted'), data: nil }
+    render status: 200, json: { message: I18n.t('success.controllers.vulnerabilities.deleted'), data: nil }
   end
 
   # POST /vulnerabilities
