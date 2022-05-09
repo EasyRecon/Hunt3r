@@ -1,14 +1,10 @@
-import {Component, OnInit,TemplateRef } from '@angular/core';
+import {Component, OnInit } from '@angular/core';
 
 import { NbThemeService } from '@nebular/theme';
 
 import * as _ from 'lodash';
 import { BugbountyPlatformService } from '../../core/bugbountyPlatform/bugbountyPlatform.service'
-import {
-  NbToastrService,
-  NbComponentStatus
-
-} from '@nebular/theme';
+import { MessageService  } from '../../shared/message.service';
 
 
   import 'echarts/lib/chart/pie'
@@ -108,7 +104,7 @@ statINTI = {
   //other
   themeSubscription: any;
   constructor(
-    private toastrService: NbToastrService,
+    private messageService: MessageService,
     private bugbountyPlatform : BugbountyPlatformService,
     private theme: NbThemeService) {
 
@@ -136,7 +132,7 @@ statINTI = {
       this.loading = false;
     },(err) =>{
       this.loading = false;
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
 
   }
@@ -193,12 +189,7 @@ statINTI = {
     console.log(this.statYWH)
     
   }
-
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
-  }
-  
+ 
   syncYWH() {
     this.loadSyncYwh=true
     this.bugbountyPlatform.syncScope('yeswehack').subscribe( (result)=>{
@@ -206,7 +197,7 @@ statINTI = {
       this.getStatsPlatform('yeswehack')
     },(err) =>{
       this.loadSyncYwh=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
 
@@ -339,7 +330,7 @@ statINTI = {
     },(err) =>{
       this.loadSyncInti=false
       this.loadingINTIGlobal = false;
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
 

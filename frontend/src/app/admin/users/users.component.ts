@@ -2,8 +2,8 @@ import {Component, OnInit,TemplateRef} from '@angular/core';
 import {UserService} from '../../core/user/user.service';
 import {User} from '../../core/user/user';
 import { FormGroup,FormBuilder   } from '@angular/forms';
+import { MessageService  } from '../../shared/message.service';
 import {
-  NbToastrService,
   NbComponentStatus,
   NbDialogService
 
@@ -34,7 +34,10 @@ export class UsersComponent implements OnInit {
   addUserModal:any;
   createUserFrom: FormGroup = <FormGroup> {};
 
-  constructor(private fbuilder: FormBuilder,private dialogService: NbDialogService,private userService : UserService,private toastrService: NbToastrService) {
+  constructor(private fbuilder: FormBuilder,
+              private dialogService: NbDialogService,
+              private userService : UserService,
+              private messageService: MessageService) {
 
     this.createUserFrom = this.fbuilder.group({
       email: '',
@@ -52,7 +55,7 @@ export class UsersComponent implements OnInit {
         this.loading = false
     },(err) =>{
       this.loading = false 
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
 
@@ -61,11 +64,11 @@ export class UsersComponent implements OnInit {
     this.loading = true 
     this.userService.deleteUser(id).subscribe( (result) => {
       this.loading = false 
-      this.showToast('User has benn deleted','success')
+      this.messageService.showToast('User has benn deleted','success')
       this.getUsers()
     },(err) =>{
       this.loading = false 
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
 
@@ -79,22 +82,15 @@ export class UsersComponent implements OnInit {
       this.loadingModal = false 
       this.loading = true 
       this.addUserModal.close()
-      this.showToast('Cloud provider scaleway has been updated','success')
+      this.messageService.showToast('Cloud provider scaleway has been updated','success')
       this.getUsers()
     },(err) =>{
       this.loadingModal = false 
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
 
   open(dialog: TemplateRef<any>) {
     this.addUserModal = this.dialogService.open(dialog, { context: 'this is some additional data passed to dialog' });
   }
-
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
-  }
-
-
 }

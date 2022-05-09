@@ -1,12 +1,8 @@
-import {Component, OnInit,TemplateRef } from '@angular/core';
+import {Component, OnInit } from '@angular/core';
 
 import { FormGroup,FormBuilder  } from '@angular/forms';
 import { BugbountyPlatformService } from '../../core/bugbountyPlatform/bugbountyPlatform.service'
-import {
-  NbToastrService,
-  NbComponentStatus
-
-} from '@nebular/theme';
+import { MessageService  } from '../../shared/message.service';
 
 
 @Component({
@@ -47,8 +43,8 @@ export class BugbountySettingsComponent implements OnInit {
   loading=true
 
   constructor(private fbuilder: FormBuilder,
-    private toastrService: NbToastrService,
-    private bugbountyPlatform : BugbountyPlatformService) {
+              private messageService: MessageService,
+              private bugbountyPlatform : BugbountyPlatformService) {
 
       this.yeswehackForm = this.fbuilder.group({
           email:'',
@@ -113,7 +109,7 @@ export class BugbountySettingsComponent implements OnInit {
       this.loading = false;
     },(err) =>{
       this.loading = false;
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
 
@@ -163,38 +159,32 @@ export class BugbountySettingsComponent implements OnInit {
   updatePlatform(data:any){
     this.bugbountyPlatform.updatePlatform(data).subscribe( (result) =>{
       this.loading=false
-      this.showToast(result.message,'success')
+      this.messageService.showToast(result.message,'success')
       this.getPlatform()
     },(err) =>{
       this.loading = false;
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   createPlatform(data:any){
     this.bugbountyPlatform.createPlatform(data).subscribe( (result) =>{
       this.loading=false
-      this.showToast(result.message,'success')
+      this.messageService.showToast(result.message,'success')
       this.getPlatform()
     },(err) =>{
       this.loading = false;
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   deletePlatform(platform:string) {
     this.loading = true;
     this.bugbountyPlatform.deletePlatform(platform).subscribe( (result) => {
       this.loading=false
-      this.showToast(result.message,'success')
+      this.messageService.showToast(result.message,'success')
       this.getPlatform()
     },(err) =>{
       this.loading = false;
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
-  }
-
-
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
   }
 }

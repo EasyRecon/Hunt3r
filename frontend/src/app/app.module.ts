@@ -15,7 +15,7 @@ import {AuthGuardService} from "./shared/auth-guard.service";
 import {AuthModule}   from './auth/auth.module'
 
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
-import { JWTInterceptor } from './pages/interceptor';
+import { JWTInterceptor } from './shared/interceptor';
 
 
 import { RoleProvider } from './acl/role.provider';

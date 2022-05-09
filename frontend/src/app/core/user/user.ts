@@ -30,5 +30,6 @@ export interface AddUser {
 }
 
 export interface UserResponse {
-   success: string;
+   message: string;
+   data:string
 }

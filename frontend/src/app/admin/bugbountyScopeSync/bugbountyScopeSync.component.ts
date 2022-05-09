@@ -1,13 +1,9 @@
-import {Component, OnInit,TemplateRef } from '@angular/core';
+import {Component, OnInit } from '@angular/core';
 
 import { FormGroup,FormBuilder  } from '@angular/forms';
 import { BugbountyPlatformService } from '../../core/bugbountyPlatform/bugbountyPlatform.service'
-import {
-  NbToastrService,
-  NbComponentStatus
+import { MessageService  } from '../../shared/message.service';
 
-} from '@nebular/theme';
-import { DataZoomComponent } from 'echarts/components';
 
 
 @Component({
@@ -45,7 +41,7 @@ export class BugbountyScopeSyncComponent implements OnInit {
 
 
   constructor(private fbuilder: FormBuilder,
-    private toastrService: NbToastrService,
+    private messageService: MessageService,
     private bugbountyPlatform : BugbountyPlatformService) {
 
       this.yeswehackForm = this.fbuilder.group({
@@ -112,7 +108,7 @@ export class BugbountyScopeSyncComponent implements OnInit {
       this.loading = false;
     },(err) =>{
       this.loading = false;
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
 
@@ -120,11 +116,11 @@ export class BugbountyScopeSyncComponent implements OnInit {
     this.loading = true;
     this.bugbountyPlatform.deletePlatform('yeswehack').subscribe( (result) => {
       this.loading=false
-      this.showToast(result.message,'success')
+      this.messageService.showToast(result.message,'success')
       this.getPlatform()
     },(err) =>{
       this.loading = false;
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   updateYeswehack(event:any) {
@@ -136,20 +132,20 @@ export class BugbountyScopeSyncComponent implements OnInit {
     {
       this.bugbountyPlatform.updatePlatform(data).subscribe( (result) =>{
         this.loading=false
-        this.showToast(result.message,'success')
+        this.messageService.showToast(result.message,'success')
         this.getPlatform()
       },(err) =>{
         this.loading = false;
-        this.showToast(err.message,'danger')
+        this.messageService.showToast(err.message,'danger')
       })
     } else {
       this.bugbountyPlatform.createPlatform(data).subscribe( (result) =>{
         this.loading=false
-        this.showToast(result.message,'success')
+        this.messageService.showToast(result.message,'success')
         this.getPlatform()
       },(err) =>{
         this.loading = false;
-        this.showToast(err.message,'danger')
+        this.messageService.showToast(err.message,'danger')
       })
     }
   }
@@ -164,20 +160,20 @@ export class BugbountyScopeSyncComponent implements OnInit {
     {
       this.bugbountyPlatform.updatePlatform(data).subscribe( (result) =>{
         this.loading=false
-        this.showToast(result.message,'success')
+        this.messageService.showToast(result.message,'success')
         this.getPlatform()
       },(err) =>{
         this.loading = false;
-        this.showToast(err.message,'danger')
+        this.messageService.showToast(err.message,'danger')
       })
     } else {
       this.bugbountyPlatform.createPlatform(data).subscribe( (result) =>{
         this.loading=false
-        this.showToast(result.message,'success')
+        this.messageService.showToast(result.message,'success')
         this.getPlatform()
       },(err) =>{
         this.loading = false;
-        this.showToast(err.message,'danger')
+        this.messageService.showToast(err.message,'danger')
       })
     }
   }
@@ -185,11 +181,11 @@ export class BugbountyScopeSyncComponent implements OnInit {
     this.loading = true;
     this.bugbountyPlatform.deletePlatform('hackerone').subscribe( (result) => {
       this.loading=false
-      this.showToast(result.message,'success')
+      this.messageService.showToast(result.message,'success')
       this.getPlatform()
     },(err) =>{
       this.loading = false;
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   updateHackerone(event:any) {
@@ -202,20 +198,20 @@ export class BugbountyScopeSyncComponent implements OnInit {
     {
       this.bugbountyPlatform.updatePlatform(data).subscribe( (result) =>{
         this.loading=false
-        this.showToast(result.message,'success')
+        this.messageService.showToast(result.message,'success')
         this.getPlatform()
       },(err) =>{
         this.loading = false;
-        this.showToast(err.message,'danger')
+        this.messageService.showToast(err.message,'danger')
       })
     } else {
       this.bugbountyPlatform.createPlatform(data).subscribe( (result) =>{
         this.loading=false
-        this.showToast(result.message,'success')
+        this.messageService.showToast(result.message,'success')
         this.getPlatform()
       },(err) =>{
         this.loading = false;
-        this.showToast(err.message,'danger')
+        this.messageService.showToast(err.message,'danger')
       })
     }
   }
@@ -223,18 +219,11 @@ export class BugbountyScopeSyncComponent implements OnInit {
     this.loading = true;
     this.bugbountyPlatform.deletePlatform('hackerone').subscribe( (result) => {
       this.loading=false
-      this.showToast(result.message,'success')
+      this.messageService.showToast(result.message,'success')
       this.getPlatform()
     },(err) =>{
       this.loading = false;
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
-  }
-
-
-
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
   }
 }

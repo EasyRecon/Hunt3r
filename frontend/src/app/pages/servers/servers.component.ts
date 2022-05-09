@@ -1,13 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ServerService} from '../../core/server/server.service';
 import {Server} from '../../core/server/server';
+import { MessageService  } from '../../shared/message.service';
 
-import {
-  NbToastrService,
-  NbComponentStatus
 
-} from '@nebular/theme';
-import { result } from 'lodash';
 
 
 
@@ -20,7 +16,7 @@ export class ServersComponent implements OnInit {
   loading=false
   serverList:Server[] = <any>[]
 
-  constructor(private serverService : ServerService,private toastrService: NbToastrService) {
+  constructor(private serverService : ServerService,private messageService: MessageService) {
     
 
     this.getServer()
@@ -37,23 +33,17 @@ export class ServersComponent implements OnInit {
       this.serverList=result.data
     },(err)=> {
       this.loading=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   deleteServer(uid:string){
     this.loading=true
     this.serverService.deleteServers(uid).subscribe( (result)=>{
       this.loading=false
-      this.showToast(result.message,'success')
+      this.messageService.showToast(result.message,'success')
       this.getServer()
     },(err)=> {
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
-  }
-
-
 }
