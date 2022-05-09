@@ -1,0 +1,50 @@
+name: CI Backend RSpec Tests
+on:
+  pull_request:
+    branches:
+      - master
+      - "feature/*"
+
+jobs:
+  build:
+    name: CI
+    runs-on: ubuntu-latest
+    env:
+      backend-dir: ./backend
+      RAILS_ENV: test
+      PG_USER: postgres
+      PG_PASSWORD: password
+      PG_HOST: 127.0.0.1
+
+    services:
+      postgres:
+        image: postgres
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: hunt3r_test
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@8f312efe1262fb463d906e9bf040319394c18d3e # v1.92
+        with:
+          ruby-version: 3.1.0
+
+      - name: Run bundle install
+        working-directory: ${{env.backend-dir}}
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+      - name: Install PostgreSQL Library
+        run: sudo apt-get install libpq-dev
+
+      - name: Setup Database
+        working-directory: ${{env.backend-dir}}
+        run: bin/rails db:create db:schema:load
+
+      - name: Build and test with rspec
+        working-directory: ${{env.backend-dir}}
+        run: bundle exec rspec spec
