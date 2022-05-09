@@ -1,4 +1,4 @@
-class Httpx
+class GoWitness
   def self.get_screenshots
     `gowitness file -f #{OPTIONS[:output]}/httpx.txt --disable-db --disable-logging -P #{OPTIONS[:output]}/screenshots/ -X 1280 -Y 720`
 
