@@ -64,10 +64,10 @@ class InteractDashboard
     request.run
   end
 
-  def self.send_screenshot(subdomains, screenshot)
-    return unless subdomains && screenshot
+  def self.send_screenshot(subdomain, screenshot)
+    return unless subdomain && screenshot
 
-    data = { screenshot: { token: OPTIONS[:hunt3r_token], subdomains: subdomains, screenshot: screenshot } }.to_json
+    data = { screenshot: { token: OPTIONS[:hunt3r_token], subdomain: subdomain, screenshot: screenshot } }.to_json
 
     request = Typhoeus::Request.new(
       File.join(OPTIONS[:url], '/screenshots'),
