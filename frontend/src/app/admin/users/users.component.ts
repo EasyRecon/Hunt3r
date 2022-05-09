@@ -31,6 +31,7 @@ export class UsersComponent implements OnInit {
     created_at: ''
 
   }]
+  addUserModal:any;
   createUserFrom: FormGroup = <FormGroup> {};
 
   constructor(private fbuilder: FormBuilder,private dialogService: NbDialogService,private userService : UserService,private toastrService: NbToastrService) {
@@ -77,6 +78,7 @@ export class UsersComponent implements OnInit {
     this.userService.createUser(finalData).subscribe( (result) => {
       this.loadingModal = false 
       this.loading = true 
+      this.addUserModal.close()
       this.showToast('Cloud provider scaleway has been updated','success')
       this.getUsers()
     },(err) =>{
@@ -86,7 +88,7 @@ export class UsersComponent implements OnInit {
   }
 
   open(dialog: TemplateRef<any>) {
-    this.dialogService.open(dialog, { context: 'this is some additional data passed to dialog' });
+    this.addUserModal = this.dialogService.open(dialog, { context: 'this is some additional data passed to dialog' });
   }
 
   showToast(message: string, status: NbComponentStatus = 'danger') {
