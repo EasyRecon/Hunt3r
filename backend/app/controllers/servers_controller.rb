@@ -13,7 +13,7 @@ class ServersController < ApplicationController
     server = Server.find_by(uid: params[:uid])
     return render status: 422, json: { message: I18n.t('errors.controllers.servers.unknown'), data: nil } if server.nil?
 
-    server_delete(server)
+    server_delete(server, 'Stopped')
     render status: 200, json: { message: I18n.t('success.controllers.servers.deleted'), data: nil }
   end
 
@@ -27,6 +27,6 @@ class ServersController < ApplicationController
     server = Server.find_by(uid: params[:uid])
     return if server.nil?
 
-    server_delete(server)
+    server_delete(server, 'Finished')
   end
 end
