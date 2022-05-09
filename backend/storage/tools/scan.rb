@@ -53,6 +53,18 @@ optparse = OptionParser.new do |opts|
     OPTIONS[:type_scan] = v
   end
 
+  opts.on('--intel true|false', 'Search for related domains') do |v|
+    OPTIONS[:intel] = v
+  end
+
+  opts.on('--whoxy-token token', 'Whoxy API Key Token') do |v|
+    OPTIONS[:whoxy_token] = v
+  end
+
+  opts.on('--c99-token token', 'C99 API Key token') do |v|
+    OPTIONS[:c99_token] = v
+  end
+
   opts.on('-l', '--leak true|false', 'Search for a leak for the scanned domain') do |v|
     OPTIONS[:leak] = v
   end
