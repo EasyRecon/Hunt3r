@@ -78,7 +78,7 @@ def get_hackerone_reports(platform)
       report_status: report['attributes']['state'],
       severity: report['relationships']['severity']['data']['attributes']['rating'],
       currency: 'USD',
-      collab: false # TODO : Need to fix this to handle H1 collab
+      collab: false
     }
 
     if report['attributes']['bounty_awarded_at']
