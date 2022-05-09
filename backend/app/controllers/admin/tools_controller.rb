@@ -73,7 +73,10 @@ class Admin::ToolsController < ApplicationController
       tool.save
       render status: 200, json: { message: I18n.t('success.controllers.admin.tools.created'), data: nil }
     when 'interactsh'
-      # TODO : InteractSH Verification
+      unless interactsh_valid?(tool)
+        tool.destroy
+        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.not_valid'), data: nil }
+      end
 
       tool.save
       render status: 200, json: { message: I18n.t('success.controllers.admin.tools.created'), data: nil }
@@ -142,6 +145,18 @@ class Admin::ToolsController < ApplicationController
 
     response&.code == 200 && response.body == 'ok'
   end
+end
+
+def interactsh_valid?(tool)
+  return false unless tool['infos']['url']
+
+  request = Typhoeus::Request.new(
+    tool['infos']['url']
+  )
+  request.run
+  response = request.response
+
+  response.body.include?('<h1> Interactsh Server </h1>')
 end
 
 def c99_valid?(tool)
