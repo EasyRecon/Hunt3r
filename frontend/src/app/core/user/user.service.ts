@@ -75,7 +75,7 @@ export class UserService  {
   deleteUser(id:number): Observable<UserResponse> {
     return this.http
       .delete<UserResponse>(
-        this.baseurl + '/admin/user/'+id,
+        this.baseurl + '/admin/users/'+id,
         this.httpOptions
       )
       .pipe(retry(1), catchError(this.errorHandl));

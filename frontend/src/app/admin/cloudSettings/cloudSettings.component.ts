@@ -114,7 +114,7 @@ export class CloudSettingsComponent implements OnInit {
         }
       });
       this.cloudService.updateScaleway(finalData).subscribe( (result) => {
-        
+        this.loading = false;
         this.showToast('Cloud provider scaleway has been updated','success')
         this.getCloudProvider()
       },(err) =>{
@@ -124,6 +124,7 @@ export class CloudSettingsComponent implements OnInit {
     } else {
       this.cloudService.createScaleway(finalData).subscribe( (result) => {
         this.scalewayExist=true
+        this.loading = false;
         this.showToast('Cloud provider scaleway has been created','success')
       },(err) =>{
         this.loading = false;
@@ -137,6 +138,7 @@ export class CloudSettingsComponent implements OnInit {
     this.cloudService.deleteScaleway().subscribe( (result) => {
       this.showToast('Cloud provider scaleway has been deleted','success')
       this.scalewayExist=false
+      this.loading = false;
       this.getCloudProvider()
     },(err) =>{
       this.loading = false;
