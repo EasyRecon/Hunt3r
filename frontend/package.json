@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve  --host 0.0.0.0 --port 4011",
+    "start": "ng serve  --host 0.0.0.0 --configuration production ",
     "start2": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "watch": "ng serve --configuration development  --host 0.0.0.0 --port 4011",
     "test": "ng test"
   },
   "private": true,

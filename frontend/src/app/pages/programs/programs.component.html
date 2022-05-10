@@ -34,7 +34,6 @@
               <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Link</th>
                 <th>Bounty ?</th>
                 <th>Number of scopes</th>
                 <th>Platform</th>
@@ -44,8 +43,7 @@
               </tr>
               <tr *ngFor="let item of this.listeProgramYwh ">
                 <td>{{ item.id }}</td>
-                <td>{{ item.name}}</td>
-                <td><a target="_blank" href="https://yeswehack.com/programs/{{item.slug}}">Link to the program</a></td>
+                <td><a target="_blank" href="https://yeswehack.com/programs/{{item.slug}}">{{ item.name}}</a></td>
                 <td><nb-icon icon="{{ item.vdp==true ? 'close-square-outline' :'checkmark-square-2-outline'}}"></nb-icon></td>
                 <td>{{ item.scopes}}</td>
                 <td>YesWeHack</td>
@@ -63,7 +61,6 @@
               <tr *ngFor="let item of this.listeProgramInti ">
                 <td>{{ item.id }}</td>
                 <td>{{ item.name}}</td>
-                <td><a target="_blank" href="{{ item.slug}}"></a></td>
                 <td><nb-icon icon="{{ item.vdp==true ? 'close-square-outline' :'checkmark-square-2-outline'}}"></nb-icon></td>
                 <td>{{ item.scopes}}</td>
                 <td>Intigriti</td>
