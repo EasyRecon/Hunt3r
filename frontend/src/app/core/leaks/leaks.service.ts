@@ -4,7 +4,7 @@ import { LeakData } from './leaks';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import {baseUrl } from "../../../environments/environment";
-import {  NbAuthService, NbAuthToken, NB_AUTH_OPTIONS } from '@nebular/auth';
+import { NB_AUTH_OPTIONS } from '@nebular/auth';
 import {ErrorService} from '../../shared/errors.service'
 @Injectable()
 export class LeaksService  {
@@ -13,14 +13,8 @@ export class LeaksService  {
   token: any;
 
 
-  constructor(private errorService: ErrorService,private http: HttpClient, authService: NbAuthService,@Inject(NB_AUTH_OPTIONS) protected options = {})  {
-    authService.onTokenChange()
-    .subscribe((token: NbAuthToken) => {
-      this.token = null;
-      if (token && token.isValid()) {
-        this.token = token;
-      }
-    });
+  constructor(private errorService: ErrorService,private http: HttpClient, @Inject(NB_AUTH_OPTIONS) protected options = {})  {
+
   }
 
 

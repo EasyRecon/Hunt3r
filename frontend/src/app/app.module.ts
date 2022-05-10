@@ -40,6 +40,7 @@ import {InvoicesService} from './core/invoices/invoices.service'
 import {DomainsService} from './core/domains/domains.service'
 import {CloudProviderService} from './core/cloudProvider/cloudProvider.service'
 import {BugbountyPlatformService} from './core/bugbountyPlatform/bugbountyPlatform.service'
+import {HttpService} from './shared/http.service'
 
 
 @NgModule({
@@ -103,12 +104,13 @@ import {BugbountyPlatformService} from './core/bugbountyPlatform/bugbountyPlatfo
     }),
   ],
 
-  providers: [
+  providers: [ 
     ErrorService,
     AuthGuardService,
     NbAuthJWTToken,
     RoleProvider,
     NotifService,
+    HttpService,
 //own service
     EnginesService,
     VulnerabilitiesService,
