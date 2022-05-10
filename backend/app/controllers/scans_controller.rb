@@ -45,7 +45,9 @@ class ScansController < ApplicationController
     end
 
     if scan.type_scan == 'recon'
-      # TODO : Return if no amass config file
+      unless File.exist?(File.join(scan_config_files, 'amass/config.ini'))
+        return render status: 422, json: { message: I18n.t('errors.controllers.scans.missing_amass'), data: nil }
+      end
 
       # If launched from the scope page we remove the wildcard
       scan.domain.gsub!('*.', '')
