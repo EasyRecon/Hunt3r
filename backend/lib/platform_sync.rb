@@ -27,22 +27,18 @@ module PlatformSync
   end
 
   def update_yeswehack_scope(jwt, slug)
-    request = Typhoeus::Request.new(
+    response = Typhoeus::Request.get(
       "https://api.yeswehack.com/programs/#{slug}",
-      method: :get,
       headers: { 'Content-Type': 'application/json', 'Authorization': "Bearer #{jwt}" }
     )
-    request.run
-    response = request.response
-
     return unless response&.code == 200
 
     scopes = JSON.parse(response.body)['scopes']
     return if scopes.nil? || scopes.empty?
 
-    program = Program.find_by_slug(slug)
+    program = Program.find_by(slug: slug)
     scopes.each do |scope|
-      next unless Scope.find_by_scope(scope['scope']).nil?
+      next unless Scope.find_by(scope: scope['scope']).nil?
 
       scope_type = if scope['type'] == 1
                      'web-application'

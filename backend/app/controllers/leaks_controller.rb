@@ -36,7 +36,6 @@ class LeaksController < ApplicationController
         Leak.create(username: leak[:username], email: leak[:email].downcase, password: leak[:password], domain_id: domain.id)
       end
     end
-
   end
 
   private

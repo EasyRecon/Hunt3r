@@ -27,6 +27,7 @@ class Admin::PlatformstatsController < ApplicationController
     if !platform_stats.empty? && (Time.now - platform_stats.last.updated_at) < 1800
       return render status: 429, json: { message: I18n.t('errors.controllers.admin.platformstats.rate_limit'), data: nil }
     end
+
     platform.PlatformStat.last.update(updated_at: Time.now) unless platform_stats.empty?
 
     case platform.name
@@ -95,13 +96,11 @@ def get_hackerone_reports(platform)
 end
 
 def get_hackerone_report_reward(platform, report_id)
-  request = Typhoeus::Request.new(
+  response = Typhoeus::Request.get(
     "https://api.hackerone.com/v1/hackers/reports/#{report_id}",
     userpwd: "#{platform.email}:#{platform.jwt}",
     headers: { 'Accept': 'application/json' }
   )
-  request.run
-  response = request.response
   return unless response.code == 200
 
   response_json = JSON.parse(response.body)
@@ -270,27 +269,26 @@ def get_intigriti_reports(platform, jwt)
 end
 
 def get_intigriti_report_infos(platform, jwt, program_id, report_id)
-  request = Typhoeus::Request.new(
+  response = Typhoeus::Request.get(
     "https://api.intigriti.com/core/researcher/program/#{program_id}/submission/#{report_id}",
     headers: { Authorization: "Bearer #{jwt}" }
   )
-
-  request.run
-  response = request.response
   return unless response&.code == 200
 
-  json_data = JSON.parse(response.body)
+  report_infos = JSON.parse(response.body)
 
-  reward = 0
-  currency = ''
-  json_data['payouts'].each do |payout|
+  infos = {
+    reward: 0,
+    currency: '',
+    collab: report_infos['collaborators'].size > 1
+  }
+
+  report_infos['payouts'].each do |payout|
     next unless payout['researcher']['userName'] == platform.hunter_username
 
-    reward += payout['amount']['value']
-    currency = payout['amount']['currency']
+    infos[:reward] += payout['amount']['value']
+    infos[:currency] = payout['amount']['currency']
   end
 
-  collab = json_data['collaborators'].size > 1
-
-  { reward: reward, currency: currency, collab: collab }
+  infos
 end
