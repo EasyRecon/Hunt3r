@@ -3,7 +3,7 @@ on:
   pull_request:
     branches:
       - master
-      - "feature/*"
+      - "release/*"
 
 jobs:
   build:

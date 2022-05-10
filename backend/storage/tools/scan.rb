@@ -7,13 +7,17 @@ require 'base64'
 require_relative 'libs/hunt3r_dashboard'
 require_relative 'libs/slack'
 require_relative 'libs/recon_scan'
+require_relative 'libs/nuclei_scan'
 
-require_relative 'libs/tools/dehashed'
 require_relative 'libs/tools/amass'
-require_relative 'libs/tools/naabu'
-require_relative 'libs/tools/httpx'
-require_relative 'libs/tools/nuclei'
+require_relative 'libs/tools/c99'
+require_relative 'libs/tools/dehashed'
 require_relative 'libs/tools/gau'
+require_relative 'libs/tools/gowitness'
+require_relative 'libs/tools/httpx'
+require_relative 'libs/tools/naabu'
+require_relative 'libs/tools/nuclei'
+require_relative 'libs/tools/whoxy'
 
 OPTIONS = {}
 
@@ -51,6 +55,18 @@ optparse = OptionParser.new do |opts|
 
   opts.on('--type-scan type', 'Type of scan (Recon or Nuclei)') do |v|
     OPTIONS[:type_scan] = v
+  end
+
+  opts.on('--intel true|false', 'Search for related domains') do |v|
+    OPTIONS[:intel] = v
+  end
+
+  opts.on('--whoxy-token token', 'Whoxy API Key Token') do |v|
+    OPTIONS[:whoxy_token] = v
+  end
+
+  opts.on('--c99-token token', 'C99 API Key token') do |v|
+    OPTIONS[:c99_token] = v
   end
 
   opts.on('-l', '--leak true|false', 'Search for a leak for the scanned domain') do |v|

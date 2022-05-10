@@ -4,10 +4,8 @@ import {NucleiService} from '../../core/nuclei/nuclei.service';
 import {EnginesService} from '../../core/engines/engines.service';
 import {Engine} from '../../core/engines/engines';
 import { FormGroup,FormBuilder   } from '@angular/forms';
-
+import { MessageService  } from '../../shared/message.service';
 import {
-  NbToastrService,
-  NbComponentStatus,
   NbDialogService
 } from '@nebular/theme';
 
@@ -29,7 +27,11 @@ export class EnginesComponent implements OnInit {
   addEngineModel:Engine=<any>{}
 
 
-  constructor(private enginesService : EnginesService,private toastrService: NbToastrService,private fbuilder: FormBuilder,private dialogService: NbDialogService,private nucleiService: NucleiService) {
+  constructor(private enginesService : EnginesService,
+              private messageService: MessageService,
+              private fbuilder: FormBuilder,
+              private dialogService: NbDialogService,
+              private nucleiService: NucleiService) {
     this.addEngineForm = this.fbuilder.group({
          "type_scan": "",
          "instance_type": "",
@@ -77,7 +79,7 @@ export class EnginesComponent implements OnInit {
       this.templatList=result.data
     },(err)=>{
       this.loadingModal=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   closeAddEngineModal(){
@@ -99,7 +101,7 @@ export class EnginesComponent implements OnInit {
       this.getEngines()
     },(err)=> {
       this.loadingModal=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   getEngines(){
@@ -109,25 +111,18 @@ export class EnginesComponent implements OnInit {
       this.enginesList=result.data
     },(err)=> {
       this.loading=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
     deleteEngine(id:number){
     this.loading=true
     this.enginesService.deleteEngine(id).subscribe( (result)=> {
       this.loading=false
-      this.showToast(result.message,'success')
+      this.messageService.showToast(result.message,'success')
       this.getEngines()
     },(err)=> {
       this.loading=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
-  
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
-  }
-
-
 }

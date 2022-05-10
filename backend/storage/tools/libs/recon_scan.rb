@@ -12,6 +12,12 @@ class ReconScan
 
     InteractDashboard.update_scan_status('Recon - Amass')
     Amass.get_domains
+
+    if OPTIONS[:intel]
+      Whoxy.get_domains
+      C99.check_domains
+    end
+
     # **-- END OF THE HARVESTING PHASE OF SUBDOMAINS
 
     `cat #{OPTIONS[:output]}/*_domains.txt | sort -u >> #{OPTIONS[:output]}/all_domains.txt`
@@ -32,10 +38,10 @@ class ReconScan
       Nuclei.check_domains
     end
 
-    if OPTIONS[:gau]
-      InteractDashboard.update_scan_status('Recon - GAU')
-      Gau.get_urls
-    end
+    return unless OPTIONS[:gau]
+
+    InteractDashboard.update_scan_status('Recon - GAU')
+    Gau.get_urls
     # **-- END OF THE ACTIVE CHECK PHASE
   end
 end

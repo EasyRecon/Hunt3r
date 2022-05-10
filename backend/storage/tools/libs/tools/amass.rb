@@ -1,13 +1,13 @@
 class Amass
-  def self.get_domains
+  def self.get_domains(domain = OPTIONS[:domain])
     prepare_config
     update_resolvers
 
-    if OPTIONS[:amass_active]
-      cmd = "amass enum -active -config #{config_path} -d #{OPTIONS[:domain]} -trf #{resolver_path} -o #{OPTIONS[:output]}/amass_domains.txt"
-    else
-      cmd = "amass enum -config #{config_path} -d #{OPTIONS[:domain]} -trf #{resolver_path} -o #{OPTIONS[:output]}/amass_domains.txt"
-    end
+    random = (0...8).map { (65 + rand(26)).chr }.join
+
+    cmd = 'amass enum'
+    cmd += ' -active' if OPTIONS[:amass_active]
+    cmd += " -d #{domain} -trf #{resolver_path} -o #{OPTIONS[:output]}/amass_#{random}_domains.txt"
 
     system(cmd)
   end

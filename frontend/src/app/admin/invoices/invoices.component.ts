@@ -1,13 +1,8 @@
-import {Component, OnInit,TemplateRef } from '@angular/core';
+import {Component, OnInit } from '@angular/core';
 
 import { FormGroup,FormBuilder  } from '@angular/forms';
 import { InvoicesService } from '../../core/invoices/invoices.service'
-import {
-  NbToastrService,
-  NbComponentStatus
-
-} from '@nebular/theme';
-import { result } from 'lodash';
+import { MessageService  } from '../../shared/message.service';
 
 
 @Component({
@@ -41,8 +36,8 @@ checked_user_vat=false;
 loading=true
 
   constructor(private fbuilder: FormBuilder,
-    private toastrService: NbToastrService,
-    private invoiceService: InvoicesService) {
+              private messageService: MessageService,
+              private invoiceService: InvoicesService) {
 
       this.invoiceForm = this.fbuilder.group({
         user_name: "",
@@ -105,14 +100,13 @@ loading=true
     console.log(data)
     //Object.keys(data).forEach(k => {if(data[k] != '') delete data[k]});
     let finalData = {"invoice": data}
-
     this.invoiceService.postInvoiceSettings(finalData).subscribe( (result) => {
       this.loading=false
-      this.showToast(result.message,'success')
+      this.messageService.showToast(result.message,'success')
       this.getInvoiceSettings()
     },(err)=> {
       this.loading=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
 
@@ -129,13 +123,7 @@ loading=true
         this.loading=false
       },(err) => {
         this.loading=false
-        this.showToast(err.message,'danger')
+        this.messageService.showToast(err.message,'danger')
       })
-  }
-
-
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
   }
 }

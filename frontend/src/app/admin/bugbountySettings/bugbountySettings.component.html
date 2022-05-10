@@ -43,7 +43,7 @@
                     <button type="submit" class="col" nbButton status="success">Update</button>
                   </div>
                   <div class="col end">
-                    <button type="button" class="col " (click)="deleteYeswehack()" nbButton status="danger">Delete</button>
+                    <button type="button" class="col " (click)="deletePlatform('yeswehack')" nbButton status="danger">Delete</button>
                   </div>
                 </div>
            
@@ -76,7 +76,7 @@
                   <button type="submit" class="col" nbButton status="success">Update</button>
                 </div>
                 <div class="col end">
-                  <button type="button" class="col " (click)="deleteIntigriti()" nbButton status="danger">Delete</button>
+                  <button type="button" class="col " (click)="deletePlatform('intigriti')" nbButton status="danger">Delete</button>
                 </div>
               </div>
             </form>
@@ -98,17 +98,11 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label for="inputEmail1" class="label col-sm-3 col-form-label">Otp</label>
-                <div class="col-sm-9">
-                  <input class="col" nbInput type="password" name="otp" formControlName="otp" [value]="hackerone.otp">
-                </div>
-              </div>
-              <div class="form-group row">
                 <div class="col">
                   <button type="submit" class="col" nbButton status="success">Update</button>
                 </div>
                 <div class="col end">
-                  <button type="button" class="col " (click)="deleteHackerone()" nbButton status="danger">Delete</button>
+                  <button type="button" class="col " (click)="deletePlatform('hackerone')" nbButton status="danger">Delete</button>
                 </div>
               </div>
             </form>

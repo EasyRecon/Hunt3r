@@ -19,16 +19,15 @@ class Admin::PlatformstatsController < ApplicationController
 
   # PATCH /platforms/:name/stats
   def update
-    platform = Platform.find_by_name(params[:name])
+    platform = Platform.find_by(name: params[:name])
     return render status: 422, json: { message: I18n.t('errors.controllers.admin.platforms.unknown'), data: nil } if platform.nil?
 
     platform_stats = platform.PlatformStat
     # In order to avoid that several refreshes are launched at the same time so as not to overload the platform's API
-    if platform_stats && (Time.now - platform_stats.last.updated_at) < 1800
+    if !platform_stats.empty? && (Time.now - platform_stats.last.updated_at) < 1800
       return render status: 429, json: { message: I18n.t('errors.controllers.admin.platformstats.rate_limit'), data: nil }
-    elsif platform_stats
-      platform.PlatformStat.last.update(updated_at: Time.now)
     end
+    platform.PlatformStat.last.update(updated_at: Time.now) unless platform_stats.empty?
 
     case platform.name
     when 'yeswehack'
@@ -78,7 +77,7 @@ def get_hackerone_reports(platform)
       report_status: report['attributes']['state'],
       severity: report['relationships']['severity']['data']['attributes']['rating'],
       currency: 'USD',
-      collab: false # TODO : Need to fix this to handle H1 collab
+      collab: false
     }
 
     if report['attributes']['bounty_awarded_at']

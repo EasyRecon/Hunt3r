@@ -45,6 +45,11 @@ class ScansController < ApplicationController
     end
 
     if scan.type_scan == 'recon'
+      # TODO : Return if no amass config file
+
+      # If launched from the scope page we remove the wildcard
+      scan.domain.gsub!('*.', '')
+
       if scan.leak
         dehashed = Tool.find_by(name: 'dehashed')
         if dehashed.nil?
@@ -56,15 +61,15 @@ class ScansController < ApplicationController
       end
 
       if scan.intel
-        c99 = Tool.find_by(name: 'c99')
-        whoxy = Tool.find_by(name: 'whoxy')
+        c99 = Tool.find_by(name: 'c99')&.infos
+        whoxy = Tool.find_by(name: 'whoxy')&.infos
 
         if c99.nil? || whoxy.nil?
           scan.destroy
           return render status: 422, json: { message: I18n.t('errors.controllers.scans.missing_intel'), data: nil }
         end
 
-        cmd += " --intel true --c99-token #{c99} --whoxy-token #{whoxy}"
+        cmd += " --intel true --c99-token #{c99['api_key']} --whoxy-token #{whoxy['api_key']}"
       end
 
       if scan.meshs
@@ -200,7 +205,7 @@ class ScansController < ApplicationController
           #ssh.exec!("screen -dm -S Scan #{cmd}")
         end
       rescue Net::SSH::AuthenticationFailed
-        server_delete(server)
+        server_delete(server, 'Stopped')
         scan.destroy
 
         Notification.create(type_message: 'danger', message: 'Unable to run a scan, check your SSH key')

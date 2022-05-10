@@ -3,6 +3,7 @@ class Gau
     data = File.read("#{OPTIONS[:output]}/httpx.txt")
 
     data.each_line do |url|
+      url.chomp!
       valid_urls = Set[]
 
       random = (0...8).map { (65 + rand(26)).chr }.join

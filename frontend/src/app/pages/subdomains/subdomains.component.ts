@@ -4,10 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { SubdomainsService } from '../../core/subdomains/subdomains.service';
 import { Subdomain } from '../../core/subdomains/subdomains';
 import {baseUrl } from "../../../environments/environment";
-
+import { MessageService  } from '../../shared/message.service';
 import {
-  NbToastrService,
-  NbComponentStatus,
   NbDialogService
 
 } from '@nebular/theme';
@@ -34,7 +32,12 @@ export class SubdomainsComponent implements OnInit {
   apiUrl=baseUrl
 
   screenModaldialog:any='';
-  constructor(private location: Location,private Activatedroute:ActivatedRoute,private dialogService: NbDialogService,private subdomainService:SubdomainsService,private toastrService: NbToastrService,private httpClient: HttpClient) {
+  constructor(private location: Location,
+              private Activatedroute:ActivatedRoute,
+              private dialogService: NbDialogService,
+              private subdomainService:SubdomainsService,
+              private messageService: MessageService,
+              private httpClient: HttpClient) {
  
    this.domain=this.Activatedroute.snapshot.paramMap.get("domain") || '';
   this.getSubdomains()
@@ -48,7 +51,7 @@ export class SubdomainsComponent implements OnInit {
       this.total_pages=result.total_pages
     },(err)=>{
       this.loadingSubomain=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
 
@@ -92,11 +95,4 @@ export class SubdomainsComponent implements OnInit {
     this.page=page
     this.getSubdomains()
   }
-
-
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
-  }
-
 }

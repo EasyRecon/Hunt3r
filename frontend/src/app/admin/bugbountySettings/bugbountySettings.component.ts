@@ -1,12 +1,8 @@
-import {Component, OnInit,TemplateRef } from '@angular/core';
+import {Component, OnInit } from '@angular/core';
 
 import { FormGroup,FormBuilder  } from '@angular/forms';
 import { BugbountyPlatformService } from '../../core/bugbountyPlatform/bugbountyPlatform.service'
-import {
-  NbToastrService,
-  NbComponentStatus
-
-} from '@nebular/theme';
+import { MessageService  } from '../../shared/message.service';
 
 
 @Component({
@@ -47,8 +43,8 @@ export class BugbountySettingsComponent implements OnInit {
   loading=true
 
   constructor(private fbuilder: FormBuilder,
-    private toastrService: NbToastrService,
-    private bugbountyPlatform : BugbountyPlatformService) {
+              private messageService: MessageService,
+              private bugbountyPlatform : BugbountyPlatformService) {
 
       this.yeswehackForm = this.fbuilder.group({
           email:'',
@@ -62,9 +58,7 @@ export class BugbountySettingsComponent implements OnInit {
     });
     this.hackeroneForm = this.fbuilder.group({
         email:'',
-        hunter_username:'',
         password:'',
-        otp:''
     });
   }
 
@@ -115,22 +109,10 @@ export class BugbountySettingsComponent implements OnInit {
       this.loading = false;
     },(err) =>{
       this.loading = false;
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
 
-  deleteYeswehack() {
-    this.loading = true;
-    this.bugbountyPlatform.deletePlatform('yeswehack').subscribe( (result) => {
-      this.loading=false
-      this.yeswehackExist=false
-      this.showToast('Settings of YesWeHack platform deleted','success')
-      this.getPlatform()
-    },(err) =>{
-      this.loading = false;
-      this.showToast(err.message,'danger')
-    })
-  }
   updateYeswehack(event:any) {
     this.loading=true
     event.preventDefault()
@@ -139,23 +121,9 @@ export class BugbountySettingsComponent implements OnInit {
     data.name='yeswehack'
     if(this.yeswehackExist)
     {
-      this.bugbountyPlatform.updatePlatform(finalData).subscribe( (result) =>{
-        this.loading=false
-        this.showToast('Settings of YesWeHack updated','success')
-        this.getPlatform()
-      },(err) =>{
-        this.loading = false;
-        this.showToast(err.message,'danger')
-      })
+      this.updatePlatform(data)
     } else {
-      this.bugbountyPlatform.createPlatform(finalData).subscribe( (result) =>{
-        this.loading=false
-        this.showToast('Settings of YesWeHack created','success')
-        this.getPlatform()
-      },(err) =>{
-        this.loading = false;
-        this.showToast(err.message,'danger')
-      })
+      this.createPlatform(data)
     }
   }
 
@@ -165,43 +133,14 @@ export class BugbountySettingsComponent implements OnInit {
     let data = this.intigritiForm.value
     if(data.otp=='') delete data.otp
     let finalData = {"platform": data}
-
     data.name='intigriti'
     if(this.intigritiExist)
     {
-      this.bugbountyPlatform.updatePlatform(finalData).subscribe( (result) =>{
-        this.loading=false
-        this.showToast('Settings of Intigriti updated','success')
-        this.getPlatform()
-      },(err) =>{
-        this.loading = false;
-        this.showToast(err.message,'danger')
-      })
+      this.updatePlatform(data)
     } else {
-      this.bugbountyPlatform.createPlatform(finalData).subscribe( (result) =>{
-        this.loading=false
-        this.showToast('Settings of Intigriti created','success')
-        this.getPlatform()
-      },(err) =>{
-        this.loading = false;
-        this.showToast(err.message,'danger')
-      })
+      this.createPlatform(data)
     }
   }
-  deleteIntigriti() {
-    this.loading = true;
-    this.bugbountyPlatform.deletePlatform('intigriti').subscribe( (result) => {
-      this.loading=false
-      this.yeswehackExist=false
-      this.showToast('Settings of Intigriti platform deleted','success')
-      this.getPlatform()
-    },(err) =>{
-      this.loading = false;
-      this.showToast(err.message,'danger')
-    })
-  }
-  
-
 
   updateHackerone(event:any) {
     this.loading=true
@@ -211,41 +150,41 @@ export class BugbountySettingsComponent implements OnInit {
     data.name='hackerone'
     if(this.yeswehackExist)
     {
-      this.bugbountyPlatform.updatePlatform(data).subscribe( (result) =>{
-        this.loading=false
-        this.showToast(result.message,'success')
-        this.getPlatform()
-      },(err) =>{
-        this.loading = false;
-        this.showToast(err.message,'danger')
-      })
+      this.updatePlatform(data)
     } else {
-      this.bugbountyPlatform.createPlatform(data).subscribe( (result) =>{
-        this.loading=false
-        this.showToast(result.message,'success')
-        this.getPlatform()
-      },(err) =>{
-        this.loading = false;
-        this.showToast(err.message,'danger')
-      })
+      this.createPlatform(data)
     }
   }
-  deleteHackerone() {
-    this.loading = true;
-    this.bugbountyPlatform.deletePlatform('hackerone').subscribe( (result) => {
+
+  updatePlatform(data:any){
+    this.bugbountyPlatform.updatePlatform(data).subscribe( (result) =>{
       this.loading=false
-      this.showToast(result.message,'success')
+      this.messageService.showToast(result.message,'success')
       this.getPlatform()
     },(err) =>{
       this.loading = false;
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
-
-
-
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
+  createPlatform(data:any){
+    this.bugbountyPlatform.createPlatform(data).subscribe( (result) =>{
+      this.loading=false
+      this.messageService.showToast(result.message,'success')
+      this.getPlatform()
+    },(err) =>{
+      this.loading = false;
+      this.messageService.showToast(err.message,'danger')
+    })
+  }
+  deletePlatform(platform:string) {
+    this.loading = true;
+    this.bugbountyPlatform.deletePlatform(platform).subscribe( (result) => {
+      this.loading=false
+      this.messageService.showToast(result.message,'success')
+      this.getPlatform()
+    },(err) =>{
+      this.loading = false;
+      this.messageService.showToast(err.message,'danger')
+    })
   }
 }

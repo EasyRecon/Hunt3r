@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../core/user/user.service';
 import {User} from '../../core/user/user';
-import { FormGroup,FormBuilder,FormControl,Validators   } from '@angular/forms';
+import { FormGroup,FormBuilder  } from '@angular/forms';
+import { MessageService  } from '../../shared/message.service';
 import {
   NbToastrService,
   NbComponentStatus
@@ -26,7 +27,7 @@ export class UserComponent implements OnInit {
   updateUserSpinner = false;
   userForm: FormGroup = <FormGroup> {};
   loading = true;
-  constructor(private userService : UserService,private fbuilder: FormBuilder,private toastrService: NbToastrService) {
+  constructor(private userService : UserService,private fbuilder: FormBuilder,private messageService: MessageService) {
     
 
     
@@ -49,7 +50,7 @@ export class UserComponent implements OnInit {
       this.loading=false
     },(err) =>{
       this.loading=false
-      this.showToast(err.error,'danger')
+      this.messageService.showToast(err.error,'danger')
     })
 
 
@@ -67,19 +68,13 @@ export class UserComponent implements OnInit {
     if(data.password == '' ) delete data.password
     this.userService.updateCurrentUser(data).subscribe( (result) => {
       this.user = result.data
-      this.showToast('User has been updated','success')
+      this.messageService.showToast('User has been updated','success')
       this.loading=false
       
     },(err) =>{
       this.loading=false
-      this.showToast(err.error,'danger')
+      this.messageService.showToast(err.error,'danger')
     })
   
   }
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
-  }
-
-
 }

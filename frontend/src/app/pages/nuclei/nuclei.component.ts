@@ -2,8 +2,8 @@ import {Component, OnInit,TemplateRef} from '@angular/core';
 import {NucleiService} from '../../core/nuclei/nuclei.service';
 import { FormGroup,FormBuilder   } from '@angular/forms';
 import { ReplaySubject,Observable } from "rxjs";
+import { MessageService  } from '../../shared/message.service';
 import {
-  NbToastrService,
   NbComponentStatus,
   NbDialogService
 
@@ -24,7 +24,10 @@ export class NucleiComponent implements OnInit {
   templateList:string[]=<any>[]
   uploadModal:any;
   fileTemp:string=''
-  constructor(private nucleiService : NucleiService,private toastrService: NbToastrService,private dialogService: NbDialogService,private fbuilder: FormBuilder) {
+  constructor(private nucleiService : NucleiService,
+    private messageService: MessageService,
+              private dialogService: NbDialogService,
+              private fbuilder: FormBuilder) {
     this.uploadTemplateForm = this.fbuilder.group({
       name: '',
       value:''
@@ -75,18 +78,18 @@ export class NucleiComponent implements OnInit {
 
     },(err)=> {
       this.loadingModal=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   deleteTemplate(name:string){
     this.loading=true
     this.nucleiService.deleteTemplate(name).subscribe((result)=> {
         this.loading=false
-        this.showToast(result.message,'success')
+        this.messageService.showToast(result.message,'success')
         this.getTemplate()
     },(err)=> {
       this.loading=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   }
   getTemplate(){
@@ -96,14 +99,8 @@ export class NucleiComponent implements OnInit {
       this.templateList=result.data
     },(err)=> {
       this.loading=false
-      this.showToast(err.message,'danger')
+      this.messageService.showToast(err.message,'danger')
     })
   
   }
-  showToast(message: string, status: NbComponentStatus = 'danger') {
-    if(status == 'danger' ) this.toastrService.show(message, 'Error', { status });
-    if(status == 'success' ) this.toastrService.show(message, 'Success', { status });
-  }
-
-
 }

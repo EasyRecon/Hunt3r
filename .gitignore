@@ -1,1 +1,4 @@
 .idea/
+frontend/.vscode/
+
+*.pem
