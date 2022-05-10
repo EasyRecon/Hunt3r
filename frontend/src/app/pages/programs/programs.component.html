@@ -78,6 +78,24 @@
                   </div>
                 </td>
               </tr>
+              <tr *ngFor="let item of this.listeProgramHackerone ">
+                <td>{{ item.id }}</td>
+                <td>{{ item.name}}</td>
+                <td><a target="_blank" href="{{ item.slug}}"></a></td>
+                <td><nb-icon icon="{{ item.vdp==true ? 'close-square-outline' :'checkmark-square-2-outline'}}"></nb-icon></td>
+                <td>{{ item.scopes}}</td>
+                <td>Intigriti</td>
+                <td>
+                  <div class="row actionGrp" >
+                    <div class="col">
+                      <button type="button" (click)="getScope(item.id)" nbButton status="success"><nb-icon icon="eye-outline" ></nb-icon></button>
+                    </div>
+                    <div class="col">
+                      <button type="button" (click)="syncScope(item.id)" nbButton status="success"><nb-icon icon="sync-outline" ></nb-icon></button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
             </table>
 
 

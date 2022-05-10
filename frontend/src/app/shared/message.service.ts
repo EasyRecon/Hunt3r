@@ -1,4 +1,4 @@
-import {Component, NgModule,Injectable } from '@angular/core';
+import {Injectable } from '@angular/core';
 import {
   NbToastrService,
   NbComponentStatus
