@@ -13,7 +13,7 @@ class Whoxy
     company = Set[]
     email = Set[]
 
-    response['whois_records'].each do |result|
+    response_json['whois_records'].each do |result|
       if result['registrant_contact']['company_name']&.match?(/#{OPTIONS[:domain].sub(/\..*/, '')}/i)
         company << result['registrant_contact']['company_name'].gsub(' ', '+')
       end
@@ -35,8 +35,10 @@ def reverse(data, type)
   subdomains = []
 
   data.each do |value|
+    next if value.end_with?(".#{OPTIONS[:domain]}")
+
     request = Typhoeus::Request.new(
-      "http://api.whoxy.com/?key=#{WHOXY_TOKEN}&reverse=whois&#{type}=#{value}"
+      "http://api.whoxy.com/?key=#{OPTIONS[:whoxy_token]}&reverse=whois&#{type}=#{value}"
     )
     request.run
     response = request.response

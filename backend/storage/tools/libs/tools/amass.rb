@@ -5,7 +5,7 @@ class Amass
 
     random = (0...8).map { (65 + rand(26)).chr }.join
 
-    cmd = "amass enum"
+    cmd = 'amass enum'
     cmd += ' -active' if OPTIONS[:amass_active]
     cmd += " -d #{domain} -trf #{resolver_path} -o #{OPTIONS[:output]}/amass_#{random}_domains.txt"
 
