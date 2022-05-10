@@ -39,10 +39,7 @@ const COMPONENTS = [
         NbMenuServiceComponent
 ];
 
-import { DEFAULT_THEME } from './styles/theme.default';
-import { COSMIC_THEME } from './styles/theme.cosmic';
-import { CORPORATE_THEME } from './styles/theme.corporate';
-import { DARK_THEME } from './styles/theme.dark';
+
 @NgModule({
   imports: [CommonModule, ...NB_MODULES],
   exports: [CommonModule, ...COMPONENTS],
@@ -56,8 +53,7 @@ export class ThemeModule {
         ...NbThemeModule.forRoot(
           {
             name: 'dark',
-          },
-          [ DARK_THEME,DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME ],
+          }
         ).providers || [],
       ],
     };
