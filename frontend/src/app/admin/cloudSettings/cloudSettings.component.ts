@@ -97,6 +97,7 @@ export class CloudSettingsComponent implements OnInit {
     event.preventDefault()
     this.loading = true;
     let data = this.scalewayForm.value
+    data.ssh_key=btoa(data.ssh_key)
     let finalData = {"provider": {"name":"scaleway","infos":data}}
     if(this.scalewayExist) {
       if(finalData.provider.infos.secret_key.charAt(1) == '*') delete finalData.provider.infos.secret_key
