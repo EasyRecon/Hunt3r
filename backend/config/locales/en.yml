@@ -118,6 +118,7 @@ en:
           c99_invalid: "The C99 API informations is invalid or your API key is exhausted"
           dehashed_invalid: "The Dehashed API informations is invalid or your API key is exhausted"
           amass_nuclei_invalid: "The Amass/Nuclei configuration sent is invalid, check the file content"
+          missing_amass: "Please add your Amass configuration file first"
         meshs:
           created: "Problem with adding mesh. A strong token is needed"
           unknown: "The specified mesh does not exist"
