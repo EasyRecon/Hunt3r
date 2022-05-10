@@ -5,16 +5,15 @@ import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import {baseUrl } from "../../../environments/environment";
 import {  NbAuthService, NbAuthToken, NB_AUTH_OPTIONS } from '@nebular/auth';
-@Injectable({
-  providedIn: 'root',
-})
+import {ErrorService} from '../../shared/errors.service'
+@Injectable()
 export class UserService  {
   // Base url
   baseurl = baseUrl;
   token: any;
 
 
-  constructor(private http: HttpClient, authService: NbAuthService,@Inject(NB_AUTH_OPTIONS) protected options = {})  {
+  constructor(private errorService: ErrorService,private http: HttpClient, authService: NbAuthService,@Inject(NB_AUTH_OPTIONS) protected options = {})  {
     authService.onTokenChange()
     .subscribe((token: NbAuthToken) => {
       this.token = null;
@@ -39,7 +38,7 @@ export class UserService  {
         this.baseurl + '/profile',
         this.httpOptions
       )
-      .pipe(retry(1), catchError(this.errorHandl));
+      .pipe(retry(1), catchError(this.errorService.errorHandl));
   }
   getAllUsers(): Observable<DataUsers> {
 
@@ -48,7 +47,7 @@ export class UserService  {
         this.baseurl + '/admin/users',
         this.httpOptions
       )
-      .pipe(retry(1), catchError(this.errorHandl));
+      .pipe(retry(1), catchError(this.errorService.errorHandl));
   }
 
   updateCurrentUser(data:UpdateUser): Observable<DataUser> {
@@ -59,7 +58,7 @@ export class UserService  {
         data,
         this.httpOptions
       )
-      .pipe(retry(1), catchError(this.errorHandl));
+      .pipe(retry(1), catchError(this.errorService.errorHandl));
   }
 
   createUser(data:AddUser): Observable<UserResponse> {
@@ -70,15 +69,15 @@ export class UserService  {
         data,
         this.httpOptions
       )
-      .pipe(retry(1), catchError(this.errorHandl));
+      .pipe(retry(1), catchError(this.errorService.errorHandl));
   }
   deleteUser(id:number): Observable<UserResponse> {
     return this.http
       .delete<UserResponse>(
-        this.baseurl + '/admin/users/'+id,
+        this.baseurl + '/admin/user/'+id,
         this.httpOptions
       )
-      .pipe(retry(1), catchError(this.errorHandl));
+      .pipe(retry(1), catchError(this.errorService.errorHandl));
   }
 
 
@@ -89,10 +88,12 @@ export class UserService  {
         this.baseurl + '/auth/logout',
         this.httpOptions
       )
-      .pipe(retry(1), catchError(this.errorHandl));
+      .pipe(retry(1), catchError(this.errorService.errorHandl));
   }
 
 
+
+  
   errorHandl(error : any) {
     let errorMessage = {};
     if (error.error instanceof ErrorEvent) {

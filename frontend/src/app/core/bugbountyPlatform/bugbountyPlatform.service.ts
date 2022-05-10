@@ -6,17 +6,16 @@ import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import {baseUrl } from "../../../environments/environment";
 import {  NbAuthService, NbAuthToken, NB_AUTH_OPTIONS } from '@nebular/auth';
+import {ErrorService} from '../../shared/errors.service'
 
-@Injectable({
-    providedIn: 'root',
-  })
+@Injectable()
   export class BugbountyPlatformService  {
     // Base url
     baseurl = baseUrl;
     token: any;
   
   
-    constructor(private http: HttpClient, authService: NbAuthService,@Inject(NB_AUTH_OPTIONS) protected options = {})  {
+    constructor(private errorService: ErrorService,private http: HttpClient, authService: NbAuthService,@Inject(NB_AUTH_OPTIONS) protected options = {})  {
       authService.onTokenChange()
       .subscribe((token: NbAuthToken) => {
         this.token = null;
@@ -39,7 +38,7 @@ import {  NbAuthService, NbAuthToken, NB_AUTH_OPTIONS } from '@nebular/auth';
         this.baseurl + '/admin/platforms',
         this.httpOptions
       )
-      .pipe(retry(1), catchError(this.errorHandl));
+      .pipe(retry(1), catchError(this.errorService.errorHandl));
   }
   deletePlatform(plateform:string): Observable<BugBountyPlatformSettingsResponse> {
     return this.http
@@ -47,7 +46,7 @@ import {  NbAuthService, NbAuthToken, NB_AUTH_OPTIONS } from '@nebular/auth';
         this.baseurl + '/admin/platforms/'+plateform,
         this.httpOptions
       )
-      .pipe(retry(1), catchError(this.errorHandl));
+      .pipe(retry(1), catchError(this.errorService.errorHandl));
   }
 
   updatePlatform(data:BugBountyPlatformSettingsUpdate): Observable<BugBountyPlatformSettingsResponse> {
@@ -57,7 +56,7 @@ import {  NbAuthService, NbAuthToken, NB_AUTH_OPTIONS } from '@nebular/auth';
         data,
         this.httpOptions
       )
-      .pipe(retry(1), catchError(this.errorHandl));
+      .pipe(retry(1), catchError(this.errorService.errorHandl));
   }
 
   createPlatform(data:BugBountyPlatformSettingsUpdate): Observable<BugBountyPlatformSettingsResponse> {
@@ -67,7 +66,7 @@ import {  NbAuthService, NbAuthToken, NB_AUTH_OPTIONS } from '@nebular/auth';
         data,
         this.httpOptions
       )
-      .pipe(retry(1), catchError(this.errorHandl));
+      .pipe(retry(1), catchError(this.errorService.errorHandl));
   }
 
   getScope(platform:any): Observable<BugBountyPlatformSyncsData> {
@@ -76,7 +75,7 @@ import {  NbAuthService, NbAuthToken, NB_AUTH_OPTIONS } from '@nebular/auth';
         this.baseurl + '/admin/platforms/'+platform+'/stats',
         this.httpOptions
       )
-      .pipe(retry(1), catchError(this.errorHandl));
+      .pipe(retry(1), catchError(this.errorService.errorHandl));
   }
   
   syncScope(platform:any): Observable<BugBountyPlatformSyncsResponse> {
@@ -85,7 +84,7 @@ import {  NbAuthService, NbAuthToken, NB_AUTH_OPTIONS } from '@nebular/auth';
         this.baseurl + '/admin/platforms/'+platform+'/stats',
         this.httpOptions
       )
-      .pipe(retry(1), catchError(this.errorHandl));
+      .pipe(retry(1), catchError(this.errorService.errorHandl));
   }
 
 
@@ -95,23 +94,6 @@ import {  NbAuthService, NbAuthToken, NB_AUTH_OPTIONS } from '@nebular/auth';
         this.baseurl + '/programs?name='+platform+'&program='+program,
         this.httpOptions
       )
-      .pipe(retry(1), catchError(this.errorHandl));
-  }
-
-
-
-  errorHandl(error : any) {
-    let errorMessage = {};
-    if (error.error instanceof ErrorEvent) {
-      // Get client-side error
-      errorMessage = {"status" : "", "error":"",'message':error.message};
-    } else {
-      // Get server-side error
-      errorMessage = {"status" : error.status, "error":error.error.errors,'message':error.error.message};
-    }
-    console.log(errorMessage);
-    return throwError(() => {
-      return errorMessage;
-    });
+      .pipe(retry(1), catchError(this.errorService.errorHandl));
   }
 }

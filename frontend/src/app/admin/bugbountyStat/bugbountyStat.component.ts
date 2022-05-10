@@ -5,21 +5,19 @@ import { NbThemeService } from '@nebular/theme';
 import * as _ from 'lodash';
 import { BugbountyPlatformService } from '../../core/bugbountyPlatform/bugbountyPlatform.service'
 import { MessageService  } from '../../shared/message.service';
+import { ChartService  } from './chart.service';
 
 
   import 'echarts/lib/chart/pie'
   import 'echarts/lib/chart/bar'
 
   import 'echarts/lib/component/legend'
-import { toBase64String } from '@angular/compiler/src/output/source_map';
-
 @Component({
   selector: 'ngx-dashboard',
   templateUrl: './bugbountyStat.component.html',
   styleUrls: ['./bugbountyStat.component.scss']
 })
 export class BugbountyStatComponent implements OnInit {
-
 
   loadSyncInti=false
   loadSyncYwh=false
@@ -82,7 +80,7 @@ statINTI = {
   },
   earn_by_month:{
   }
-}
+};
   scopeINTI = [
     {
       "id":"",
@@ -106,7 +104,7 @@ statINTI = {
   constructor(
     private messageService: MessageService,
     private bugbountyPlatform : BugbountyPlatformService,
-    private theme: NbThemeService) {
+    private chartService:ChartService) {
 
     
   }
@@ -117,7 +115,7 @@ statINTI = {
       this.intigritiExist = false;
       let one = false
       result.data.forEach( (element) => {
-        console.log(this.yeswehackExist)
+       // console.log(this.yeswehackExist)
         if(element.name == 'yeswehack'){
           this.yeswehackExist=true
           this.getStatsPlatform('yeswehack')
@@ -136,10 +134,6 @@ statINTI = {
     })
 
   }
-
-
-
-
   computeYWHStat() {
     var temp=Array();
     var tempStatus=Array()
@@ -181,12 +175,12 @@ statINTI = {
     this.statYWH.total_rapports=this.scopeYWH.length
     this.statYWH.average_per_rapport = parseFloat((this.statYWH.earnedEuro /this.scopeYWH.length).toFixed(2))
     this.loadingYWHGlobal=false
-    console.log(this.statYWH)
+   // console.log(this.statYWH)
     this.optionsYWHPie = this.pieCriticity(this.statYWH.rapport_severity.L,this.statYWH.rapport_severity.M,this.statYWH.rapport_severity.H,this.statYWH.rapport_severity.C)
     this.initYWHBarre()
     this.initYWHPiReportStatus()
     this.initYWHEarnByMonth()
-    console.log(this.statYWH)
+    //console.log(this.statYWH)
     
   }
  
@@ -206,7 +200,7 @@ statINTI = {
     Object.keys(this.statYWH.report_by_status).forEach( (element) => {
       data.push({value:this.statYWH.report_by_status[element as keyof typeof this.statYWH.report_by_status],name:element})
     })
-    console.log(data)
+    //console.log(data)
     this.optionsYWHPieReportStatus = this.pieRepport(data)
   }
 
@@ -231,7 +225,7 @@ statINTI = {
       }
       month++
     }
-    this.optionsYWHBarre = this.graphBarre(data,label)
+    this.optionsYWHBarre = this.chartService.barreGraph(data,label,'Number of rapport','Number of report')
   }
   
   initYWHEarnByMonth(){
@@ -255,7 +249,7 @@ statINTI = {
       }
       month++
     }
-    this.optionsYWHEarnedByMonth = this.earnByMonth(data,label)
+    this.optionsYWHEarnedByMonth = this.chartService.barreGraph(data,label,"Earn by month",'value')
   }
   //---------------Intigriti part
 
@@ -278,6 +272,7 @@ statINTI = {
       var tempStatus=Array()
       var tempEarnByMonth=Array()
       this.loadingINTIGlobal=true
+      console.log(this.scopeINTI)
       _.each(this.scopeINTI, (element) => {
         //total earned
         this.statINTI.earnedEuro +=  parseInt(element.reward)
@@ -313,14 +308,14 @@ statINTI = {
         this.statINTI.total_rapports=this.scopeINTI.length
         this.statINTI.average_per_rapport = parseFloat((this.statINTI.earnedEuro /this.scopeINTI.length).toFixed(2))
         this.loadingINTIGlobal=false
-        console.log(this.statINTI)
+        //console.log(this.statINTI)
         this.optionsINTIPie =  this.pieCriticity(this.statINTI.rapport_severity.L,this.statINTI.rapport_severity.M,this.statINTI.rapport_severity.H,this.statINTI.rapport_severity.C)
 
       
       this.initINTIBarre()
       this.initINTIPiReportStatus()
       this.initINTIEarnByMonth()
-      console.log(this.statINTI)
+      //console.log(this.statINTI)
   }
   syncINTI() {
     this.loadSyncInti=true
@@ -339,7 +334,7 @@ statINTI = {
     Object.keys(this.statINTI.report_by_status).forEach( (element) => {
       data.push({value:this.statINTI.report_by_status[element as keyof typeof this.statINTI.report_by_status],name:element})
     })
-    console.log(data)
+    //console.log(data)
     this.optionsINTIPieReportStatus = this.pieRepport(data)
   }
 
@@ -364,7 +359,7 @@ statINTI = {
       }
       month++
     }
-    this.optionsINTIBarre =  this.graphBarre(data,label)
+    this.optionsINTIBarre =  this.chartService.barreGraph(data,label,'Report by month','value')
   }
   
   initINTIEarnByMonth(){
@@ -388,139 +383,19 @@ statINTI = {
       }
       month++
     }
-    this.optionsINTIEarnedByMonth = this.earnByMonth(data,label)
-  }
-  earnByMonth(data:any[],label:any[]){
-    return{
-      title: {
-        text: "Earn by month",
-        //x: "center"
-      },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'shadow',
-        },
-      },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-      },
-      xAxis: [
-        {
-          type: 'category',
-          data: label,
-          axisTick: {
-            alignWithLabel: true,
-          },
-        },
-      ],
-      yAxis: [
-        {
-          type: 'value',      
-        },
-      ],
-      series: [
-        {
-          name: 'Number of report',
-          type: 'bar',
-          barWidth: '60%',
-          data: data,
-        },
-      ],
-    };
-  }
-  graphBarre(data:any[],label:any[]){
-    return {
-      title: {
-        text: "Report by month",
-        //x: "center"
-      },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'shadow',
-        },
-      },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-      },
-      xAxis: [
-        {
-          type: 'category',
-          data: label,
-          axisTick: {
-            alignWithLabel: true,
-          },
-        },
-      ],
-      yAxis: [
-        {
-          type: 'value',      
-        },
-      ],
-      series: [
-        {
-          name: 'Number of report',
-          type: 'bar',
-          barWidth: '60%',
-          data: data,
-        },
-      ],
-    };
+    this.optionsINTIEarnedByMonth = this.chartService.barreGraph(data,label,"Earn by month","value")
   }
   pieRepport(data:any[]){
-    return {
-      title: {
-        text: "Report by status",
-      },
-      tooltip: {
-        trigger: "item",
-        formatter: "{a} <br/>{b} : {c} ({d}%)"
-      },
-      calculable: true,
-      series: [
-        {
-          name: "Report by criticity",
-          type: "pie",
-          radius: [30, 110],
-          roseType: "area",
-          data: data,
-          color:['#00d68f','#fa0','#ff3d71','#222b45']
-        }
-      ]
-    };
+    return this.chartService.pieChart(data,
+                       'Report by status')
   }
   pieCriticity(low:number,medium:number,high:number,critic:number){
-    return {
-      title: {
-        text: "Report by criticity",
-      },
-      tooltip: {
-        trigger: "item",
-        formatter: "{a} <br/>{b} : {c} ({d}%)"
-      },
-      calculable: true,
-      series: [
-        {
-          name: "Report by criticity",
-          type: "pie",
-          radius: [30, 110],
-          roseType: "area",
-          data: [
-            { value: low, name: "Low" },
-            { value: medium, name: "Medium" },
-            { value: high, name: "High" },
-            { value: critic, name: "Critical" }
-          ],
-          color:['#00d68f','#fa0','#ff3d71','#222b45']
-        }
-      ]
-    };
+    return this.chartService.pieChart([
+                    { value: low, name: "Low" },
+                    { value: medium, name: "Medium" },
+                    { value: high, name: "High" },
+                    { value: critic, name: "Critical" }
+                  ],
+                'Report by criticity')
   }
 }
