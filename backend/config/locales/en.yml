@@ -112,6 +112,12 @@ en:
           informations_missing: "Please fill in the billing information first"
         tools:
           not_valid: "The information in the tool is not valid or your API key is exhausted"
+          whoxy_invalid: "The Whoxy API informations is invalid or your API key is exhausted"
+          slack_invalid: "Your slack webhook seems invalid, it was impossible to send a test message"
+          interactsh_invalid: "interactsh_invalid"
+          c99_invalid: "The C99 API informations is invalid or your API key is exhausted"
+          dehashed_invalid: "The Dehashed API informations is invalid or your API key is exhausted"
+          amass_nuclei_invalid: "The Amass/Nuclei configuration sent is invalid, check the file content"
         meshs:
           created: "Problem with adding mesh. A strong token is needed"
           unknown: "The specified mesh does not exist"
