@@ -31,10 +31,10 @@ runcmd:
   - mv nuclei /usr/local/bin
   - rm nuclei_2.6.9_linux_amd64.zip
   # Naabu
-  - wget https://github.com/projectdiscovery/naabu/releases/download/v2.0.6/naabu_2.0.6_linux_amd64.zip
-  - unzip naabu_2.0.6_linux_amd64.zip
+  - wget https://github.com/projectdiscovery/naabu/releases/download/v2.0.7/naabu_2.0.7_linux_amd64.zip
+  - unzip naabu_2.0.7_linux_amd64.zip
   - mv naabu /usr/local/bin/
-  - rm naabu_2.0.6_linux_amd64.zip
+  - rm naabu_2.0.7_linux_amd64.zip
   # HTTPX
   - wget https://github.com/projectdiscovery/httpx/releases/download/v1.2.1/httpx_1.2.1_linux_amd64.zip
   - unzip httpx_1.2.1_linux_amd64.zip
