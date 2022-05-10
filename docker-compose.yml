@@ -33,11 +33,8 @@ services:
 
   frontend:
     build: ./frontend
-    command: ng serve --host 0.0.0.0
-    volumes:
-      - ./frontend:/hunt3r
     ports:
-      - "4200:4200"
+      - "80:80"
     logging:
       options:
         max-file: "1"
