@@ -70,8 +70,7 @@ export class BugbountyScopeSyncComponent implements OnInit {
     this.hackeroneExist = false
     this.getPlatform()
   }
-
-  getPlatform(){
+  resetLocalVar(){
     this.intigriti = {
       "email":"",
       "password":"",
@@ -87,23 +86,15 @@ export class BugbountyScopeSyncComponent implements OnInit {
       "password":"",
       "otp":""
     }
+  }
+  getPlatform(){
+    this.resetLocalVar()
     this.bugbountyPlatform.getPlatform().subscribe( (result) => {
       this.yeswehackExist = false;
       this.intigritiExist = false;
       this.hackeroneExist = false
       result.data.forEach( (element) => {
-        if(element.name == 'yeswehack'){
-          this.yeswehack.email = element.email
-          this.yeswehackExist=true
-        } 
-        if(element.name == 'intigriti'){
-          this.intigriti.email = element.email
-          this.intigritiExist = true
-        } 
-        if(element.name == 'hackerone'){
-          this.hackerone.email = element.email
-          this.hackeroneExist = true
-        } 
+        this.updateObjectVar(element)
       });     
       this.loading = false;
     },(err) =>{
@@ -111,10 +102,50 @@ export class BugbountyScopeSyncComponent implements OnInit {
       this.messageService.showToast(err.message,'danger')
     })
   }
+  updateObjectVar(element:any) {
+    if(element.name == 'yeswehack'){
+      this.yeswehack.email = element.email
+      this.yeswehackExist=true
+    } 
+    if(element.name == 'intigriti'){
+      this.intigriti.email = element.email
+      this.intigritiExist = true
+    } 
+    if(element.name == 'hackerone'){
+      this.hackerone.email = element.email
+      this.hackeroneExist = true
+    } 
+  }
 
-  deleteYeswehack() {
-    this.loading = true;
-    this.bugbountyPlatform.deletePlatform('yeswehack').subscribe( (result) => {
+  platformData(event:any,platform:string){
+    this.loading=true
+    event.preventDefault()
+    let exist = false
+    let data:any
+    if(platform=='yeswehack'){
+      exist = this.yeswehackExist
+      data = this.intigritiForm.value
+      data.name='yeswehack'
+    }
+    if(platform=='intigriti'){
+      exist = this.intigritiExist
+      data = this.intigritiForm.value
+      data.name='intigriti'
+    }
+    if(platform=='hackerone'){
+      exist = this.hackeroneExist
+      data = this.hackeroneForm.value
+      data.name='hackerone'
+    }
+    if(data.otp == "" ) delete data.otp
+    if(exist){
+      this.updatePlatform(data)
+    } else {
+      this.createPlatform(data)
+    }
+  }
+  createPlatform(data:any){
+    this.bugbountyPlatform.createPlatform(data).subscribe( (result) =>{
       this.loading=false
       this.messageService.showToast(result.message,'success')
       this.getPlatform()
@@ -123,63 +154,8 @@ export class BugbountyScopeSyncComponent implements OnInit {
       this.messageService.showToast(err.message,'danger')
     })
   }
-  updateYeswehack(event:any) {
-    this.loading=true
-    event.preventDefault()
-    let data = this.intigritiForm.value
-    data.name='yeswehack'
-    if(this.yeswehackExist)
-    {
-      this.bugbountyPlatform.updatePlatform(data).subscribe( (result) =>{
-        this.loading=false
-        this.messageService.showToast(result.message,'success')
-        this.getPlatform()
-      },(err) =>{
-        this.loading = false;
-        this.messageService.showToast(err.message,'danger')
-      })
-    } else {
-      this.bugbountyPlatform.createPlatform(data).subscribe( (result) =>{
-        this.loading=false
-        this.messageService.showToast(result.message,'success')
-        this.getPlatform()
-      },(err) =>{
-        this.loading = false;
-        this.messageService.showToast(err.message,'danger')
-      })
-    }
-  }
-
-  updateIntigriti(event:any) {
-    this.loading=true
-    event.preventDefault()
-    let data = this.intigritiForm.value
-    if(data.otp == "" ) delete data.otp
-    data.name='intigriti'
-    if(this.yeswehackExist)
-    {
-      this.bugbountyPlatform.updatePlatform(data).subscribe( (result) =>{
-        this.loading=false
-        this.messageService.showToast(result.message,'success')
-        this.getPlatform()
-      },(err) =>{
-        this.loading = false;
-        this.messageService.showToast(err.message,'danger')
-      })
-    } else {
-      this.bugbountyPlatform.createPlatform(data).subscribe( (result) =>{
-        this.loading=false
-        this.messageService.showToast(result.message,'success')
-        this.getPlatform()
-      },(err) =>{
-        this.loading = false;
-        this.messageService.showToast(err.message,'danger')
-      })
-    }
-  }
-  deleteHackerone() {
-    this.loading = true;
-    this.bugbountyPlatform.deletePlatform('hackerone').subscribe( (result) => {
+  updatePlatform(data:any){
+    this.bugbountyPlatform.updatePlatform(data).subscribe( (result) =>{
       this.loading=false
       this.messageService.showToast(result.message,'success')
       this.getPlatform()
@@ -188,36 +164,10 @@ export class BugbountyScopeSyncComponent implements OnInit {
       this.messageService.showToast(err.message,'danger')
     })
   }
-  updateHackerone(event:any) {
-    this.loading=true
-    event.preventDefault()
-    let data = this.hackeroneForm.value
-    if(data.otp == "" ) delete data.otp
-    data.name='hackerone'
-    if(this.yeswehackExist)
-    {
-      this.bugbountyPlatform.updatePlatform(data).subscribe( (result) =>{
-        this.loading=false
-        this.messageService.showToast(result.message,'success')
-        this.getPlatform()
-      },(err) =>{
-        this.loading = false;
-        this.messageService.showToast(err.message,'danger')
-      })
-    } else {
-      this.bugbountyPlatform.createPlatform(data).subscribe( (result) =>{
-        this.loading=false
-        this.messageService.showToast(result.message,'success')
-        this.getPlatform()
-      },(err) =>{
-        this.loading = false;
-        this.messageService.showToast(err.message,'danger')
-      })
-    }
-  }
-  deleteIntigriti() {
+
+  deletePlatform(name:string) {
     this.loading = true;
-    this.bugbountyPlatform.deletePlatform('hackerone').subscribe( (result) => {
+    this.bugbountyPlatform.deletePlatform(name).subscribe( (result) => {
       this.loading=false
       this.messageService.showToast(result.message,'success')
       this.getPlatform()

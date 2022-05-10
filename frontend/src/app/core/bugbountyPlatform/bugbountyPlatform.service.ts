@@ -1,99 +1,46 @@
 
-import { Injectable,Inject  } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BugBountyPlatformSettingsUpdate,BugBountyPlatformSettingsResponse,BugBountyPlatformStatsResponse,BugBountyPlatformSyncsResponse,BugBountyPlatformSyncsData} from './bugbountyPlatform';
-import { Observable, throwError } from 'rxjs';
-import { retry, catchError } from 'rxjs/operators';
-import {baseUrl } from "../../../environments/environment";
-import {  NbAuthService, NbAuthToken, NB_AUTH_OPTIONS } from '@nebular/auth';
-import {ErrorService} from '../../shared/errors.service'
+import { Injectable  } from '@angular/core';
+import { Observable } from 'rxjs';
+import {HttpService} from '../../shared/http.service'
+import { 
+  BugBountyPlatformSettingsUpdate,
+  BugBountyPlatformSettingsResponse,
+  BugBountyPlatformStatsResponse,
+  BugBountyPlatformSyncsResponse,
+  BugBountyPlatformSyncsData
+} from './bugbountyPlatform';
+
 
 @Injectable()
   export class BugbountyPlatformService  {
-    // Base url
-    baseurl = baseUrl;
-    token: any;
-  
-  
-    constructor(private errorService: ErrorService,private http: HttpClient, authService: NbAuthService,@Inject(NB_AUTH_OPTIONS) protected options = {})  {
-      authService.onTokenChange()
-      .subscribe((token: NbAuthToken) => {
-        this.token = null;
-        if (token && token.isValid()) {
-          this.token = token;
-        }
-      });
-    }
-  // Http Headers
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-    }),
-  };
 
-  
+    constructor(private httpService:HttpService)  {
+    }
+
   getPlatform(): Observable<BugBountyPlatformSettingsResponse> {
-    return this.http
-      .get<BugBountyPlatformSettingsResponse>(
-        this.baseurl + '/admin/platforms',
-        this.httpOptions
-      )
-      .pipe(retry(1), catchError(this.errorService.errorHandl));
+    return this.httpService.get<BugBountyPlatformSettingsResponse>('/admin/platforms')
   }
   deletePlatform(plateform:string): Observable<BugBountyPlatformSettingsResponse> {
-    return this.http
-      .delete<BugBountyPlatformSettingsResponse>(
-        this.baseurl + '/admin/platforms/'+plateform,
-        this.httpOptions
-      )
-      .pipe(retry(1), catchError(this.errorService.errorHandl));
+    return this.httpService.delete<BugBountyPlatformSettingsResponse>('/admin/platforms/'+plateform)
   }
 
   updatePlatform(data:BugBountyPlatformSettingsUpdate): Observable<BugBountyPlatformSettingsResponse> {
-    return this.http
-      .patch<BugBountyPlatformSettingsResponse>(
-        this.baseurl + '/admin/platforms',
-        data,
-        this.httpOptions
-      )
-      .pipe(retry(1), catchError(this.errorService.errorHandl));
+    return this.httpService.post<BugBountyPlatformSettingsResponse>('/admin/platforms',data)
   }
 
   createPlatform(data:BugBountyPlatformSettingsUpdate): Observable<BugBountyPlatformSettingsResponse> {
-    return this.http
-      .post<BugBountyPlatformSettingsResponse>(
-        this.baseurl + '/admin/platforms',
-        data,
-        this.httpOptions
-      )
-      .pipe(retry(1), catchError(this.errorService.errorHandl));
+    return this.httpService.post<BugBountyPlatformSettingsResponse>('/admin/platforms',data)
   }
 
   getScope(platform:any): Observable<BugBountyPlatformSyncsData> {
-    return this.http
-      .get<BugBountyPlatformSyncsData>(
-        this.baseurl + '/admin/platforms/'+platform+'/stats',
-        this.httpOptions
-      )
-      .pipe(retry(1), catchError(this.errorService.errorHandl));
+    return this.httpService.get<BugBountyPlatformSyncsData>('/admin/platforms/'+platform+'/stats')
   }
   
   syncScope(platform:any): Observable<BugBountyPlatformSyncsResponse> {
-    return this.http
-      .patch<BugBountyPlatformSyncsResponse>(
-        this.baseurl + '/admin/platforms/'+platform+'/stats',
-        this.httpOptions
-      )
-      .pipe(retry(1), catchError(this.errorService.errorHandl));
+    return this.httpService.patch<BugBountyPlatformSyncsResponse>('/admin/platforms/'+platform+'/stats')
   }
 
-
   getProgram(platform:any,program:any): Observable<BugBountyPlatformStatsResponse> {
-    return this.http
-      .post<BugBountyPlatformStatsResponse>(
-        this.baseurl + '/programs?name='+platform+'&program='+program,
-        this.httpOptions
-      )
-      .pipe(retry(1), catchError(this.errorService.errorHandl));
+    return this.httpService.get<BugBountyPlatformStatsResponse>('/programs?name='+platform+'&program='+program)
   }
 }

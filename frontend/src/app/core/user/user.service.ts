@@ -1,111 +1,35 @@
-import { Injectable,Inject  } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable  } from '@angular/core';
 import { DataUser,UpdateUser,DataUsers,UserResponse,AddUser } from './user';
-import { Observable, throwError } from 'rxjs';
-import { retry, catchError } from 'rxjs/operators';
-import {baseUrl } from "../../../environments/environment";
-import {  NbAuthService, NbAuthToken, NB_AUTH_OPTIONS } from '@nebular/auth';
-import {ErrorService} from '../../shared/errors.service'
+import { Observable } from 'rxjs';
+
+
+import {HttpService} from '../../shared/http.service'
 @Injectable()
 export class UserService  {
-  // Base url
-  baseurl = baseUrl;
-  token: any;
 
+  constructor(private httpService:HttpService)  {
 
-  constructor(private errorService: ErrorService,private http: HttpClient, authService: NbAuthService,@Inject(NB_AUTH_OPTIONS) protected options = {})  {
-    authService.onTokenChange()
-    .subscribe((token: NbAuthToken) => {
-      this.token = null;
-      if (token && token.isValid()) {
-        this.token = token;
-      }
-    });
   }
 
-
-  // Http Headers
-  httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-    }),
-  };
-  // POST
   getCurrentUser(): Observable<DataUser> {
-
-    return this.http
-      .get<DataUser>(
-        this.baseurl + '/profile',
-        this.httpOptions
-      )
-      .pipe(retry(1), catchError(this.errorService.errorHandl));
+    return this.httpService.get<DataUser>('/profile')
   }
   getAllUsers(): Observable<DataUsers> {
-
-    return this.http
-      .get<DataUsers>(
-        this.baseurl + '/admin/users',
-        this.httpOptions
-      )
-      .pipe(retry(1), catchError(this.errorService.errorHandl));
+    return this.httpService.get<DataUsers>('/admin/users')
   }
 
   updateCurrentUser(data:UpdateUser): Observable<DataUser> {
-
-    return this.http
-      .patch<DataUser>(
-        this.baseurl + '/profile',
-        data,
-        this.httpOptions
-      )
-      .pipe(retry(1), catchError(this.errorService.errorHandl));
+    return this.httpService.patch<DataUser>('/profile',data)
   }
 
   createUser(data:AddUser): Observable<UserResponse> {
-
-    return this.http
-      .post<UserResponse>(
-        this.baseurl + '/admin/users',
-        data,
-        this.httpOptions
-      )
-      .pipe(retry(1), catchError(this.errorService.errorHandl));
+    return this.httpService.post<UserResponse>('/admin/users',data)
   }
   deleteUser(id:number): Observable<UserResponse> {
-    return this.http
-      .delete<UserResponse>(
-        this.baseurl + '/admin/user/'+id,
-        this.httpOptions
-      )
-      .pipe(retry(1), catchError(this.errorService.errorHandl));
+    return this.httpService.delete<UserResponse>('/admin/user/'+id)
   }
-
-
-
   logoutUser(): Observable<any> {
-    return this.http
-      .delete<any>(
-        this.baseurl + '/auth/logout',
-        this.httpOptions
-      )
-      .pipe(retry(1), catchError(this.errorService.errorHandl));
+    return this.httpService.delete<UserResponse>('/auth/logout')
   }
 
-
-
-  
-  errorHandl(error : any) {
-    let errorMessage = {};
-    if (error.error instanceof ErrorEvent) {
-      // Get client-side error
-      errorMessage = {"status" : "", "error":"",'message':error.message};
-    } else {
-      // Get server-side error
-      errorMessage = {"status" : error.status, "error":error.error.errors,'message':error.error.message};
-    }
-    console.log(errorMessage);
-    return throwError(() => {
-      return errorMessage;
-    });
-  }
 }
