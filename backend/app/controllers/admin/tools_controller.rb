@@ -30,7 +30,7 @@ class Admin::ToolsController < ApplicationController
 
       unless (tool.name == 'amass' && base64?(value)) || (tool.name == 'nuclei' && base64?(value) && yaml?(value))
         tool.destroy
-        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.not_valid'), data: nil }
+        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.amass_nuclei_invalid'), data: nil }
       end
 
       write_config(tool.name, value)
@@ -40,7 +40,7 @@ class Admin::ToolsController < ApplicationController
     when 'dehashed'
       unless dehashed_valid?(tool)
         tool.destroy
-        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.not_valid'), data: nil }
+        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.dehashed_invalid'), data: nil }
       end
 
       tool.save
@@ -51,7 +51,7 @@ class Admin::ToolsController < ApplicationController
     when 'c99'
       unless c99_valid?(tool)
         tool.destroy
-        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.not_valid'), data: nil }
+        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.c99_invalid'), data: nil }
       end
 
       tool.save
@@ -59,7 +59,7 @@ class Admin::ToolsController < ApplicationController
     when 'whoxy'
       unless whoxy_valid?(tool)
         tool.destroy
-        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.not_valid'), data: nil }
+        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.whoxy_invalid'), data: nil }
       end
 
       tool.save
@@ -67,7 +67,7 @@ class Admin::ToolsController < ApplicationController
     when 'slack'
       unless slack_valid?(tool)
         tool.destroy
-        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.not_valid'), data: nil }
+        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.slack_invalid'), data: nil }
       end
 
       tool.save
@@ -75,7 +75,7 @@ class Admin::ToolsController < ApplicationController
     when 'interactsh'
       unless interactsh_valid?(tool)
         tool.destroy
-        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.not_valid'), data: nil }
+        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.interactsh_invalid'), data: nil }
       end
 
       tool.save
