@@ -7,33 +7,42 @@ class Httpx
 
     urls = []
     data.each do |host, infos|
-      httpx = JSON.parse(`echo #{host} | httpx -silent -sc -cl -location -title -td -cname -cdn -json`)
-      url = httpx['url']
+      httpx_ports = infos['ports'].join(',')
+      httpx = `echo #{host} | httpx -silent -sc -cl -location -title -td -cname -cdn -ports #{httpx_ports} -json`
+      next if httpx.empty?
 
-      # Allows not to pollute the recon with useless domains
-      # Ex http://www.domain.tld 302 to https://www.domain.tld
-      next if url.start_with?('http://') && url.match?(%r{https://(www\.)?#{host}(:443)?/?})
+      httpx.chomp!
+      results = httpx.split("\n")
 
-      url.sub!(':443', '')
+      results.each do |result|
+        result_json = JSON.parse(result)
+        url = result_json['url']
 
-      subdomain = {
-        url: url,
-        infos: {
-          title: httpx['title'],
-          status_code: httpx['status-code'],
-          content_length: httpx['content-length'],
-          location: httpx['location'],
-          technologies: httpx['technologies'],
-          ip: infos['ip'],
-          cname: httpx.dig('cnames', 0),
-          cdn: httpx['cdn-name'],
-          ports: infos['ports'],
-          body_hash: httpx.dig('hashes', 'body-sha256')
+        # Allows not to pollute the recon with useless domains
+        # Ex http://www.domain.tld 302 to https://www.domain.tld
+        next if url.start_with?('http://') && url.match?(%r{https://(www\.)?#{host}(:443)?/?})
+
+        url.sub!(':443', '')
+
+        subdomain = {
+          url: url,
+          infos: {
+            title: result_json['title'],
+            status_code: result_json['status-code'],
+            content_length: result_json['content-length'],
+            location: result_json['location'],
+            technologies: result_json['technologies'],
+            ip: infos['ip'],
+            cname: result_json.dig('cnames', 0),
+            cdn: result_json['cdn-name'],
+            ports: infos['ports'],
+            body_hash: result_json.dig('hashes', 'body-sha256')
+          }
         }
-      }
 
-      urls << url
-      subdomains << subdomain
+        urls << url
+        subdomains << subdomain
+      end
     end
 
     File.open("#{OPTIONS[:output]}/httpx.txt", 'w+') do |f|
