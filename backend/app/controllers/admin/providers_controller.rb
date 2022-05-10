@@ -14,7 +14,7 @@ class Admin::ProvidersController < ApplicationController
     providers_params = get_provider_params
     @provider = Provider.create(providers_params)
 
-    unless ssh_key_valid?(@provider)
+    unless ssh_key_valid?(@provider) && provider_is_valid?(providers_params)
       @provider.destroy
       return render status: 422, json: { message: I18n.t('errors.controllers.admin.providers.invalid_informations'), data: nil }
     end
@@ -22,11 +22,6 @@ class Admin::ProvidersController < ApplicationController
     unless @provider.save
       @provider.destroy
       return render status: 422, json: { message: I18n.t('errors.controllers.admin.providers.already_present'), data: nil }
-    end
-
-    unless provider_is_valid?(providers_params)
-      @provider.destroy
-      return render status: 422, json: { message: I18n.t('errors.controllers.admin.providers.invalid_informations'), data: nil }
     end
 
     render status: 200, json: { message: I18n.t('success.controllers.admin.providers.created'), data: nil }
