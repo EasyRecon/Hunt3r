@@ -19,7 +19,7 @@
        <nb-tabset>
         <nb-tab tabTitle="yeswehack">
           <nb-form-field>
-            <form  [formGroup]="yeswehackForm" (ngSubmit)="updateYeswehack($event)">
+            <form  [formGroup]="yeswehackForm" (ngSubmit)="platformData($event,'yeswehack')">
               <div class="form-group row">
                 <label for="inputEmail1" class="label col-sm-3 col-form-label">Email</label>
                 <div class="col-sm-9">
@@ -43,7 +43,7 @@
                     <button type="submit" class="col" nbButton status="success">Update</button>
                   </div>
                   <div class="col end">
-                    <button type="button" class="col " (click)="deleteYeswehack()" nbButton status="danger">Delete</button>
+                    <button type="button" class="col " (click)="deletePlatform('yeswehack')" nbButton status="danger">Delete</button>
                   </div>
                 </div>
            
@@ -52,7 +52,7 @@
         </nb-tab>
         <nb-tab tabTitle="intigriti">
           <nb-form-field>
-            <form  [formGroup]="intigritiForm" (ngSubmit)="updateIntigriti($event)">
+            <form  [formGroup]="intigritiForm" (ngSubmit)="platformData($event,'yeswehack')">
               <div class="form-group row">
                 <label for="inputEmail1" class="label col-sm-3 col-form-label">Email</label>
                 <div class="col-sm-9">
@@ -76,7 +76,7 @@
                   <button type="submit" class="col" nbButton status="success">Update</button>
                 </div>
                 <div class="col end">
-                  <button type="button" class="col " (click)="deleteIntigriti()" nbButton status="danger">Delete</button>
+                  <button type="button" class="col " (click)="deletePlatform('intigriti')" nbButton status="danger">Delete</button>
                 </div>
               </div>
             </form>
@@ -84,7 +84,7 @@
         </nb-tab>
         <nb-tab tabTitle="hackerone">
           <nb-form-field>
-            <form  [formGroup]="hackeroneForm" (ngSubmit)="updateHackerone($event)">
+            <form  [formGroup]="hackeroneForm" (ngSubmit)="platformData($event,'yeswehack')">
               <div class="form-group row">
                 <label for="inputEmail1" class="label col-sm-3 col-form-label">Email</label>
                 <div class="col-sm-9">
@@ -108,7 +108,7 @@
                   <button type="submit" class="col" nbButton status="success">Update</button>
                 </div>
                 <div class="col end">
-                  <button type="button" class="col " (click)="deleteHackerone()" nbButton status="danger">Delete</button>
+                  <button type="button" class="col " (click)="deletePlatform('hackerone')" nbButton status="danger">Delete</button>
                 </div>
               </div>
             </form>
