@@ -1,7 +1,7 @@
-#require 'platforms'
+require 'platforms'
 
 class Admin::InvoiceController < ApplicationController
-  #include(Platforms)
+  include(Platforms)
   before_action :authenticate_user, :admin?
 
   # GET /platforms/:name/invoice
