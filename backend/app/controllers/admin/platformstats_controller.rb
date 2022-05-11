@@ -1,4 +1,4 @@
-require '../../../../backend/lib/platforms'
+require '../../../lib/platforms'
 
 class Admin::PlatformstatsController < ApplicationController
   include(Platforms)

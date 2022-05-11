@@ -1,4 +1,4 @@
-require '../../../backend/lib/platforms'
+require '../../lib/platforms'
 
 class ProgramsController < ApplicationController
   include(Platforms)
