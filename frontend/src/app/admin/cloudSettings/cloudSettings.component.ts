@@ -43,30 +43,20 @@ export class CloudSettingsComponent implements OnInit {
               private cloudService : CloudProviderService) {
 
 
-      this.scalewayForm = this.fbuilder.group({
-          access_key: '',
-          secret_key: '',
-          organization_id: '',
-          project_id: '',
-          region: '',
-          zone: '',
-          ssh_key: ''
-    });
-
-
-    this.awsForm = this.fbuilder.group({
-        access_key: '',
-        secret_key: '',
-        organization_id: '',
-        project_id: '',
-        region: '',
-        zone: '',
-        ssh_key: ''
-  });
-
-
+      this.scalewayForm = this.initForm()
+      this.awsForm = this.initForm()
   }
-
+  initForm(){
+    return this.fbuilder.group({
+      access_key: '',
+      secret_key: '',
+      organization_id: '',
+      project_id: '',
+      region: '',
+      zone: '',
+      ssh_key: ''
+});
+  }
   ngOnInit(): void {
     this.scalewayExist = false;
     this.awsExist      = false;
