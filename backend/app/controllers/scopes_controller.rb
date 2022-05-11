@@ -1,4 +1,4 @@
-require_relative '../../lib/platforms'
+require 'platforms'
 
 class ScopesController < ApplicationController
   include(Platforms)
