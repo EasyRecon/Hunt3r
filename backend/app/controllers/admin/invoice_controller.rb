@@ -1,7 +1,7 @@
-require 'platforms'
+#require 'platforms'
 
 class Admin::InvoiceController < ApplicationController
-  include(Platforms)
+  #include(Platforms)
   before_action :authenticate_user, :admin?
 
   # GET /platforms/:name/invoice
@@ -70,7 +70,7 @@ class Admin::InvoiceController < ApplicationController
     end
 
     template = File.read(invoice_template_file)
-    @payouts = nil #get_payouts(platform, @from, @to)
+    @payouts = get_payouts(platform, @from, @to)
 
     if @payouts.nil? || @payouts.empty?
       return render status: 422, json: { message: I18n.t('errors.controllers.admin.invoices.no_payouts') }
