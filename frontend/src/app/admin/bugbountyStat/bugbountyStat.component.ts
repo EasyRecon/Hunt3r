@@ -21,36 +21,9 @@ export class BugbountyStatComponent implements OnInit {
 
   loadSyncInti=false
   loadSyncYwh=false
-  scopeYWH = [
-    {
-      "id":"",
-      "title":"",
-      "severity":"",
-      "reward":"",
-      "collab":"",
-      "status":"",
-      "report_date":""
-    }
-  ]
+  scopeYWH = this.scopeTemplate()
 
-  statYWH = {
-    earnedEuro:0,
-    collab_number:0,
-    total_rapports:0,
-    average_per_rapport:0.0,
-    rapport_severity:{
-      "C":0,
-      "H":0,
-      "M":0,
-      "L":0
-    },
-    report_by_month:{
-    },
-    report_by_status:{
-    },
-    earn_by_month:{
-    }
-  };
+  statYWH = this.statTemplate()
   optionsYWHPie:any ;
   optionsYWHPieReportStatus: any;
   optionsYWHBarre: any = {};
@@ -63,35 +36,8 @@ optionsINTIPieReportStatus: any;
 optionsINTIBarre: any = {};
 optionsINTIEarnedByMonth: any = {};
 
-statINTI = {
-  earnedEuro:0,
-  collab_number:0,
-  total_rapports:0,
-  average_per_rapport:0.0,
-  rapport_severity:{
-    "C":0,
-    "H":0,
-    "M":0,
-    "L":0
-  },
-  report_by_month:{
-  },
-  report_by_status:{
-  },
-  earn_by_month:{
-  }
-};
-  scopeINTI = [
-    {
-      "id":"",
-      "title":"",
-      "severity":"",
-      "reward":"",
-      "collab":"",
-      "status":"",
-      "report_date":""
-    }
-  ]
+statINTI = this.statTemplate()
+scopeINTI = this.scopeTemplate()
 
 
   loading=true
@@ -130,6 +76,39 @@ statINTI = {
       this.messageService.showToast(err.message,'danger')
     })
 
+  }
+  statTemplate(){
+    return {
+      earnedEuro:0,
+      collab_number:0,
+      total_rapports:0,
+      average_per_rapport:0.0,
+      rapport_severity:{
+        "C":0,
+        "H":0,
+        "M":0,
+        "L":0
+      },
+      report_by_month:{
+      },
+      report_by_status:{
+      },
+      earn_by_month:{
+      }
+    };
+  }
+  scopeTemplate(){
+    return [
+      {
+        "id":"",
+        "title":"",
+        "severity":"",
+        "reward":"",
+        "collab":"",
+        "status":"",
+        "report_date":""
+      }
+    ]
   }
   countSeverity(severity:string,rapport_severity:any){
     if(severity=="Low")this.statYWH.rapport_severity.L++
