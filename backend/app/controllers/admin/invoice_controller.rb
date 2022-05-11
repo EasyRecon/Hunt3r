@@ -1,4 +1,4 @@
-require '../../../lib/platforms'
+require_relative '../../../lib/platforms'
 
 class Admin::InvoiceController < ApplicationController
   include(Platforms)
