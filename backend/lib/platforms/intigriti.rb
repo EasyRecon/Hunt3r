@@ -155,6 +155,37 @@ class Intigriti
     infos
   end
 
+  def self.payouts(platform, from, to)
+    get_jwt(platform)
+
+    from = Date.parse(from).to_time.to_i # 00:00 AM
+    to = Date.parse(to).to_time.to_i + 86_399 # 23:59 PM
+
+    response = api_request(platform, 'https://api.intigriti.com/core/researcher/payout')
+    return unless response&.code == 200
+
+    payouts = JSON.parse(response.body)
+    parse_payouts(payouts, from, to)
+  end
+
+  def self.parse_payouts(payouts, from, to)
+    payouts_data = {}
+
+    payouts.each do |payout|
+      next unless payout['createdAt'] > from && payout['createdAt'] < to
+
+      paid_date = DateTime.strptime(payout['createdAt'].to_s, '%s').strftime('%d-%m-%Y')
+
+      if payouts_data.has_key?(payout['submissionCode'])
+        payouts_data[payout['submissionCode']][:amount] += payout['amount']['value']
+      else
+        payouts_data[payout['submissionCode']] = { date: paid_date, title: payout['submissionTitle'], amount: payout['amount']['value'] }
+      end
+    end
+
+    payouts_data
+  end
+
   def self.api_request(platform, url)
     Typhoeus::Request.get(
       url,
