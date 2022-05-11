@@ -70,7 +70,7 @@ export class NbSidebarToggleComponent implements OnInit {
       });
   }
 
-  getNotification(){
+ async getNotification(){
     this.notifService.getNotif().subscribe( (result)=> {
 
       if(result.data.length>0)this.notif=[{ "title": 'Delete all notifications',"icon":"trash-outline"}]
@@ -103,8 +103,8 @@ toggleTheme(){
   }
 }
 
-  ngOnInit() {
-    this.getNotification()
+  async ngOnInit() {
+    await this.getNotification()
     this.nbMenuService.onItemClick()
     .pipe(
       filter(({ tag }) => tag === 'user-context-menu'),
