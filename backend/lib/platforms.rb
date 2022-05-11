@@ -1,6 +1,6 @@
-require 'platforms/hackerone'
-require 'platforms/intigriti'
-require 'platforms/yeswehack'
+require_relative 'platforms/hackerone'
+require_relative 'platforms/intigriti'
+require_relative 'platforms/yeswehack'
 
 module Platforms
   def platform_is_valid?(platform)
