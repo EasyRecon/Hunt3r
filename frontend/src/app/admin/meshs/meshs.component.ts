@@ -61,7 +61,6 @@ export class MeshsComponent implements  OnInit  {
   getMesh() {
     this.loading = true;
     this.meshsService.getMeshs().subscribe( (result)=> {
-
       this.meshs=result.data
       this.loading = false;
     },(err) => {
@@ -122,10 +121,10 @@ export class MeshsComponent implements  OnInit  {
       });
       } 
     });
-    this.dialogueRefUpdate = this.dialogService.open(dialog, { context: 'this is some additional data passed to dialog' });
+    this.dialogueRefUpdate = this.dialogService.open(dialog);
   }
   meshCreateModal(dialog: TemplateRef<any>) {
-    this.dialogueRefCreate = this.dialogService.open(dialog, { context: 'this is some additional data passed to dialog' });
+    this.dialogueRefCreate = this.dialogService.open(dialog);
   }
   closeCreate() {
     this.dialogueRefCreate.close();
