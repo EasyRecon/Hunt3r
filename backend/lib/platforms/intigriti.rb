@@ -156,8 +156,6 @@ class Intigriti
   end
 
   def self.payouts(platform, from, to)
-    get_jwt(platform)
-
     from = Date.parse(from).to_time.to_i # 00:00 AM
     to = Date.parse(to).to_time.to_i + 86_399 # 23:59 PM
 

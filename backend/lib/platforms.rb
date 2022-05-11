@@ -81,4 +81,15 @@ module Platforms
       nil
     end
   end
+
+  def get_payouts(platform, from, to)
+    get_platform_jwt(platform)
+
+    case platform.name
+    when 'intigriti'
+      Intigriti.payouts(platform, from, to)
+    else
+      nil
+    end
+  end
 end
