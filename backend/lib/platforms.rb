@@ -87,7 +87,7 @@ module Platforms
 
     case platform.name
     when 'intigriti'
-      #Intigriti.payouts(platform, from, to)
+      Intigriti.payouts(platform, from, to)
     else
       nil
     end
