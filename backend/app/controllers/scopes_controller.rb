@@ -1,9 +1,7 @@
-require 'get_platform_jwt'
-require 'platform_sync'
+require 'platforms'
 
 class ScopesController < ApplicationController
-  include(GetPlatformJwt)
-  include(PlatformSync)
+  include(Platforms)
 
   before_action :authenticate_user
 
@@ -16,16 +14,10 @@ class ScopesController < ApplicationController
 
   # PATCH /programs/:id/scopes
   def update
-    program = Program.find_by_id(params[:id])
-    platform = Platform.find_by_id(program.platform_id)
+    program = Program.find_by(id: params[:id])
+    platform = Platform.find_by(id: program.platform_id)
 
-    case platform.name
-    when 'yeswehack'
-      jwt = get_platform_jwt(platform)
-      update_yeswehack_scope(jwt, program['slug'])
-    else
-      return render status: 422, json: { message: I18n.t('errors.controllers.programs.unknown'), data: nil }
-    end
+    update_scopes(platform, program['slug'])
 
     render status: 200, json: { message: I18n.t('success.controllers.scopes.updated'), data: nil }
   end

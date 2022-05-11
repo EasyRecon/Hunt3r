@@ -16,10 +16,9 @@ class ApplicationController < ActionController::API
   def server_delete(server, state)
     server.destroy
     server.scan.update(state: state)
+    return unless server.name.downcase.start_with?('scw-')
 
-    if server.name.downcase.start_with?('scw-')
-      Thread.start { `scw instance server terminate #{server.uid} with-ip=true` }
-    end
+    Thread.start { `scw instance server terminate #{server.uid} with-ip=true` }
   end
 
   def base64?(value)
