@@ -22,7 +22,7 @@ class Admin::PlatformsController < ApplicationController
 
     unless @platform.save
       @platform.destroy
-      return render status: 422, json: { message: I18n.t('errors.controllers.admin.platforms.already_present'), data: nil }
+      return render status: 422, json: { message: @platform.errors.objects.first.full_message, data: nil }
     end
 
     unless platform_is_valid?(@platform)

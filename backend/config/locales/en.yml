@@ -101,7 +101,6 @@ en:
           invalid_informations: "The provider information is not valid"
           unknown: "The specified provider does not exist"
         platforms:
-          already_present: "The platform is already registered"
           invalid_informations: "The platform information is not valid."
           unknown: "The specified platform does not exist"
           empty: "Add a platform before launching a sync"
