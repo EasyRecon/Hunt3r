@@ -14,18 +14,11 @@ class ScansController < ApplicationController
   end
 
   # POST /scans
-  # TODO : Refactor all this method
   def create
     scan_infos = params.require(:scan).permit(
       :domain, :meshs, :type_scan, :instance_type, :provider, :notifs, :active_recon, :intel, :leak, :nuclei,
       :all_templates, :custom_interactsh, :permutation, :gau, nuclei_severity: [], custom_templates: []
     )
-
-    hunt3r_token = Tool.find_by(name: 'hunt3r_token')
-    if hunt3r_token.nil?
-      return render status: 422, json: { message: I18n.t('errors.controllers.scans.hunt3r_token'), data: nil }
-    end
-    cmd = "ruby scan.rb --hunt3r-token #{hunt3r_token.infos['api_key']} --url #{ENV['APP_URL']}"
 
     if Provider.find_by(name: scan_infos[:provider]).nil?
       return render status: 422, json: { message: I18n.t('errors.controllers.admin.providers.unknown'), data: nil }
@@ -36,183 +29,21 @@ class ScansController < ApplicationController
       scan.destroy
       return render status: 422, json: { message: I18n.t('errors.controllers.scans.invalid'), data: nil }
     end
-    cmd += " --scan-id #{scan.id} --type-scan #{scan.type_scan} -d #{scan.domain}"
 
-    slack_webhook = Tool.find_by(name: 'slack')
-    if scan.notifs && slack_webhook.nil?
-      scan.destroy
-      return render status: 422, json: { message: I18n.t('errors.controllers.scans.missing_webhook'), data: nil }
+    scan_cmd = build_scan_cmd(scan)
+    if scan_cmd[:errors]
+      return render status: 422, json: { message: I18n.t("errors.controllers.scans.#{scan_cmd[:errors]}"), data: nil }
     end
 
-    if scan.type_scan == 'recon'
-      unless File.exist?(File.join(scan_config_files, 'amass/config.ini'))
-        return render status: 422, json: { message: I18n.t('errors.controllers.scans.missing_amass'), data: nil }
-      end
-
-      # If launched from the scope page we remove the wildcard
-      scan.domain.gsub!('*.', '')
-
-      if scan.leak
-        dehashed = Tool.find_by(name: 'dehashed')
-        if dehashed.nil?
-          scan.destroy
-          return render status: 422, json: { message: I18n.t('errors.controllers.scans.dehashed_credentials'), data: nil }
-        end
-
-        cmd += " --leak true --dehashed-username #{dehashed[:infos]['user']} --dehashed-token #{dehashed[:infos]['api_key']}"
-      end
-
-      if scan.intel
-        c99 = Tool.find_by(name: 'c99')&.infos
-        whoxy = Tool.find_by(name: 'whoxy')&.infos
-
-        if c99.nil? || whoxy.nil?
-          scan.destroy
-          return render status: 422, json: { message: I18n.t('errors.controllers.scans.missing_intel'), data: nil }
-        end
-
-        cmd += " --intel true --c99-token #{c99['api_key']} --whoxy-token #{whoxy['api_key']}"
-      end
-
-      if scan.meshs
-        meshs = Mesh.all.select(:url, :token)
-
-        if meshs.empty?
-          scan.destroy
-          return render status: 422, json: { message: I18n.t('errors.controllers.scans.missing_meshs'), data: nil }
-        end
-
-        cmd += " --meshs #{meshs.to_json}"
-      end
-
-      cmd += ' --gau true' if scan.gau
-      cmd += ' --active-amass true' if scan.active_recon
-    end
-
-    if scan.nuclei || scan.type_scan == 'nuclei'
-      cmd += " --nuclei #{scan.nuclei}"
-
-      unless (scan.custom_templates && !scan.custom_templates.empty?) || scan.all_templates
-        scan.destroy
-        return render status: 422, json: { message: I18n.t('errors.controllers.scans.no_nuclei_templates'), data: nil }
-      end
-
-      if scan.nuclei_severity && !scan.nuclei_severity.empty?
-        severity = scan.nuclei_severity.join(',')
-        cmd += " --nuclei-severity #{severity}"
-      end
-
-      if scan.custom_interactsh
-        interactsh = Tool.find_by(name: 'interactsh')
-        if interactsh.nil?
-          scan.destroy
-          return render status: 422, json: { message: I18n.t('errors.controllers.scans.missing_interactsh'), data: nil }
-        end
-
-        cmd += " --interactsh-url #{interactsh[:url]}"
-        cmd += " --interactsh-token #{interactsh[:api_key]}" if interactsh[:api_key]
-      end
-
-      cmd += ' --nuclei-all-templates true' if scan.all_templates
-
-      if scan.custom_templates && !scan.custom_templates.empty?
-        scan.custom_templates.each do |template|
-          template = "#{template}.yaml" unless template.end_with?('.yaml')
-          next if File.exist?("#{nuclei_templates_path}/#{template.gsub('..', '')}")
-
-          scan.destroy
-          return render status: 422, json: { message: I18n.t('errors.controllers.scans.missing_template'), data: nil }
-        end
-
-        templates = scan.custom_templates.join(',')
-        cmd += " --nuclei-custom-templates #{templates}"
-      end
-
-      if scan.type_scan == 'nuclei'
-        subdomains = if scan.domain == '*'
-                       Subdomain.all
-                     else
-                       Domain.find_by(name: scan.domain)&.subdomain
-                     end
-
-        if subdomains.nil? || subdomains.empty?
-          scan.destroy
-          return render status: 422, json: { message: I18n.t('errors.controllers.scans.empty_subdomains'), data: nil }
-        end
-
-        subdomains_urls = []
-        subdomains.each do |subdomain|
-          subdomains_urls << subdomain.url
-        end
-
-        File.open(domains_file, 'w+') do |f|
-          f.puts(subdomains_urls)
-        end
-      end
-    end
-
-    case scan.provider
-    when 'scaleway'
-      # Force default value to DEV1-S
-      scan.update(instance_type: 'DEV1-S') unless scan[:instance_type]
-
-      cmd_output = launch_scaleway_server(scan.instance_type)
-
-      begin
-        cmd_output_json = JSON.parse(cmd_output)
-      rescue JSON::ParserError
-        scan.destroy
-        return render status: 500, json: { message: I18n.t('errors.controllers.scans.parse_error'), data: nil }
-      end
-
-      server_infos = {
-        uid: cmd_output_json['id'],
-        name: cmd_output_json['name'],
-        ip: cmd_output_json['public_ip']['address'],
-        state: 'Launched',
-        scan_id: scan.id
-      }
-
-      scan.update(state: 'Deploy In Progress')
-    else
-      return render status: 422, json: { message: I18n.t('errors.controllers.scans.unknown_provider'), data: nil }
+    server_infos = launch_server(scan)
+    unless server_infos.is_a?(Hash)
+      return render status: 422, json: { message: I18n.t("errors.controllers.scans.#{server_infos}"), data: nil }
     end
 
     server = Server.create(server_infos)
-    cmd += " --server-uid #{server[:uid]}"
+    scan_cmd[:cmd] += " --server-uid #{server[:uid]}"
 
-    Domain.create(name: scan.domain, scan_id: scan.id) if scan.type_scan == 'recon' && Domain.find_by(name: scan.domain).nil?
-    Scope.where('scope LIKE ?', "%.#{scan.domain}").first&.update(last_scan: Time.now) unless scan.type_scan == 'nuclei'
-
-    Thread.start do
-      puts cmd
-
-      # Sleep until the server starts and install the necessary tools
-      p '------- SLEEP 360'
-      sleep(360)
-
-      begin
-        Net::SCP.start(server.ip, 'root', keys: "/root/.ssh/#{scan.provider}_id_rsa") do |scp|
-          # upload a file to a remote server
-          scp.upload! scan_config_files, '/tmp', recursive: true
-          scp.upload! scan_tools_files,'/tmp', recursive: true
-          scp.upload! domains_file, '/tmp' if scan.type_scan == 'nuclei'
-        end
-
-        Net::SSH.start(server.ip, 'root', keys: "/root/.ssh/#{scan.provider}_id_rsa") do |ssh|
-          p '----- DEBUG'
-          puts 'SSH OK'
-          puts ssh.exec!('whoami')
-
-          #ssh.exec!("screen -dm -S Scan #{cmd}")
-        end
-      rescue Net::SSH::AuthenticationFailed
-        server_delete(server, 'Stopped')
-        scan.destroy
-
-        Notification.create(type_message: 'danger', message: 'Unable to run a scan, check your SSH key')
-      end
-    end
+    launch_scan(scan_cmd[:cmd], scan)
 
     render status: 200, json: { message: I18n.t('success.controllers.scans.launched'), data: nil }
   end
@@ -233,6 +64,177 @@ class ScansController < ApplicationController
   end
 
   private
+
+  def build_scan_cmd(scan)
+    scan_cmd = { cmd: 'ruby scan.rb' }
+    hunt3r_token = Tool.find_by(name: 'hunt3r_token')&.infos
+    scan_cmd[:errors] = 'hunt3r_token' if hunt3r_token.nil?
+
+    scan_cmd[:cmd] += " --hunt3r-token #{hunt3r_token['api_key']} --url #{ENV['APP_URL']}" if hunt3r_token
+    scan_cmd[:cmd] += " --scan-id #{scan.id} --type-scan #{scan.type_scan} -d #{scan.domain}"
+
+    slack_webhook = Tool.find_by(name: 'slack')
+    scan_cmd[:errors] = 'missing_webhook' if scan.notifs && slack_webhook.nil?
+
+    # If launched from the scope page we remove the wildcard
+    scan.domain.gsub!('*.', '')
+
+    scan_cmd = build_recon_scan_cmd(scan, scan_cmd) if scan.type_scan == 'recon'
+    scan_cmd = build_nuclei_scan_cmd(scan, scan_cmd) if scan.nuclei || scan.type_scan == 'nuclei'
+
+    scan_cmd
+  end
+
+  def build_recon_scan_cmd(scan, scan_cmd)
+    scan_cmd[:errors] = 'missing_amass' unless File.exist?(File.join(scan_config_files, 'amass/config.ini'))
+
+    if scan.leak
+      dehashed = Tool.find_by(name: 'dehashed')
+      if dehashed.nil?
+        scan_cmd[:errors] = 'dehashed_credentials'
+      else
+        scan_cmd[:cmd] += " --leak true --dehashed-username #{dehashed[:infos]['user']} --dehashed-token #{dehashed[:infos]['api_key']}"
+      end
+    end
+
+    if scan.intel
+      c99 = Tool.find_by(name: 'c99')&.infos
+      whoxy = Tool.find_by(name: 'whoxy')&.infos
+
+      if c99.nil? || whoxy.nil?
+        scan_cmd[:errors] = 'missing_intel'
+      else
+        scan_cmd[:cmd] += " --intel true --c99-token #{c99['api_key']} --whoxy-token #{whoxy['api_key']}"
+      end
+    end
+
+    if scan.meshs
+      meshs = Mesh.all.select(:url, :token)
+      meshs.empty? ? scan_cmd[:errors] = 'missing_meshs' : scan_cmd[:cmd] += " --meshs #{meshs.to_json}"
+    end
+
+    scan_cmd[:cmd] += ' --gau true' if scan.gau
+    scan_cmd[:cmd] += ' --active-amass true' if scan.active_recon
+    scan_cmd
+  end
+
+  def build_nuclei_scan_cmd(scan, scan_cmd)
+    scan_cmd[:cmd] += " --nuclei #{scan.nuclei}"
+
+    unless (scan.custom_templates && !scan.custom_templates.empty?) || scan.all_templates
+      scan_cmd[:errors] = 'no_nuclei_templates'
+    end
+
+    if scan.nuclei_severity && !scan.nuclei_severity.empty?
+      scan_cmd[:cmd] += " --nuclei-severity #{scan.nuclei_severity.join(',')}"
+    end
+
+    if scan.custom_interactsh
+      interactsh = Tool.find_by(name: 'interactsh')
+      if interactsh.nil?
+        scan_cmd[:errors] = 'missing_interactsh'
+      else
+        scan_cmd[:cmd] += " --interactsh-url #{interactsh[:url]}"
+        scan_cmd[:cmd] += " --interactsh-token #{interactsh[:api_key]}" if interactsh[:api_key]
+      end
+    end
+
+    scan_cmd[:cmd] += ' --nuclei-all-templates true' if scan.all_templates
+
+    if scan.custom_templates && !scan.custom_templates.empty?
+      scan.custom_templates.each do |template|
+        template = "#{template}.yaml" unless template.end_with?('.yaml')
+        next if File.exist?("#{nuclei_templates_path}/#{template.gsub('..', '')}")
+
+        scan_cmd[:errors] = 'missing_template'
+      end
+
+      templates = scan.custom_templates.join(',')
+      scan_cmd[:cmd] += " --nuclei-custom-templates #{templates}"
+    end
+
+    return scan_cmd unless scan.type_scan == 'nuclei'
+
+    subdomains = if scan.domain == '*'
+                   Subdomain.all
+                 else
+                   Domain.find_by(name: scan.domain)&.subdomain
+                 end
+
+    if subdomains.nil? || subdomains.empty?
+      scan_cmd[:errors] = 'empty_subdomains'
+    else
+      subdomains_urls = []
+      subdomains.each do |subdomain|
+        subdomains_urls << subdomain.url
+      end
+
+      File.open(domains_file, 'w+') do |f|
+        f.puts(subdomains_urls)
+      end
+    end
+
+    scan_cmd
+  end
+
+  def launch_server(scan)
+    case scan.provider
+    when 'scaleway'
+      # Force default value to DEV1-S
+      scan.update(instance_type: 'DEV1-S') unless scan[:instance_type]
+      cmd_output = launch_scaleway_server(scan.instance_type)
+
+      begin
+        cmd_output_json = JSON.parse(cmd_output)
+      rescue JSON::ParserError
+        return 'parse_error'
+      end
+
+      scan.update(state: 'Deploy In Progress')
+
+      {
+        uid: cmd_output_json['id'],
+        name: cmd_output_json['name'],
+        ip: cmd_output_json['public_ip']['address'],
+        state: 'Launched',
+        scan_id: scan.id
+      }
+    else
+      scan.destroy
+      'unknown_provider'
+    end
+  end
+
+  def launch_scan(cmd, scan)
+    Domain.create(name: scan.domain, scan_id: scan.id) if scan.type_scan == 'recon' && Domain.find_by(name: scan.domain).nil?
+    Scope.where('scope LIKE ?', "%.#{scan.domain}").first&.update(last_scan: Time.now) unless scan.type_scan == 'nuclei'
+
+    Thread.start do
+      # TODO : Remove debug
+      p '-----'
+      p cmd
+      # Sleep until the server starts and install the necessary tools
+      sleep(360)
+
+      begin
+        Net::SCP.start(server.ip, 'root', keys: "/root/.ssh/#{scan.provider}_id_rsa") do |scp|
+          # upload a file to a remote server
+          scp.upload! scan_config_files, '/tmp', recursive: true
+          scp.upload! scan_tools_files,'/tmp', recursive: true
+          scp.upload! domains_file, '/tmp' if scan.type_scan == 'nuclei'
+        end
+
+        Net::SSH.start(server.ip, 'root', keys: "/root/.ssh/#{scan.provider}_id_rsa") do |ssh|
+          #ssh.exec!("screen -dm -S Scan #{cmd}")
+        end
+      rescue Net::SSH::AuthenticationFailed
+        server_delete(server, 'Stopped')
+        scan.destroy
+
+        Notification.create(type_message: 'danger', message: 'Unable to run a scan, check your SSH key')
+      end
+    end
+  end
 
   def domains_file
     File.join(Rails.root, 'storage', 'domains.txt')
