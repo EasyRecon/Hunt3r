@@ -29,22 +29,16 @@ export class BugbountyStatComponent implements OnInit {
   optionsYWHBarre: any = {};
   optionsYWHEarnedByMonth: any = {};
   loadingYWHGlobal=true
-//inti part
-loadingINTIGlobal=true
-optionsINTIPie:any ;
-optionsINTIPieReportStatus: any;
-optionsINTIBarre: any = {};
-optionsINTIEarnedByMonth: any = {};
+  //inti part
+  loadingINTIGlobal=true
+  optionsINTIPie:any ;
+  optionsINTIPieReportStatus: any;
+  optionsINTIBarre: any = {};
+  optionsINTIEarnedByMonth: any = {};
 
-statINTI = this.statTemplate()
-scopeINTI = this.scopeTemplate()
-
-
+  statINTI = this.statTemplate()
+  scopeINTI = this.scopeTemplate()
   loading=true
-
-  yeswehackExist=false
-  intigritiExist = false
-
   //other
   themeSubscription: any;
   constructor(
@@ -54,19 +48,14 @@ scopeINTI = this.scopeTemplate()
 
     
   }
-
   ngOnInit(): void {
     this.bugbountyPlatform.getPlatform().subscribe( (result) => {
-      this.yeswehackExist = false;
-      this.intigritiExist = false;
       result.data.forEach( (element) => {
        // console.log(this.yeswehackExist)
         if(element.name == 'yeswehack'){
-          this.yeswehackExist=true
           this.getStatsPlatform('yeswehack')
         } 
         if(element.name == 'intigriti'){
-          this.intigritiExist = true
           this.getStatsPlatform('intigriti')
         } 
       });     
@@ -83,18 +72,10 @@ scopeINTI = this.scopeTemplate()
       collab_number:0,
       total_rapports:0,
       average_per_rapport:0.0,
-      rapport_severity:{
-        "C":0,
-        "H":0,
-        "M":0,
-        "L":0
-      },
-      report_by_month:{
-      },
-      report_by_status:{
-      },
-      earn_by_month:{
-      }
+      rapport_severity:{"C":0,"H":0,"M":0,"L":0},
+      report_by_month:{},
+      report_by_status:{},
+      earn_by_month:{}
     };
   }
   scopeTemplate(){
@@ -117,13 +98,15 @@ scopeINTI = this.scopeTemplate()
     if(severity=="Critical")rapport_severity.C++
     return rapport_severity
   }
-  computeYWHStat() {
-    this.statYWH = this.globalStat(this.scopeYWH)
-    this.loadingYWHGlobal=false
-    this.optionsYWHPie = this.pieCriticity(this.statYWH.rapport_severity.L,this.statYWH.rapport_severity.M,this.statYWH.rapport_severity.H,this.statYWH.rapport_severity.C)
-    this.initYWHBarre()
-    this.initYWHPiReportStatus()
-    this.initYWHEarnByMonth()
+  computeStat(platform:'YWH'|'INTI') {
+    this[`stat${platform}`] = this.globalStat(this.scopeYWH)
+    this[`loading${platform}Global`]=false
+    this[`options${platform}Pie`] = this.pieCriticity(this.statYWH.rapport_severity.L,this.statYWH.rapport_severity.M,this.statYWH.rapport_severity.H,this.statYWH.rapport_severity.C)
+    let data = this.initBarreData(this[`stat${platform}`])
+    this[`options${platform}Barre`] = this.chartService.barreGraph(data.report_by_month,data.label,'Number of rapport','Number of report')
+    let dataTwo   = this.initPie(this[`stat${platform}`])
+    this[`options${platform}PieReportStatus`] = this.pieRepport(dataTwo)
+    this[`options${platform}EarnedByMonth`] = this.chartService.barreGraph(data.earn_by_month,data.label,"Earn by month",'value')
   }
   globalStat(scope:any):any{
     let returnData:{report_by_month:any,earn_by_month:any,report_by_status:any,earnedEuro:number,collab_number:number,rapport_severity:any,average_per_rapport:number,total_repports:number}={
@@ -153,8 +136,8 @@ scopeINTI = this.scopeTemplate()
         returnData.report_by_month[date2 as keyof typeof returnData.report_by_month]=0
         returnData.earn_by_month[date2]=0
       }
-      returnData.report_by_month[date2]+=element.reward
-      returnData.earn_by_month[date2]++
+      returnData.earn_by_month[date2]+=element.reward
+      returnData.report_by_month[date2]++
       //status des rapports
       if(_.isUndefined( returnData.report_by_status[element.status as keyof typeof returnData.report_by_status]))returnData.report_by_status[element.status as keyof typeof returnData.report_by_status]=0
       returnData.report_by_status[element.status as keyof typeof returnData.report_by_status]++
@@ -164,7 +147,6 @@ scopeINTI = this.scopeTemplate()
     console.log(returnData)
     return returnData
   }
- 
   syncYWH() {
     this.loadSyncYwh=true
     this.bugbountyPlatform.syncScope('yeswehack').subscribe( (result)=>{
@@ -175,16 +157,6 @@ scopeINTI = this.scopeTemplate()
       this.messageService.showToast(err.message,'danger')
     })
   }
-
-  initYWHPiReportStatus(){
-    let data   = this.initPie(this.statYWH)
-    this.optionsYWHPieReportStatus = this.pieRepport(data)
-  }
-
-  initYWHBarre(){
-   let data = this.initBarreReportByMonth(this.statYWH)
-   this.optionsYWHBarre = this.chartService.barreGraph(data[0],data[1],'Number of rapport','Number of report')
-  }
   initPie(stat:any){
     let data=Array()
     Object.keys(stat.report_by_status).forEach( (element) => {
@@ -192,10 +164,11 @@ scopeINTI = this.scopeTemplate()
     })
     return data
   }
-  initBarreReportByMonth(stat:any){
+  initBarreData(stat:any){
     let month=(new Date()).getMonth();
     let year=((new Date()).getFullYear()-2);
     let data=Array()
+    let data2=Array()
     let label=Array()
     for(var i=0;i<25;i++){
       let padMonth = `${month}`.padStart(2, '0')
@@ -203,32 +176,10 @@ scopeINTI = this.scopeTemplate()
       let tempLabel:string = `${year}-${padMonth}`
       if(Object.prototype.hasOwnProperty.call(stat.report_by_month,key)){
        data.push(stat.report_by_month[key as keyof typeof stat.report_by_month])
-      } else {
-        data.push(0)
-      }
-      label.push(tempLabel)
-      if(month==12){
-        month=0
-        year++
-      }
-      month++
-    }
-    return [data,label]
-  }
-  initBarreEarnedByMonth(stat:any){
-    let month=(new Date()).getMonth();
-    let year=((new Date()).getFullYear()-2);
-    let data=Array()
-    let label=Array()
-    for(var i=0;i<25;i++){
-      let padMonth = `${month}`.padStart(2, '0')
-      let key:string = `${year}${padMonth}`
-      let tempLabel:string = `${year}-${padMonth}`
+      } else data.push(0)
       if(Object.prototype.hasOwnProperty.call(stat.earn_by_month,key)){
-       data.push(stat.earn_by_month[key as keyof typeof stat.earn_by_month])
-      } else {
-        data.push(0)
-      }
+        data2.push(stat.earn_by_month[key as keyof typeof stat.earn_by_month])
+       } else data2.push(0)
       label.push(tempLabel)
       if(month==12){
         month=0
@@ -236,35 +187,20 @@ scopeINTI = this.scopeTemplate()
       }
       month++
     }
-    return [data,label]
+    return {"report_by_month":data,"earn_by_month":data2,"label":label}
   }
-  initYWHEarnByMonth(){
-    let data =  this.initBarreEarnedByMonth(this.statYWH)
-    this.optionsYWHEarnedByMonth = this.chartService.barreGraph(data[0],data[1],"Earn by month",'value')
-  }
-  //---------------Intigriti part
 
   getStatsPlatform(platform:string){
     this.bugbountyPlatform.getScope(platform).subscribe( (result) => {
       if(platform=='yeswehack'){
         this.scopeYWH=result.data
-        this.computeYWHStat()
+        this.computeStat('YWH')
       }
       if(platform=='intigriti'){
         this.scopeINTI=result.data
-        this.computeINTIStat()
+        this.computeStat('INTI')
       }
-
     })
-  }
-
-  computeINTIStat() {
-      this.statINTI = this.globalStat(this.scopeINTI)
-      this.loadingINTIGlobal=false
-      this.optionsINTIPie =  this.pieCriticity(this.statINTI.rapport_severity.L,this.statINTI.rapport_severity.M,this.statINTI.rapport_severity.H,this.statINTI.rapport_severity.C)
-      this.initINTIBarre()
-      this.initINTIPiReportStatus()
-      this.initINTIEarnByMonth()
   }
   syncINTI() {
     this.loadSyncInti=true
@@ -277,24 +213,8 @@ scopeINTI = this.scopeTemplate()
       this.messageService.showToast(err.message,'danger')
     })
   }
-
-  initINTIPiReportStatus(){
-    let data = this.initPie(this.statINTI)
-    this.optionsINTIPieReportStatus = this.pieRepport(data)
-  }
-
-  initINTIBarre(){
-    let data =this.initBarreReportByMonth(this.statINTI)
-    this.optionsINTIBarre =  this.chartService.barreGraph(data[0],data[1],'Report by month','value')
-  }
-  
-  initINTIEarnByMonth(){
-    let data = this.initBarreEarnedByMonth(this.statINTI)
-    this.optionsINTIEarnedByMonth = this.chartService.barreGraph(data[0],data[1],"Earn by month","value")
-  }
   pieRepport(data:any[]){
-    return this.chartService.pieChart(data,
-                       'Report by status')
+    return this.chartService.pieChart(data,'Report by status')
   }
   pieCriticity(low:number,medium:number,high:number,critic:number){
     return this.chartService.pieChart([

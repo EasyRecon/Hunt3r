@@ -107,7 +107,7 @@ toggleTheme(){
     await this.getNotification()
     this.nbMenuService.onItemClick()
     .pipe(
-      filter(({ tag }) => tag === 'user-context-menu'),
+      filter(({ tag }) => tag === 'user-context-menu'|| tag === 'notif-context-menu'),
       map(({ item: { title } }) => title),
     )
     .subscribe(title => {
@@ -121,14 +121,6 @@ toggleTheme(){
       if(title=='Profile'){
         this.router.navigateByUrl('/pages/user');
       }
-    });
-
-    this.nbMenuService.onItemClick()
-    .pipe(
-      filter(({ tag }) => tag === 'notif-context-menu'),
-      map(({ item: { title } }) => title),
-    )
-    .subscribe(title => {
       if(title=='Delete all notifications') {
         this.notifService.deleteNotif().subscribe( (result) => {
           this.notif=[{"name":""}]
@@ -136,11 +128,7 @@ toggleTheme(){
       }
     });
 
-
     this.currentTheme = this.themeService.currentTheme;
-
-
-
 
     this.themeService.onThemeChange()
       .pipe(
@@ -148,11 +136,7 @@ toggleTheme(){
         takeUntil(this.destroy$),
       )
       .subscribe(themeName => this.currentTheme = themeName);
-
-
   }
-
-
 
   toggleLeft(event:any) {
     event.preventDefault()

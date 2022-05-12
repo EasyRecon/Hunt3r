@@ -99,10 +99,12 @@ export class BugbountySettingsComponent implements OnInit {
     let formName:'yeswehackForm'|'hackeroneForm'|'intigritiForm'=`${platform}Form`
     let data = this[formName].value
     if(data.otp == "" ) delete data.otp
+    data.name=platform
+    let finalData = {"platform": data}
     if(this[platform].email!='' ){
-      this.updatePlatform(data)
+      this.updatePlatform(finalData)
     } else {
-      this.createPlatform(data)
+      this.createPlatform(finalData)
     }
   }
 

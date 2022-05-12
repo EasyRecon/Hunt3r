@@ -25,7 +25,7 @@ import {
   }
 
   updatePlatform(data:BugBountyPlatformSettingsUpdate): Observable<BugBountyPlatformSettingsResponse> {
-    return this.httpService.post<BugBountyPlatformSettingsResponse>('/admin/platforms',data)
+    return this.httpService.patch<BugBountyPlatformSettingsResponse>('/admin/platforms',data)
   }
 
   createPlatform(data:BugBountyPlatformSettingsUpdate): Observable<BugBountyPlatformSettingsResponse> {
