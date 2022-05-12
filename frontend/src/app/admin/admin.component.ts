@@ -1,7 +1,4 @@
 import { Component } from '@angular/core';
-import { NbSidebarService } from '@nebular/theme';
-
-import {NbLayoutModule} from '@nebular/theme';
 
 
 
@@ -16,11 +13,7 @@ import {NbLayoutModule} from '@nebular/theme';
 })
 export class AdminComponent {
 
-  constructor(private sidebarService: NbSidebarService,private componentNGX: NbLayoutModule) {
-  }
-  toggle() {
-    this.sidebarService.toggle(true);
-    return false;
+  constructor() {
   }
 
 

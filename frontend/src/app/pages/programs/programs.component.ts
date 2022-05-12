@@ -138,7 +138,6 @@ export class ProgramsComponent  {
     this.scopeModal.close()
   }
   getProgram(search:any='',platform:'all'|'yeswehack'|'intigriti'|'hackerone'='all'){
-    this.loading=true
     if(platform=='all'){
       this.getProgramFromPlatform(search, ['yeswehack','intigriti','hackerone'])
     } else {
@@ -146,11 +145,14 @@ export class ProgramsComponent  {
     }
   }
   getProgramFromPlatform(search:any='',platform:any[]){
+    
     platform.forEach( (plat:any) => {
+      this.loading=true
       this.programsService.getPrograms(plat,search).subscribe( (result)=> {
         let upperPlatform:'Yeswehack'|'Intigriti'|'Hackerone'=plat.charAt(0).toUpperCase()
         let listName:'listeProgramYeswehack'|'listeProgramIntigriti'|'listeProgramHackerone'=`listeProgram${upperPlatform}`
         this[listName]=result.data
+        this.loading=false
       },(err)=>{
         this.loading=false
         this.messageService.showToast(err.message,'danger')
