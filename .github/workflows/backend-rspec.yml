@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       backend-dir: ./backend
-      RAILS_ENV: test
+      RAILS_ENV: development
       PG_USER: postgres
       PG_PASSWORD: password
       PG_HOST: 127.0.0.1
@@ -25,7 +25,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
-          POSTGRES_DB: hunt3r_test
+          POSTGRES_DB: hunt3r_development
 
     steps:
       - uses: actions/checkout@v3
