@@ -15,7 +15,6 @@ export class BugbountyScopeSyncComponent implements OnInit {
 
 
   yeswehackForm: FormGroup = <FormGroup> {};
-  yeswehackExist=false;
   yeswehack = {
     "email":"",
     "password":"",
@@ -23,7 +22,6 @@ export class BugbountyScopeSyncComponent implements OnInit {
   }
   
   intigritiForm: FormGroup = <FormGroup> {};
-  intigritiExist=false;
   intigriti = {
     "email":"",
     "password":"",
@@ -32,7 +30,6 @@ export class BugbountyScopeSyncComponent implements OnInit {
   loading=true
 
   hackeroneForm: FormGroup = <FormGroup> {};
-  hackeroneExist=false;
   hackerone = {
     "email":"",
     "password":"",
@@ -65,9 +62,6 @@ export class BugbountyScopeSyncComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.yeswehackExist = false;
-    this.intigritiExist = false;
-    this.hackeroneExist = false
     this.getPlatform()
   }
   resetLocalVar(){
@@ -87,14 +81,13 @@ export class BugbountyScopeSyncComponent implements OnInit {
       "otp":""
     }
   }
+
   getPlatform(){
     this.resetLocalVar()
     this.bugbountyPlatform.getPlatform().subscribe( (result) => {
-      this.yeswehackExist = false;
-      this.intigritiExist = false;
-      this.hackeroneExist = false
-      result.data.forEach( (element) => {
-        this.updateObjectVar(element)
+      result.data.forEach( (element:any) => {
+        let name:'yeswehack'|'hackerone'|'intigriti'=element.name
+        this[name].email=element.email
       });     
       this.loading = false;
     },(err) =>{
@@ -102,43 +95,21 @@ export class BugbountyScopeSyncComponent implements OnInit {
       this.messageService.showToast(err.message,'danger')
     })
   }
-  updateObjectVar(element:any) {
-    if(element.name == 'yeswehack'){
-      this.yeswehack.email = element.email
-      this.yeswehackExist=true
-    } 
-    if(element.name == 'intigriti'){
-      this.intigriti.email = element.email
-      this.intigritiExist = true
-    } 
-    if(element.name == 'hackerone'){
-      this.hackerone.email = element.email
-      this.hackeroneExist = true
-    } 
-  }
 
-  platformData(event:any,platform:string){
+
+  platformData(event:any,platform:'yeswehack'|'hackerone'|'intigriti'){
     this.loading=true
     event.preventDefault()
-    let exist = false
+    let formName:'yeswehackForm'|'hackeroneForm'|'intigritiForm'=`${platform}Form`
+    let exist = ''
     let data:any
-    if(platform=='yeswehack'){
-      exist = this.yeswehackExist
-      data = this.intigritiForm.value
-      data.name='yeswehack'
-    }
-    if(platform=='intigriti'){
-      exist = this.intigritiExist
-      data = this.intigritiForm.value
-      data.name='intigriti'
-    }
-    if(platform=='hackerone'){
-      exist = this.hackeroneExist
-      data = this.hackeroneForm.value
-      data.name='hackerone'
-    }
+
+    exist = this[platform].email
+    data = this[formName].value
+    data.name=platform
+
     if(data.otp == "" ) delete data.otp
-    if(exist){
+    if(exist!=''){
       this.updatePlatform(data)
     } else {
       this.createPlatform(data)

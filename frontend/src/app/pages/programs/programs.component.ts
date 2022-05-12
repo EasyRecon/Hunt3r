@@ -33,8 +33,8 @@ export class ProgramsComponent  {
   scopeChoosed=false
   scopeTemp:Scope[]=<any>[]
   selectedPlateform:any='all';
-  listeProgramInti:Programs[]=<any>[]
-  listeProgramYwh:Programs[]=<any>[]
+  listeProgramIntigriti:Programs[]=<any>[]
+  listeProgramYeswehack:Programs[]=<any>[]
   listeProgramHackerone :Programs[]=<any>[]
   scopeModal:any;
   loadingModal=false;
@@ -137,49 +137,25 @@ export class ProgramsComponent  {
     
     this.scopeModal.close()
   }
-  getProgram(search:any='',platfrom:any='all'){
+  getProgram(search:any='',platform:'all'|'yeswehack'|'intigriti'|'hackerone'='all'){
     this.loading=true
-    this.listeProgramYwh=[]
-    this.listeProgramInti=[]
-    var stateLoadYWH=0
-    var stateLoadInti=0
-    var stateLoadHackerone=0
-    if(platfrom=='yeswehack' || platfrom=='all'){
-      stateLoadYWH=1
-      this.programsService.getPrograms('yeswehack',search).subscribe( (result)=> {
-        if( (stateLoadInti==0 ||stateLoadInti==2) && (stateLoadHackerone==0 ||stateLoadHackerone==2) )this.loading=false
-        stateLoadYWH=2
-        this.listeProgramYwh=result.data
-
+    if(platform=='all'){
+      this.getProgramFromPlatform(search, ['yeswehack','intigriti','hackerone'])
+    } else {
+      this.getProgramFromPlatform(search, [platform])
+    }
+  }
+  getProgramFromPlatform(search:any='',platform:any[]){
+    platform.forEach( (plat:any) => {
+      this.programsService.getPrograms(plat,search).subscribe( (result)=> {
+        let upperPlatform:'Yeswehack'|'Intigriti'|'Hackerone'=plat.charAt(0).toUpperCase()
+        let listName:'listeProgramYeswehack'|'listeProgramIntigriti'|'listeProgramHackerone'=`listeProgram${upperPlatform}`
+        this[listName]=result.data
       },(err)=>{
         this.loading=false
         this.messageService.showToast(err.message,'danger')
       })
-    }
-    if(platfrom=='intigriti' || platfrom=='all'){
-      stateLoadInti=1
-      this.programsService.getPrograms('intigriti',search).subscribe( (result)=> {
-        if((stateLoadYWH==0 ||stateLoadYWH==2) && (stateLoadHackerone==0 ||stateLoadHackerone==2) )this.loading=false
-        stateLoadInti=2
-        this.listeProgramInti=result.data
-      },(err)=>{
-
-        this.messageService.showToast(err.message,'danger')
-      })
-    }
-    
-    if(platfrom=='hackerone' || platfrom=='all'){
-      stateLoadHackerone=1
-      this.programsService.getPrograms('hackerone',search).subscribe( (result)=> {
-        if((stateLoadYWH==0 ||stateLoadYWH==2) && (stateLoadInti==0 ||stateLoadInti==2) )this.loading=false
-        stateLoadHackerone=2
-        this.listeProgramHackerone=result.data
-      },(err)=>{
-
-        this.messageService.showToast(err.message,'danger')
-      })
-    }
-
+    })
   }
   back(){
     this.flipped=false

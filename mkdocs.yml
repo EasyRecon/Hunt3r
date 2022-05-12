@@ -1,3 +1,39 @@
-site_name: My Docs
+site_name: Hunt3r Documentation
 theme:
   name: material
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+  logo: assets/logo.png
+  favicon: assets/logo.png
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/EasyRecon/Hunt3r
+repo_url: https://github.com/EasyRecon/Hunt3r
+repo_name: EasyRecon/Hunt3r
+edit_uri: ""
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+nav:
+  - 'index.md'
+  - Getting Started:
+    - 'getting_started/installation.md'
+    - 'getting_started/first_setup.md'
+  - 'features.md'
+  - 'faq.md'

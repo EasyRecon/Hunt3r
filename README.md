@@ -4,31 +4,24 @@
 </h1>  
 
 <p align="center">  
-<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-_red.svg"></a>  
-<a href="https://github.com/EasyRecon/Hunt3r/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>  
-<a href="https://github.com/EasyRecon/Hunt3r"><img src="https://img.shields.io/badge/release-v1.0.0-informational"></a>
-<a href="https://codeclimate.com/github/EasyRecon/Hunt3r"><img src="https://codeclimate.com/github/EasyRecon/Hunt3r.png"></a>
+    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-_red.svg"></a>  
+    <a href="https://github.com/EasyRecon/Hunt3r/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>  
+    <a href="https://github.com/EasyRecon/Hunt3r"><img src="https://img.shields.io/badge/release-v1.0.0-informational"></a>
+    <a href="https://github.com/easyrecon/hunt3r/issues" target="_blank"><img src="https://img.shields.io/github/issues/easyrecon/hunt3r?color=blue" /></a>
+</p>
 
 <p align="center">  
-  <a href="#features">Features</a> •  
-  <a href="#installation-instructions">Installation</a> •
+    <a href="https://codeclimate.com/github/EasyRecon/Hunt3r"><img src="https://codeclimate.com/github/EasyRecon/Hunt3r.png"></a>
+    <a href="https://github.com/easyrecon/hunt3r/actions/workflows/codeql-analysis.yml"><img src="https://github.com/easyrecon/hunt3r/actions/workflows/codeql-analysis.yml/badge.svg"></a>
+</p>
+
+<p align="center">
+  <a href="#installation-instructions">Quick Installation</a> •
+  <a href="#preview">Preview</a> •
   <a href="https://docs.hunt3r.ovh">Documentation</a>
 </p>
 
-# Features
-- [X] User management
-- [X] Cloud Providers management
-- [X] Connect another Hunt3r platform
-- [X] Tools management
-- [X] BugBounty Platforms Integration
-- [X] Platform programs / scopes synchronisation
-- [X] Platform statistiques
-- [X] Generate Intigriti Invoice
-- [X] Servers management
-- [X] Notifications management
-- [X] Scans management
-
-# Installation Instructions
+# Quick Installation Instructions
 
 ```bash
 mv backend/.env.example backend/.env  
@@ -36,16 +29,18 @@ nano backend/.env
 ```
 
 ```docker
-docker-compose run frontend npm install
 docker-compose up --build
 docker-compose run backend rake db:create
 docker-compose run backend rake db:migrate
 docker-compose run backend rake db:seed
 ```
 
-# Access
-
 Once the Docker environment is up, you can access the application through the Web UI available on [http://0.0.0.0](http://0.0.0.0) with the following default credentials :
-
 - Email address : `admin@admin.tld`
 - Password : `password`
+
+# Preview
+
+| Light Dashboard | Dark Dashboard |
+:---:|:---:
+![](docs/assets/light_dashboard.png) | ![](docs/assets/dark_dashboard.png)
