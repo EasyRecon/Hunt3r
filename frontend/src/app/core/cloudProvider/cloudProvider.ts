@@ -23,8 +23,14 @@ export interface DataCloudProvider {
 
 
  export interface DeleteProviderResponse {
-    success: string;
+    message: string;
+    data: string[];
  }
+
+ export interface UpdateProviderResponse {
+   message: string;
+   data: CloudProvider[];
+}
 
 
 

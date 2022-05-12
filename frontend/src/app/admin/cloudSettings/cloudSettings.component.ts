@@ -89,33 +89,24 @@ export class CloudSettingsComponent implements OnInit {
     let data = this.scalewayForm.value
     data.ssh_key=btoa(data.ssh_key)
     let finalData = {"provider": {"name":"scaleway","infos":data}}
-    if(this.scalewayExist) {
-      if(finalData.provider.infos.secret_key.charAt(1) == '*') delete finalData.provider.infos.secret_key
+    if(finalData.provider.infos.secret_key.charAt(1) == '*') delete finalData.provider.infos.secret_key
+    let action:'create'|'update'='create'
+    if(this.scalewayExist) action='update'
       Object.keys(finalData.provider.infos).forEach(key => {
         if (finalData.provider.infos[key] === '') {
           delete finalData.provider.infos[key];
         }
       });
-      this.cloudService.updateScaleway(finalData).subscribe( (result) => {
+      this.cloudService[`${action}Scaleway`](finalData).subscribe( (result) => {
         this.loading = false;
-        this.messageService.showToast('Cloud provider scaleway has been updated','success')
+        this.messageService.showToast(result.message,'success')
         this.getCloudProvider()
       },(err) =>{
         this.loading = false;
         this.messageService.showToast(err.message,'danger')
       })
-    } else {
-      this.cloudService.createScaleway(finalData).subscribe( (result) => {
-        this.scalewayExist=true
-        this.loading = false;
-        this.messageService.showToast('Cloud provider scaleway has been created','success')
-      },(err) =>{
-        this.loading = false;
-        this.messageService.showToast(err.message,'danger')
-      })
-    }
-
   }
+
   deletescaleway() {
     this.loading = true;
     this.cloudService.deleteScaleway().subscribe( (result) => {

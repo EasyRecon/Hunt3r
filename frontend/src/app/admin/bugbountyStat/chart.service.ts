@@ -15,44 +15,26 @@ export class ChartService {
     constructor() { }
     barreGraph(data:any[],label:any[],title:string,yaxis:string){
         return{
-          title: {
-            text: title,
-            //x: "center"
-          },
+          title: {text: title },
           tooltip: {
             trigger: 'axis',
-            axisPointer: {
-              type: 'shadow',
-            },
+            axisPointer: {type: 'shadow'},
           },
-          grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true,
-          },
+          grid: {left: '3%',right: '4%',bottom: '3%', containLabel: true },
           xAxis: [
             {
               type: 'category',
               data: label,
-              axisTick: {
-                alignWithLabel: true,
-              },
+              axisTick: {alignWithLabel: true},
             },
           ],
-          yAxis: [
-            {
-              type: 'value',      
-            },
-          ],
-          series: [
-            {
+          yAxis: [ {type: 'value' }],
+          series: [{
               name: yaxis,
               type: 'bar',
               barWidth: '60%',
               data: data,
-            },
-          ],
+            }],
         };
       }
       pieChart(data:any[],title:string){
@@ -75,8 +57,7 @@ export class ChartService {
               color:['#00d68f','#fa0','#ff3d71','#222b45']
             }
           ]
-        };
-    
+        }
       }
 
  }
