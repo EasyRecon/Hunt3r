@@ -19,7 +19,7 @@
        <nb-tabset>
         <nb-tab tabTitle="yeswehack">
           <nb-form-field>
-            <form  [formGroup]="yeswehackForm" (ngSubmit)="updateYeswehack($event)">
+            <form  [formGroup]="yeswehackForm" (ngSubmit)="updateOrCreate($event,'yeswehack')">
               <div class="form-group row">
                 <label for="inputEmail1" class="label col-sm-3 col-form-label">Email</label>
                 <div class="col-sm-9">
@@ -52,7 +52,7 @@
         </nb-tab>
         <nb-tab tabTitle="intigriti">
           <nb-form-field>
-            <form  [formGroup]="intigritiForm" (ngSubmit)="updateIntigriti($event)">
+            <form  [formGroup]="intigritiForm" (ngSubmit)="updateOrCreate($event,'intigriti')">
               <div class="form-group row">
                 <label for="inputEmail1" class="label col-sm-3 col-form-label">Email</label>
                 <div class="col-sm-9">
@@ -84,7 +84,7 @@
         </nb-tab>
         <nb-tab tabTitle="hackerone">
           <nb-form-field>
-            <form  [formGroup]="hackeroneForm" (ngSubmit)="updateHackerone($event)">
+            <form  [formGroup]="hackeroneForm" (ngSubmit)="updateOrCreate($event,'hackerone')">
               <div class="form-group row">
                 <label for="inputEmail1" class="label col-sm-3 col-form-label">Email</label>
                 <div class="col-sm-9">
