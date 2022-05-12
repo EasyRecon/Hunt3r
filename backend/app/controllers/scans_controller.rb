@@ -43,7 +43,7 @@ class ScansController < ApplicationController
     server = Server.create(server_infos)
     scan_cmd[:cmd] += " --server-uid #{server[:uid]}"
 
-    launch_scan(scan_cmd[:cmd], scan)
+    launch_scan(scan_cmd[:cmd], scan, server)
 
     render status: 200, json: { message: I18n.t('success.controllers.scans.launched'), data: nil }
   end
@@ -205,7 +205,7 @@ class ScansController < ApplicationController
     end
   end
 
-  def launch_scan(cmd, scan)
+  def launch_scan(cmd, scan, server)
     Domain.create(name: scan.domain, scan_id: scan.id) if scan.type_scan == 'recon' && Domain.find_by(name: scan.domain).nil?
     Scope.where('scope LIKE ?', "%.#{scan.domain}").first&.update(last_scan: Time.now) unless scan.type_scan == 'nuclei'
 
