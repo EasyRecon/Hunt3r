@@ -211,9 +211,6 @@ class ScansController < ApplicationController
     Scope.where('scope LIKE ?', "%.#{scan.domain}").first&.update(last_scan: Time.now) unless scan.type_scan == 'nuclei'
 
     Thread.start do
-      # TODO : Remove debug
-      p '-----'
-      p cmd
       # Sleep until the server starts and install the necessary tools
       sleep(360)
 
@@ -226,7 +223,7 @@ class ScansController < ApplicationController
         end
 
         Net::SSH.start(server.ip, 'root', keys: "/root/.ssh/#{scan.provider}_id_rsa") do |ssh|
-          #ssh.exec!("screen -dm -S Scan #{cmd}")
+          ssh.exec!("screen -dm -S Scan #{cmd}")
         end
       rescue Net::SSH::AuthenticationFailed
         server_delete(server, 'Stopped')
