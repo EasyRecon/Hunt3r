@@ -24,66 +24,14 @@ class Admin::ToolsController < ApplicationController
       return render status: 422, json: { message: tool.errors.objects.first.full_message, data: nil }
     end
 
-    case tool.name
-    when 'amass', 'nuclei'
-      value = tool.infos['config_value']
-
-      unless (tool.name == 'amass' && base64?(value)) || (tool.name == 'nuclei' && base64?(value) && yaml?(value))
-        tool.destroy
-        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.amass_nuclei_invalid'), data: nil }
-      end
-
-      write_config(tool.name, value)
-
-      tool.save
-      render status: 200, json: { message: I18n.t('success.controllers.admin.tools.created'), data: nil }
-    when 'dehashed'
-      unless dehashed_valid?(tool)
-        tool.destroy
-        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.dehashed_invalid'), data: nil }
-      end
-
-      tool.save
-      render status: 200, json: { message: I18n.t('success.controllers.admin.tools.created'), data: nil }
-    when 'hunt3r_token'
-      tool.save
-      render status: 200, json: { message: I18n.t('success.controllers.admin.tools.created'), data: nil }
-    when 'c99'
-      unless c99_valid?(tool)
-        tool.destroy
-        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.c99_invalid'), data: nil }
-      end
-
-      tool.save
-      render status: 200, json: { message: I18n.t('success.controllers.admin.tools.created'), data: nil }
-    when 'whoxy'
-      unless whoxy_valid?(tool)
-        tool.destroy
-        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.whoxy_invalid'), data: nil }
-      end
-
-      tool.save
-      render status: 200, json: { message: I18n.t('success.controllers.admin.tools.created'), data: nil }
-    when 'slack'
-      unless slack_valid?(tool)
-        tool.destroy
-        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.slack_invalid'), data: nil }
-      end
-
-      tool.save
-      render status: 200, json: { message: I18n.t('success.controllers.admin.tools.created'), data: nil }
-    when 'interactsh'
-      unless interactsh_valid?(tool)
-        tool.destroy
-        return render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.interactsh_invalid'), data: nil }
-      end
-
-      tool.save
-      render status: 200, json: { message: I18n.t('success.controllers.admin.tools.created'), data: nil }
-    else
+    errors = check_tools(tool)
+    unless errors.nil?
       tool.destroy
-      render status: 422, json: { message: I18n.t('errors.controllers.admin.tools.not_valid'), data: nil }
+      return render status: 422, json: { message: I18n.t("errors.controllers.admin.tools.#{errors}"), data: nil }
     end
+
+    tool.save
+    render status: 200, json: { message: I18n.t('success.controllers.admin.tools.created'), data: nil }
   end
 
   def model
@@ -91,6 +39,33 @@ class Admin::ToolsController < ApplicationController
   end
 
   private
+
+  def check_tools(tool)
+    case tool.name
+    when 'amass'
+      value = tool.infos['config_value']
+      return 'amass_invalid' unless base64?(value)
+
+      write_config(tool.name, value)
+    when 'nuclei'
+      value = tool.infos['config_value']
+      return 'nuclei_invalid' unless base64?(value) && yaml?(value)
+
+      write_config(tool.name, value)
+    when 'dehashed'
+      'dehashed_invalid' unless dehashed_valid?(tool)
+    when 'c99'
+      'c99_invalid' unless c99_valid?(tool)
+    when 'whoxy'
+      'whoxy_invalid' unless whoxy_valid?(tool)
+    when 'slack'
+      'slack_invalid' unless slack_valid?(tool)
+    when 'interactsh'
+      'interactsh_invalid' unless interactsh_valid?(tool)
+    else
+      'not_valid'
+    end
+  end
 
   def write_config(tool_name, value)
     path = case tool_name
