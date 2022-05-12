@@ -47,11 +47,13 @@ class Admin::ToolsController < ApplicationController
       return 'amass_invalid' unless base64?(value)
 
       write_config(tool.name, value)
+      nil
     when 'nuclei'
       value = tool.infos['config_value']
       return 'nuclei_invalid' unless base64?(value) && yaml?(value)
 
       write_config(tool.name, value)
+      nil
     when 'dehashed'
       'dehashed_invalid' unless dehashed_valid?(tool)
     when 'c99'
@@ -60,6 +62,8 @@ class Admin::ToolsController < ApplicationController
       'whoxy_invalid' unless whoxy_valid?(tool)
     when 'slack'
       'slack_invalid' unless slack_valid?(tool)
+    when 'hunt3r_token'
+      nil
     when 'interactsh'
       'interactsh_invalid' unless interactsh_valid?(tool)
     else
