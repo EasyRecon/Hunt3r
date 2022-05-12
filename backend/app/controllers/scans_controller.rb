@@ -32,6 +32,7 @@ class ScansController < ApplicationController
 
     scan_cmd = build_scan_cmd(scan)
     if scan_cmd[:errors]
+      scan.destroy
       return render status: 422, json: { message: I18n.t("errors.controllers.scans.#{scan_cmd[:errors]}"), data: nil }
     end
 
