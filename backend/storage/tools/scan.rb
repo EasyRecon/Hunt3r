@@ -42,7 +42,7 @@ optparse = OptionParser.new do |opts|
   end
 
   opts.on('--url value', 'Dashboard URL') do |value|
-    OPTIONS[:url] = value
+    OPTIONS[:url] = File.join(value, '/api')
   end
 
   opts.on('-d', '--domain domain', 'Domain to scan') do |v|
