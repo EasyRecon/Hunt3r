@@ -64,7 +64,7 @@ export class UsersComponent implements OnInit {
     this.loading = true 
     this.userService.deleteUser(id).subscribe( (result) => {
       this.loading = false 
-      this.messageService.showToast('User has benn deleted','success')
+      this.messageService.showToast(result.message,'success')
       this.getUsers()
     },(err) =>{
       this.loading = false 
@@ -82,7 +82,7 @@ export class UsersComponent implements OnInit {
       this.loadingModal = false 
       this.loading = true 
       this.addUserModal.close()
-      this.messageService.showToast('Cloud provider scaleway has been updated','success')
+      this.messageService.showToast(result.message,'success')
       this.getUsers()
     },(err) =>{
       this.loadingModal = false 
@@ -91,6 +91,6 @@ export class UsersComponent implements OnInit {
   }
 
   open(dialog: TemplateRef<any>) {
-    this.addUserModal = this.dialogService.open(dialog, { context: 'this is some additional data passed to dialog' });
+    this.addUserModal = this.dialogService.open(dialog);
   }
 }

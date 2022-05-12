@@ -1,7 +1,7 @@
-require 'get_platform_jwt'
+require 'platforms'
 
 class Admin::InvoiceController < ApplicationController
-  include(GetPlatformJwt)
+  include(Platforms)
   before_action :authenticate_user, :admin?
 
   # GET /platforms/:name/invoice
@@ -70,8 +70,7 @@ class Admin::InvoiceController < ApplicationController
     end
 
     template = File.read(invoice_template_file)
-    jwt = get_platform_jwt(platform)
-    @payouts = get_intigriti_payouts(jwt, @from, @to)
+    @payouts = get_payouts(platform, @from, @to)
 
     if @payouts.nil? || @payouts.empty?
       return render status: 422, json: { message: I18n.t('errors.controllers.admin.invoices.no_payouts') }
@@ -119,38 +118,5 @@ class Admin::InvoiceController < ApplicationController
 
   def invoice_pdf_file
     Rails.root.join('/tmp/invoice.pdf')
-  end
-
-  def get_intigriti_payouts(jwt, from, to)
-    from_timestamp = Date.parse(from).to_time.to_i # 00:00 AM
-    to_timestamp = Date.parse(to).to_time.to_i + 86_399 # 23:59 PM
-
-    request = Typhoeus::Request.new(
-      'https://api.intigriti.com/core/researcher/payout',
-      headers: { Authorization: "Bearer #{jwt}" }
-    )
-
-    request.run
-    response = request.response
-
-    return unless response&.code == 200
-
-    payouts = JSON.parse(response.body)
-
-    payouts_data = {}
-
-    payouts.each do |payout|
-      next unless payout['createdAt'] > from_timestamp && payout['createdAt'] < to_timestamp
-
-      paid_date = DateTime.strptime(payout['createdAt'].to_s, '%s').strftime('%d-%m-%Y')
-
-      if payouts_data.has_key?(payout['submissionCode'])
-        payouts_data[payout['submissionCode']][:amount] += payout['amount']['value']
-      else
-        payouts_data[payout['submissionCode']] = { date: paid_date, title: payout['submissionTitle'], amount: payout['amount']['value'] }
-      end
-    end
-
-    payouts_data
   end
 end

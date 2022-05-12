@@ -42,3 +42,10 @@ docker-compose run backend rake db:create
 docker-compose run backend rake db:migrate
 docker-compose run backend rake db:seed
 ```
+
+# Access
+
+Once the Docker environment is up, you can access the application through the Web UI available on [http://0.0.0.0](http://0.0.0.0) with the following default credentials :
+
+- Email address : `admin@admin.tld`
+- Password : `password`

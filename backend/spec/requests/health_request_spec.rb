@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'spec_helper'
 
 RSpec.describe 'Healths', type: :request do
   describe 'GET /' do

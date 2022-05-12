@@ -1,9 +1,7 @@
-require 'get_platform_jwt'
-require 'platform_sync'
+require 'platforms'
 
 class ProgramsController < ApplicationController
-  include(GetPlatformJwt)
-  include(PlatformSync)
+  include(Platforms)
 
   before_action :authenticate_user
 
@@ -26,37 +24,8 @@ class ProgramsController < ApplicationController
       return render status: 422, json: { message: I18n.t('errors.controllers.admin.platforms.empty'), data: nil }
     end
 
-    rate_limited = []
-    platforms.each do |platform|
-      # In order to avoid that several refreshes are launched at the same time so as not to overload the platform's API
-      if platform.program.last && (Time.now - platform.program.last.updated_at) < 1800
-        rate_limited << platform.name
-        next
-      elsif platform.program.last
-        platform.program.last.update(updated_at: Time.now)
-      end
-
-      case platform.name
-      when 'yeswehack'
-        Thread.start do
-          jwt = get_platform_jwt(platform)
-          update_yeswehack_programs(jwt, platform)
-        end
-      when 'intigriti'
-        Thread.start do
-          jwt = get_platform_jwt(platform)
-          update_intigriti_programs(jwt, platform)
-        end
-      when 'hackerone'
-        Thread.start do
-          update_hackerone_programs(platform)
-        end
-      else
-        next
-      end
-    end
-
-    if rate_limited.empty?
+    rate_limited = launch_sync(platforms)
+    if rate_limited.compact.empty?
       render status: 200, json: { message: I18n.t('success.controllers.programs.sync_in_progress'), data: nil }
     else
       render status: 429, json: { message: I18n.t('errors.controllers.programs.rate_limited'), data: rate_limited }
@@ -65,6 +34,26 @@ class ProgramsController < ApplicationController
 end
 
 private
+
+def launch_sync(platforms)
+  rate_limited = []
+  platforms.each do |platform|
+    rate_limited << rate_limited?(platform)
+    next if rate_limited.include?(platform.name)
+
+    update_programs(platform)
+  end
+
+  rate_limited
+end
+
+# In order to avoid that several refreshes are launched at the same time so as not to overload the platform's API
+def rate_limited?(platform)
+  return unless platform.program.last && (Time.now - platform.program.last.updated_at) < 1800
+
+  platform.program.last.update(updated_at: Time.now)
+  platform.name
+end
 
 def query_params
   params[:program] || ''

@@ -18,7 +18,7 @@
       <nb-card-body>
         <h3>Tools settings</h3><br>
         <div class="addGrp">
-          <nb-select (selectedChange)="inputForm($event)" placeholder="Select a tool" #toolSelected>
+          <nb-select  placeholder="Select a tool" #toolSelected>
             <nb-option *ngFor="let item of this.toolsList"  value="{{item}}">{{item}}</nb-option>
           </nb-select>
           <button type="button" nbButton status="success"  (click)="createModal(toolSelected.selected)"><nb-icon icon="plus-outline" ></nb-icon></button>
@@ -51,168 +51,51 @@
       </nb-card-body>
 
   </nb-card>
-  <ng-template #dialogCreateUserPassword let-data let-ref="dialogCreateUserPassword"  >
+  
+   <ng-template #dialogCreateGlobal let-data let-ref="dialogCreateGlobal">
     <nb-card  >
       <nb-card-header>Create tool config</nb-card-header>
       <nb-card-body>
         <nb-form-field>
-          <form  (ngSubmit)="this.updateTools($event,'userPassword')" [formGroup]="toolsFormUserPassword">
+          <form  (ngSubmit)="this.updateTools($event,data.name)"  [formGroup]="toolsFormGlobal">
+            <input class="col" nbInput type="hidden" value="{{data.name}}" formControlName="name" >
             <div class=" modaleBth row">
-              <div class="form-group row">
-                <label for="inputEmail1" class="label col-sm-3 col-form-label">User</label>
-                <div class="col-sm-9">
-                  <input class="col" nbInput type="text" name="user" formControlName="user" >
-                </div>
-              </div>
-              <input class="col" nbInput type="hidden" value="{{data}}" formControlName="name" >
-              <div class="form-group row">
-                <label for="inputEmail1" class="label col-sm-3 col-form-label">Password</label>
-                <div class="col-sm-9">
-                  <input class="col" nbInput type="password" name="password" formControlName="password" >
-                </div>
-              </div>
-              <div class="col">
-                <button nbButton (click)="closeModal()">Cancel</button>
-              </div>
-              <div class="col">
-                <button type="submit" nbButton status="success">Update</button>
-              </div>
-            </div>
-          </form>
-        </nb-form-field>
-      </nb-card-body>
-    </nb-card>
-  </ng-template>
-  <ng-template #dialogCreateApiKey let-data let-ref="dialogCreateApiKey"  >
-    <nb-card  >
-      <nb-card-header>Create tool config</nb-card-header>
-      <nb-card-body>
-        <nb-form-field>
-          <form  (ngSubmit)="this.updateTools($event,'apiKey')" [formGroup]="toolsFormApikey">
-            <div class=" modaleBth row">
-              <div class="form-group row">
-                <label for="inputEmail1" class="label col-sm-3 col-form-label">Api key</label>
-                <div class="col-sm-9">
-                  <input class="col" nbInput type="password" name="api_key" formControlName="api_key" >
-                  <input class="col" nbInput type="hidden" value="{{data}}" formControlName="name" >
-                </div>
-              </div>
-              <div class="col">
-                <button nbButton (click)="closeModal()">Cancel</button>
-              </div>
-              <div class="col">
-                <button type="submit" nbButton status="success">Update</button>
-              </div>
-            </div>
-          </form>
-        </nb-form-field>
-      </nb-card-body>
-    </nb-card>
-  </ng-template>
-  <ng-template #dialogCreateConfig let-data let-ref="dialogCreateConfig"  >
-    <nb-card  >
-      <nb-card-header>Create tool config</nb-card-header>
-      <nb-card-body>
-        <nb-form-field>
-          <form  (ngSubmit)="this.updateTools($event,'config')" [formGroup]="toolsFormConfig">
-            <div class=" modaleBth row">
-              <div class="form-group row">
-                <label for="inputEmail1" class="label col-sm-3 col-form-label">Configuration file</label>
-                <div class="col-sm-9">
-                  <textarea nbInput fullWidth placeholder="Textarea" class="" formControlName="config_value" ></textarea>
-                  <input class="col" nbInput type="hidden" value="{{data}}" formControlName="name" >
-                </div>
-              </div>
-              <div class="col">
-                <button nbButton (click)="closeModal()">Cancel</button>
-              </div>
-              <div class="col">
-                <button type="submit" nbButton status="success">Update</button>
-              </div>
-            </div>
-          </form>
-        </nb-form-field>
-      </nb-card-body>
-    </nb-card>
-  </ng-template>
-  <ng-template #dialogCreateUserApikey let-data let-ref="dialogCreateUserApikey">
-    <nb-card  >
-      <nb-card-header>Create tool config</nb-card-header>
-      <nb-card-body>
-        <nb-form-field>
-          <form  (ngSubmit)="this.updateTools($event,'userApikey')"  [formGroup]="toolsFormUserApiKey">
-            <div class=" modaleBth row">
-              <div class="form-group row">
-                <label for="inputEmail1" class="label col-sm-3 col-form-label">User</label>
-                <div class="col-sm-9">
-                  <input class="col" nbInput type="password" name="user" formControlName="user" >
-                  <input class="col" nbInput type="hidden" value="{{data}}" formControlName="name" >
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="inputEmail1" class="label col-sm-3 col-form-label">Api Key</label>
-                <div class="col-sm-9">
-                  <input class="col" nbInput type="password" name="api_key" formControlName="api_key" >
-                </div>
-              </div>
-              <div class="col">
-                <button nbButton (click)="closeModal()">Cancel</button>
-              </div>
-              <div class="col">
-                <button type="submit" nbButton status="success">Update</button>
-              </div>
-            </div>
-          </form>
-        </nb-form-field>
-      </nb-card-body>
-    </nb-card>
-  </ng-template>
-  <ng-template #dialogCreateUrlApikey let-data let-ref="dialogCreateUrlApikey">
-    <nb-card  >
-      <nb-card-header>Create tool config</nb-card-header>
-      <nb-card-body>
-        <nb-form-field>
-          <form  (ngSubmit)="this.updateTools($event,'UrlApikey')"  [formGroup]="toolsFormUrlApiKey">
-            <div class=" modaleBth row">
-              <div class="form-group row">
-                <label for="inputEmail1" class="label col-sm-3 col-form-label">URL</label>
-                <div class="col-sm-9">
-                  <input class="col" nbInput type="text" name="user" formControlName="url" >
-                  <input class="col" nbInput type="hidden" value="{{data}}" formControlName="name" >
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="inputEmail1" class="label col-sm-3 col-form-label">Api Key</label>
-                <div class="col-sm-9">
-                  <input class="col" nbInput type="password" name="api_key" formControlName="api_key" >
-                </div>
-              </div>
-              <div class="col">
-                <button nbButton (click)="closeModal()">Cancel</button>
-              </div>
-              <div class="col">
-                <button type="submit" nbButton status="success">Update</button>
-              </div>
-            </div>
-          </form>
-        </nb-form-field>
-      </nb-card-body>
-    </nb-card>
-  </ng-template>
-  <ng-template #dialogCreateWebhook let-data let-ref="dialogCreateWebhook">
-    <nb-card  >
-      <nb-card-header>Create tool config</nb-card-header>
-      <nb-card-body>
-        <nb-form-field>
-          <form  (ngSubmit)="this.updateTools($event,'Webhook')"  [formGroup]="toolsFormWebhook">
-            <div class=" modaleBth row">
-              <div class="form-group row">
+              <div class="form-group row" *ngIf="data.required.includes('webhook')">
                 <label for="inputEmail1" class="label col-sm-3 col-form-label">Webhook</label>
                 <div class="col-sm-9">
-                  <input class="col" nbInput type="text" name="user" formControlName="webhook" >
-                  <input class="col" nbInput type="hidden" value="{{data}}" formControlName="name" >
+                  <input class="col" nbInput type="text" name="user"  formControlName="webhook" >
                 </div>
               </div>
+              <div class="form-group row" *ngIf="data.required.includes('url')">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">URL</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="text" name="url" formControlName="url" >
+                </div>
+              </div>
+              <div class="form-group row" *ngIf="data.required.includes('api_key')">
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Api key</label>
+                <div class="col-sm-9">
+                  <input class="col" nbInput type="text" name="api_key" formControlName="api_key" >
+                </div>
+              </div>
+                <div class="form-group row" *ngIf="data.required.includes('user')">
+                  <label for="inputEmail1" class="label col-sm-3 col-form-label">User</label>
+                  <div class="col-sm-9">
+                    <input class="col" nbInput type="text" name="user" formControlName="user" >
+                  </div>
+                </div>
+                  <div class="form-group row" *ngIf="data.required.includes('password')">
+                    <label for="inputEmail1" class="label col-sm-3 col-form-label">Password</label>
+                    <div class="col-sm-9">
+                      <input class="col" nbInput type="password" name="password" formControlName="password" >
+                    </div>
+                  </div>
+                  <div class="form-group row" *ngIf="data.required.includes('config_value')">
+                    <label for="inputEmail1" class="label col-sm-3 col-form-label">Configuration file</label>
+                    <div class="col-sm-9">
+                      <textarea nbInput fullWidth placeholder="Textarea" class="" formControlName="config_value" ></textarea>
+                    </div>
+                  </div>
               <div class="col">
                 <button nbButton (click)="closeModal()">Cancel</button>
               </div>
