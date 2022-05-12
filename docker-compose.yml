@@ -20,8 +20,6 @@ services:
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - ./backend:/hunt3r
-    ports:
-      - "3000:3000"
     networks:
       hunt3r_network:
           aliases:
@@ -44,7 +42,6 @@ services:
         max-file: "1"
         max-size: "2m"
 
-
   proxy_hunt3r:
     restart: always
     image: nginx:alpine
@@ -57,7 +54,6 @@ services:
         hunt3r_network:
     volumes:
         - ./conf/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-
 
 networks:
    hunt3r_network:
