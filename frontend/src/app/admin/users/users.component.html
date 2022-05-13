@@ -30,7 +30,7 @@
             <td>{{ item.id }}</td>
             <td>{{ item.email }}</td>
             <td>{{ item.role }}</td>
-            <td>{{ item.created_at }}</td>
+            <td>{{ parseDate(item.created_at) }}</td>
             <td>
               <div class="row actionGrp" >
                 <div class="col">
