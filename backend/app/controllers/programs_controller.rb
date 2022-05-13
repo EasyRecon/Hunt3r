@@ -38,6 +38,7 @@ def launch_sync(platforms)
     next if rate_limited.include?(platform.name)
 
     update_programs(platform)
+    platform.programs.last.update(updated_at: Time.now)
   end
 
   rate_limited
@@ -45,9 +46,8 @@ end
 
 # In order to avoid that several refreshes are launched at the same time so as not to overload the platform's API
 def rate_limited?(platform)
-  return unless platform.program.last && (Time.now - platform.program.last.updated_at) < 1800
+  return unless platform.programs.last && Time.now - platform.programs.last.updated_at < 1800
 
-  platform.program.last.update(updated_at: Time.now)
   platform.name
 end
 
