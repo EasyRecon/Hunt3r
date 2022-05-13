@@ -71,7 +71,8 @@ class ScansController < ApplicationController
     hunt3r_token = Tool.find_by(name: 'hunt3r_token')&.infos
     scan_cmd[:errors] = 'hunt3r_token' if hunt3r_token.nil?
 
-    scan_cmd[:cmd] += " --hunt3r-token #{hunt3r_token['api_key']} --url #{ENV['APP_URL']}" if hunt3r_token
+    hunt3r_url = request.protocol + request.host_with_port
+    scan_cmd[:cmd] += " --hunt3r-token #{hunt3r_token['api_key']} --url #{hunt3r_url}" if hunt3r_token
     scan_cmd[:cmd] += " --scan-id #{scan.id} --type-scan #{scan.type_scan} -d #{scan.domain}"
 
     slack_webhook = Tool.find_by(name: 'slack')

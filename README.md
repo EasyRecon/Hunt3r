@@ -23,11 +23,6 @@
 
 # Quick Installation Instructions
 
-```bash
-mv backend/.env.example backend/.env  
-nano backend/.env
-```
-
 ```docker
 docker-compose up --build
 docker-compose run backend rake db:create

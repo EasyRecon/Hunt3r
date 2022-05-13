@@ -32,10 +32,6 @@ RSpec.configure do |config|
     host! '127.0.0.1'
   end
 
-  config.before(:each, type: :request) do
-    #host! ENV['APP_URL'].sub('http://', '')
-  end
-
   # rspec-mocks config goes here. You can use an alternate test double
   # library (such as bogus or mocha) by changing the `mock_with` option here.
   config.mock_with :rspec do |mocks|
