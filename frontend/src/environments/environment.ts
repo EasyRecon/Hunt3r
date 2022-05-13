@@ -5,7 +5,7 @@
 export const environment = {
   production: false
 };
-export const baseUrl = `http://127.0.0.1:3000`;
+export const baseUrl = `http://127.0.0.1/api`;
 export const login = `/auth/login`;
 export const dashboard = `/dashboard`;
 

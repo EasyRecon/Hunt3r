@@ -149,7 +149,7 @@ export class ProgramsComponent  {
     platform.forEach( (plat:any) => {
       this.loading=true
       this.programsService.getPrograms(plat,search).subscribe( (result)=> {
-        let upperPlatform:'Yeswehack'|'Intigriti'|'Hackerone'=plat.charAt(0).toUpperCase()
+        let upperPlatform:'Yeswehack'|'Intigriti'|'Hackerone'=plat.charAt(0).toUpperCase()+plat.slice(1)
         let listName:'listeProgramYeswehack'|'listeProgramIntigriti'|'listeProgramHackerone'=`listeProgram${upperPlatform}`
         this[listName]=result.data
         this.loading=false
