@@ -1,10 +1,8 @@
 class Whoxy
   def self.get_domains
-    request = Typhoeus::Request.new(
+    response = Typhoeus::Request.get(
       "http://api.whoxy.com/?key=#{OPTIONS[:whoxy_token]}&history=#{OPTIONS[:domain]}"
     )
-    request.run
-    response = request.response
     return unless response&.code == 200
 
     response_json = JSON.parse(response.body)
@@ -37,11 +35,9 @@ def reverse(data, type)
   data.each do |value|
     next if value.end_with?(".#{OPTIONS[:domain]}")
 
-    request = Typhoeus::Request.new(
+    response = Typhoeus::Request.get(
       "http://api.whoxy.com/?key=#{OPTIONS[:whoxy_token]}&reverse=whois&#{type}=#{value}"
     )
-    request.run
-    response = request.response
     next unless response&.code == 200
 
     response_json = JSON.parse(response.body)

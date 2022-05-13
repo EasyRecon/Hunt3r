@@ -3,7 +3,7 @@ class Amass
     prepare_config
     update_resolvers
 
-    random = (0...8).map { (65 + rand(26)).chr }.join
+    random = (0...8).map { rand(65..90).chr }.join
 
     cmd = 'amass enum'
     cmd += ' -active' if OPTIONS[:amass_active]

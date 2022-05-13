@@ -6,7 +6,7 @@ class Gau
       url.chomp!
       valid_urls = Set[]
 
-      random = (0...8).map { (65 + rand(26)).chr }.join
+      random = (0...8).map { rand(65..90).chr }.join
       `gau --blacklist png,jpg,jpeg,gif,svg,js,css,ttf,woff,woff2 --o #{OPTIONS[:output]}/gau_#{random}.txt #{url}`
 
       gau_results = File.open("#{OPTIONS[:output]}/gau_#{random}.txt").read
