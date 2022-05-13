@@ -7,12 +7,8 @@ class ProgramsController < ApplicationController
 
   # GET /programs
   def index
-    if params[:name]
-      platform = Platform.find_by(name: params[:name])
-      @programs = platform.nil? ? [] : Program.where(platform_id: platform.id).order(id: :asc).filtered(query_params)
-    else
-      @programs = Program.all
-    end
+    @programs = params[:name] ? Platform.find_by(name: params[:name])&.programs : Program.all
+    @programs&.order(id: :asc)&.filtered(query_params)
 
     render status: 200, template: 'programs/index'
   end
@@ -42,6 +38,7 @@ def launch_sync(platforms)
     next if rate_limited.include?(platform.name)
 
     update_programs(platform)
+    platform.programs.last.update(updated_at: Time.now)
   end
 
   rate_limited
@@ -49,9 +46,8 @@ end
 
 # In order to avoid that several refreshes are launched at the same time so as not to overload the platform's API
 def rate_limited?(platform)
-  return unless platform.program.last && (Time.now - platform.program.last.updated_at) < 1800
+  return unless platform.programs.last && Time.now - platform.programs.last.updated_at < 1800
 
-  platform.program.last.update(updated_at: Time.now)
   platform.name
 end
 

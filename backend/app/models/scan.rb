@@ -1,6 +1,8 @@
 class Scan < ApplicationRecord
   has_one :server
 
+  validates :domain, presence: true
+
   def cost
     running_time = updated_at.to_i - created_at.to_i
 
