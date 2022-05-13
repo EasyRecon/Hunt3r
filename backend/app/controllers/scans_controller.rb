@@ -90,25 +90,8 @@ class ScansController < ApplicationController
   def build_recon_scan_cmd(scan, scan_cmd)
     scan_cmd[:errors] = 'missing_amass' unless File.exist?(File.join(scan_config_files, 'amass/config.ini'))
 
-    if scan.leak
-      dehashed = Tool.find_by(name: 'dehashed')
-      if dehashed.nil?
-        scan_cmd[:errors] = 'dehashed_credentials'
-      else
-        scan_cmd[:cmd] += " --leak true --dehashed-username #{dehashed[:infos]['user']} --dehashed-token #{dehashed[:infos]['api_key']}"
-      end
-    end
-
-    if scan.intel
-      c99 = Tool.find_by(name: 'c99')&.infos
-      whoxy = Tool.find_by(name: 'whoxy')&.infos
-
-      if c99.nil? || whoxy.nil?
-        scan_cmd[:errors] = 'missing_intel'
-      else
-        scan_cmd[:cmd] += " --intel true --c99-token #{c99['api_key']} --whoxy-token #{whoxy['api_key']}"
-      end
-    end
+    scan_cmd = build_recon_scan_leak_cmd(scan_cmd) if scan.leak
+    scan_cmd = build_recon_scan_intel_cmd(scan_cmd) if scan.intel
 
     if scan.meshs
       meshs = Mesh.all.select(:url, :token)
@@ -117,6 +100,31 @@ class ScansController < ApplicationController
 
     scan_cmd[:cmd] += ' --gau true' if scan.gau
     scan_cmd[:cmd] += ' --active-amass true' if scan.active_recon
+    scan_cmd[:cmd] += " --excludes #{scan.excludes.join('|')}" if scan.excludes
+    scan_cmd
+  end
+
+  def build_recon_scan_leak_cmd(scan_cmd)
+    dehashed = Tool.find_by(name: 'dehashed')
+    if dehashed.nil?
+      scan_cmd[:errors] = 'dehashed_credentials'
+      return scan_cmd
+    end
+
+    scan_cmd[:cmd] += " --leak true --dehashed-username #{dehashed[:infos]['user']}"
+    scan_cmd[:cmd] += " --dehashed-token #{dehashed[:infos]['api_key']}"
+    scan_cmd
+  end
+
+  def build_recon_scan_intel_cmd(scan_cmd)
+    c99 = Tool.find_by(name: 'c99')&.infos
+    whoxy = Tool.find_by(name: 'whoxy')&.infos
+    if c99.nil? || whoxy.nil?
+      scan_cmd[:errors] = 'missing_intel'
+      return scan_cmd
+    end
+
+    scan_cmd[:cmd] += " --intel true --c99-token #{c99['api_key']} --whoxy-token #{whoxy['api_key']}"
     scan_cmd
   end
 

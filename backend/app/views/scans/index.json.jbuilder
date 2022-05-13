@@ -10,6 +10,7 @@ json.data do
     json.notifs scan.notifs
     json.active_recon scan.active_recon
     json.intel scan.intel
+    json.excludes scan.excludes
     json.leak scan.leak
     json.nuclei scan.nuclei
     json.all_templates scan.all_templates

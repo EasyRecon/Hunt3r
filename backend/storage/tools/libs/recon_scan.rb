@@ -23,6 +23,8 @@ class ReconScan
 
     `cat #{OPTIONS[:output]}/*_domains.txt | sort -u >> #{OPTIONS[:output]}/all_domains.txt`
 
+    clean_domains if OPTIONS[:excludes]
+
     # **-- START OF THE ACTIVE CHECK PHASE
     InteractDashboard.update_scan_status('Recon - Port Scanning')
     Naabu.check_domains
@@ -44,5 +46,31 @@ class ReconScan
     InteractDashboard.update_scan_status('Recon - GAU')
     Gau.get_urls
     # **-- END OF THE ACTIVE CHECK PHASE
+  end
+end
+
+private
+
+def clean_domains
+  regex_string = OPTIONS[:excludes].split('|')
+  regex = []
+  regex_string.each do |rs|
+    regex << Regexp.new(".*#{rs}.*")
+  rescue StandardError
+    next
+  end
+
+  input_domains = File.readlines("#{OPTIONS[:output]}/all_domains.txt")
+  output_domains = []
+
+  input_domains.each do |line|
+    line.chomp!
+    next if regex.any? { |r| r.match?(line) }
+
+    output_domains << line
+  end
+
+  File.open("#{OPTIONS[:output]}/all_domains.txt", 'w+') do |f|
+    f.puts(output_domains)
   end
 end
