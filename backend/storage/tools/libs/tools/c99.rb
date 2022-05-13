@@ -6,11 +6,9 @@ class C99
     domains.each_line do |domain|
       next if domain.end_with?(".#{OPTIONS[:domain]}")
 
-      request = Typhoeus::Request.new(
+      response = Typhoeus::Request.get(
         "https://api.c99.nl/subdomainfinder?key=#{OPTIONS[:c99_token]}&domain=#{domain.chomp}&json"
       )
-      request.run
-      response = request.response
       next unless response&.code == 200
 
       response_json = JSON.parse(response.body)
