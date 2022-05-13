@@ -155,7 +155,7 @@
                                 <nb-option *ngFor="let engine of this.listEngines" value="{{engine.id}}">{{engine.name}}</nb-option>
                               </nb-select>
                             </td>
-                            <td><button type="button" (click)="lauchScan(data)" nbButton status="success"><nb-icon icon="log-out-outline"></nb-icon></button></td>
+                            <td><button type="button" (click)="lauchScan(item)" nbButton status="success"><nb-icon icon="log-out-outline"></nb-icon></button></td>
                           </tr>
                         </table>
                         <br>

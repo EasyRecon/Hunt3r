@@ -67,7 +67,7 @@ export class ProgramsComponent  {
     this.listEngines.forEach((element)=>{
       if(element.id==this.engineByDomain[domain as keyof typeof this.engineByDomain]){
         scanAttr=Object.assign(element.infos,{"domain":domain})
-
+        console.log(domain)
         this.scansService.addScans({"scan":scanAttr}).subscribe((result)=>{
           this.loadingModal=false
           this.messageService.showToast(result.message,'success')
@@ -115,7 +115,7 @@ export class ProgramsComponent  {
     this.flipped=true
   }
   openModal(dialog: TemplateRef<any>,domains:string[]){
-    domains=domains.map( domain => this.cleanScope(domain))
+   // domains=domains.map( domain => this.cleanScope(domain))
     this.loadingModal=true
     this.enginesService.getEngines().subscribe((result)=>{
       this.loadingModal=false
@@ -125,13 +125,6 @@ export class ProgramsComponent  {
       this.messageService.showToast(err.message,'danger')
     })
     this.scopeModal=this.dialogService.open(dialog, { context: domains });
-  }
-  cleanScope(data:any){
-    data=data.replace(/^https?:\/\//, '')
-    data=data.replace(/^http?:\/\//, '')
-    data=data.replace(/\*/, '')
-
-    return data
   }
   closeModal(){
     
