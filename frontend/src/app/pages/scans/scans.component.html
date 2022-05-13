@@ -35,7 +35,7 @@
                 <td>{{ item.type_scan }}</td>
                 <td>{{ item.instance_type}}</td>
                 <td>{{ item.provider}}</td>
-                <td> <nb-badge class="badgeSub" text="{{ item.state }}" status="{{ item.state.toLowerCase()=='stopped' ? 'danger' : 'success' }}"></nb-badge></td>
+                <td> <nb-badge class="badgeSub" text="{{ item.state }}" status="{{ item.state!=null?item.state.toLowerCase()=='stopped' ? 'danger' : 'success':'' }}"></nb-badge></td>
               </tr>
              
             </table>

@@ -67,7 +67,7 @@ export class ProgramsComponent  {
     this.listEngines.forEach((element)=>{
       if(element.id==this.engineByDomain[domain as keyof typeof this.engineByDomain]){
         scanAttr=Object.assign(element.infos,{"domain":domain})
-        scanAttr.domain=scanAttr.domain[0]
+        if(scanAttr.domain.constructor === Array)scanAttr.domain=scanAttr.domain[0]
         this.scansService.addScans({"scan":scanAttr}).subscribe((result)=>{
           this.loadingModal=false
           this.messageService.showToast(result.message,'success')
