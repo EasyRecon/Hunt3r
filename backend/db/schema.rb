@@ -126,6 +126,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_05_08_073735) do
     t.string "state"
     t.string "type_scan"
     t.boolean "meshs"
+    t.string "excludes", array: true
     t.string "instance_type"
     t.string "provider"
     t.boolean "notifs"
