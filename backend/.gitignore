@@ -26,7 +26,6 @@
 !/tmp/storage/
 !/tmp/storage/.keep
 
-/lib/json_web_token.rb
 /storage/configs/tools/amass/config.ini
 /storage/configs/tools/nuclei/config.yaml
 /storage/domains.txt
