@@ -4,7 +4,7 @@
 
 The first thing to do is to change your login information by going to your profile [/pages/user](http://0.0.0.0/pages/user)
 
-![](../assets/profile_update.png)
+![](../assets/images/profile_update.png)
 
 ## Configure a Cloud Provider
 
@@ -22,8 +22,8 @@ To be able to launch a scan you will first have to configure a Cloud Provider on
 
 First of all it is necessary to add an SSH key on https://console.scaleway.com/project/credentials
 
-![](../assets/Scaleway_SSH_Configuration.png)
+![](../assets/images/Scaleway_SSH_Configuration.png)
 
 As well as a Keys API for Hunt3r, still on the same page
 
-![](../assets/Scaleway_API_Keys_Configuration.png)
+![](../assets/images/Scaleway_API_Keys_Configuration.png)

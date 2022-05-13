@@ -13,8 +13,8 @@ theme:
   features:
     - navigation.tabs
     - navigation.tabs.sticky
-  logo: assets/logo.png
-  favicon: assets/logo.png
+  logo: assets/images/logo.png
+  favicon: assets/images/logo.png
 extra:
   social:
     - icon: fontawesome/brands/github

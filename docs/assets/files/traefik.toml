@@ -1,0 +1,31 @@
+[log]
+  level = "DEBUG"
+
+[entryPoints]
+  [entryPoints.web]
+    address = ":80"
+
+  [entryPoints.web.http.redirections.entryPoint]
+    to = "websecure"
+    scheme = "https"
+
+  [entryPoints.websecure]
+    address = ":443"
+
+[certificatesResolvers.letsencrypt.acme]
+  email = "contact@domain.tld"
+  storage = "/letsencrypt/acme.json"
+  [certificatesResolvers.letsencrypt.acme.tlsChallenge]
+
+[api]
+  dashboard = true
+
+[providers.docker]
+  exposedByDefault = false
+  network = "traefik-global-proxy"
+
+[providers.file]
+  directory = "/etc/traefik/dynamic"
+
+[accessLog]
+  filePath = "/logs"
