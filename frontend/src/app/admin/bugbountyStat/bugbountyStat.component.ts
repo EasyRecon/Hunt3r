@@ -99,9 +99,9 @@ export class BugbountyStatComponent implements OnInit {
     return rapport_severity
   }
   computeStat(platform:'YWH'|'INTI') {
-    this[`stat${platform}`] = this.globalStat(this.scopeYWH)
+    this[`stat${platform}`] = this.globalStat(this[`scope${platform}`])
     this[`loading${platform}Global`]=false
-    this[`options${platform}Pie`] = this.pieCriticity(this.statYWH.rapport_severity.L,this.statYWH.rapport_severity.M,this.statYWH.rapport_severity.H,this.statYWH.rapport_severity.C)
+    this[`options${platform}Pie`] = this.pieCriticity(this[`stat${platform}`].rapport_severity.L,this[`stat${platform}`].rapport_severity.M,this[`stat${platform}`].rapport_severity.H,this[`stat${platform}`].rapport_severity.C)
     let data = this.initBarreData(this[`stat${platform}`])
     this[`options${platform}Barre`] = this.chartService.barreGraph(data.report_by_month,data.label,'Number of rapport','Number of report')
     let dataTwo   = this.initPie(this[`stat${platform}`])
@@ -109,7 +109,7 @@ export class BugbountyStatComponent implements OnInit {
     this[`options${platform}EarnedByMonth`] = this.chartService.barreGraph(data.earn_by_month,data.label,"Earn by month",'value')
   }
   globalStat(scope:any):any{
-    let returnData:{report_by_month:any,earn_by_month:any,report_by_status:any,earnedEuro:number,collab_number:number,rapport_severity:any,average_per_rapport:number,total_repports:number}={
+    let returnData:{report_by_month:any,earn_by_month:any,report_by_status:any,earnedEuro:number,collab_number:number,rapport_severity:any,average_per_rapport:number,total_rapports:number}={
       "report_by_month":{},
       "earn_by_month":{},
       "report_by_status":{},
@@ -117,7 +117,7 @@ export class BugbountyStatComponent implements OnInit {
       "collab_number":0,
       "rapport_severity":{},
       "average_per_rapport":0.0,
-      "total_repports":0
+      "total_rapports":0
     }
     _.each(scope, (element) => {
       console.log(returnData,element)
@@ -142,7 +142,7 @@ export class BugbountyStatComponent implements OnInit {
       if(_.isUndefined( returnData.report_by_status[element.status as keyof typeof returnData.report_by_status]))returnData.report_by_status[element.status as keyof typeof returnData.report_by_status]=0
       returnData.report_by_status[element.status as keyof typeof returnData.report_by_status]++
     })
-    returnData.total_repports=scope.length
+    returnData.total_rapports=scope.length
     returnData.average_per_rapport=parseFloat((returnData.earnedEuro /scope.length).toFixed(2))
     console.log(returnData)
     return returnData
