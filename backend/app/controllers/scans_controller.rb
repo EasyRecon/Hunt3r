@@ -25,7 +25,7 @@ class ScansController < ApplicationController
     end
 
     scan = Scan.create(scan_infos)
-    unless scan.valid? || scan.type_scan != 'recon' || scan.type_scan != 'nuclei'
+    unless scan.valid? && (scan.type_scan != 'recon' || scan.type_scan != 'nuclei')
       scan.destroy
       return render status: 422, json: { message: I18n.t('errors.controllers.scans.invalid'), data: nil }
     end
