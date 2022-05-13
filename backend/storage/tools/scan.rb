@@ -16,6 +16,7 @@ require_relative 'libs/tools/dehashed'
 require_relative 'libs/tools/gau'
 require_relative 'libs/tools/gowitness'
 require_relative 'libs/tools/httpx'
+require_relative 'libs/tools/mesh'
 require_relative 'libs/tools/naabu'
 require_relative 'libs/tools/nuclei'
 require_relative 'libs/tools/whoxy'
@@ -30,44 +31,44 @@ optparse = OptionParser.new do |opts|
     exit
   end
 
-  opts.on('--scan-id id', 'ScanID') do |id|
-    OPTIONS[:scan_id] = id
+  opts.on('--scan-id id', 'ScanID') do |value|
+    OPTIONS[:scan_id] = value
   end
 
-  opts.on('--server-uid uid', 'Server UID') do |uid|
-    OPTIONS[:srv_uid] = uid
+  opts.on('--server-uid uid', 'Server UID') do |value|
+    OPTIONS[:srv_uid] = value
   end
 
-  opts.on('--hunt3r-token token', 'Secret Token for requests to the dashboard') do |token|
-    OPTIONS[:hunt3r_token] = token
+  opts.on('--hunt3r-token token', 'Secret Token for requests to the dashboard') do |value|
+    OPTIONS[:hunt3r_token] = value
   end
 
   opts.on('--url value', 'Dashboard URL') do |value|
     OPTIONS[:url] = File.join(value, '/api')
   end
 
-  opts.on('-d', '--domain domain', 'Domain to scan') do |v|
-    OPTIONS[:domain] = v
+  opts.on('-d', '--domain domain', 'Domain to scan') do |value|
+    OPTIONS[:domain] = value
   end
 
   opts.on('--amass-active true|false', 'If Amass enum in active mode should be used') do |v|
     OPTIONS[:amass_active] = v
   end
 
-  opts.on('--type-scan type', 'Type of scan (Recon or Nuclei)') do |v|
-    OPTIONS[:type_scan] = v
+  opts.on('--type-scan type', 'Type of scan (Recon or Nuclei)') do |value|
+    OPTIONS[:type_scan] = value
   end
 
   opts.on('--intel true|false', 'Search for related domains') do |v|
     OPTIONS[:intel] = v
   end
 
-  opts.on('--whoxy-token token', 'Whoxy API Key Token') do |v|
-    OPTIONS[:whoxy_token] = v
+  opts.on('--whoxy-token token', 'Whoxy API Key Token') do |value|
+    OPTIONS[:whoxy_token] = value
   end
 
-  opts.on('--c99-token token', 'C99 API Key token') do |v|
-    OPTIONS[:c99_token] = v
+  opts.on('--c99-token token', 'C99 API Key token') do |value|
+    OPTIONS[:c99_token] = value
   end
 
   opts.on('-l', '--leak true|false', 'Search for a leak for the scanned domain') do |v|
@@ -110,8 +111,12 @@ optparse = OptionParser.new do |opts|
     OPTIONS[:gau] = v
   end
 
-  opts.on('--slack webhook', 'Sends scan information to Slack') do |v|
-    OPTIONS[:slack] = v
+  opts.on('--slack webhook', 'Sends scan information to Slack') do |value|
+    OPTIONS[:slack] = value
+  end
+
+  opts.on('--meshs meshs_data', 'List of meshes to query to retrieve domains') do |value|
+    OPTIONS[:meshs] = value
   end
 end
 
