@@ -112,7 +112,7 @@ class ScansController < ApplicationController
 
     if scan.meshs
       meshs = Mesh.all.select(:url, :token)
-      meshs.empty? ? scan_cmd[:errors] = 'missing_meshs' : scan_cmd[:cmd] += " --meshs #{meshs.to_json}"
+      meshs.empty? ? scan_cmd[:errors] = 'missing_meshs' : scan_cmd[:cmd] += " --meshs #{meshs.to_json(except: :id)}"
     end
 
     scan_cmd[:cmd] += ' --gau true' if scan.gau

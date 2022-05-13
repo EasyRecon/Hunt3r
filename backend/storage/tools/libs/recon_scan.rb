@@ -12,6 +12,7 @@ class ReconScan
 
     InteractDashboard.update_scan_status('Recon - Amass')
     Amass.get_domains
+    Mesh.get_domains if OPTIONS[:meshs]
 
     if OPTIONS[:intel]
       Whoxy.get_domains
