@@ -123,7 +123,7 @@ class Intigriti
       report_data = report_infos(platform, report['programId'], report['id'])
       report_data[:report_title] = report['title']
       report_data[:severity] = report['severity']
-      report_data[:report_status] = report['state']['status']
+      report_data[:report_status] = [report['state']['status'], report['state']['closeReason']].join(',')
       report_data[:report_date] = DateTime.strptime(report['createdAt'].to_s, '%s').strftime('%Y-%m-%d')
       report_data[:platform_id] = platform.id
       report_data[:report_id] = report['id']

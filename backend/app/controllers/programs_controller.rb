@@ -8,7 +8,7 @@ class ProgramsController < ApplicationController
   # GET /programs
   def index
     if params[:name]
-      platform = Platform.find_by_name(params[:name])
+      platform = Platform.find_by(name: params[:name])
       @programs = platform.nil? ? [] : Program.where(platform_id: platform.id).order(id: :asc).filtered(query_params)
     else
       @programs = Program.all
