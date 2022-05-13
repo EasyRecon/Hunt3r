@@ -42,6 +42,7 @@ export class VulnerabilitiesComponent implements OnInit {
     this.loading=true
     this.vulnerabilitiesService.deleteVulnerabilities(id).subscribe((result)=> {
       this.loading=false
+      this.messageService.showToast(result.message, 'success');
       this.getVulnerabilities()
     },(err)=> {
       this.loading=false

@@ -49,7 +49,7 @@
             <td><nb-icon icon="{{ item.infos.all_templates ? 'checkmark-circle-outline' : 'close-circle-outline'}}" status="{{ item.infos.all_templates ? 'success' : ''}}"></nb-icon></td>
             <td><nb-icon icon="{{ item.infos.permutation ? 'checkmark-circle-outline' : 'close-circle-outline'}}" status="{{ item.infos.permutation ? 'success' : ''}}"></nb-icon></td>
             <td><nb-icon icon="{{ item.infos.gau ? 'checkmark-circle-outline' : 'close-circle-outline'}}" status="{{ item.infos.gau ? 'success' : ''}}"></nb-icon></td>
-            <td>{{ item.infos.custom_templates.join(',')}}</td>
+            <td>{{item.infos.custom_templates.join(',')}}</td>
             <td>
               <div class="row actionGrp" >
                 <div class="col">
@@ -119,49 +119,49 @@
                 <div class="form-group ">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Notifications</label>
                   <div class="col-sm-2">
-                    <nb-checkbox (checkedChange)="toggle($event,'notifs')" [checked]="addEngineModel.infos.notifs" ></nb-checkbox>
+                    <nb-checkbox (checkedChange)="toggle($event,'notifs')" ></nb-checkbox>
                   </div>
                 </div>
                 <div class="form-group ">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Active recon</label>
                   <div class="col-sm-2">
-                    <nb-checkbox (checkedChange)="toggle($event,'active_recon')" [checked]="addEngineModel.infos.active_recon"></nb-checkbox>
+                    <nb-checkbox (checkedChange)="toggle($event,'active_recon')" ></nb-checkbox>
                   </div>
                 </div>
                 <div class="form-group ">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Intel recon</label>
                   <div class="col-sm-2">
-                    <nb-checkbox (checkedChange)="toggle($event,'intel')"  [checked]="addEngineModel.infos.intel"></nb-checkbox>
+                    <nb-checkbox (checkedChange)="toggle($event,'intel')" ></nb-checkbox>
                   </div>
                 </div>
                 <div class="form-group ">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Leak check</label>
                   <div class="col-sm-2">
-                    <nb-checkbox (checkedChange)="toggle($event,'leak')" [checked]="addEngineModel.infos.leak"></nb-checkbox>
+                    <nb-checkbox (checkedChange)="toggle($event,'leak')" ></nb-checkbox>
                   </div>
                 </div>
                 <div class="form-group ">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Nuclei</label>
                   <div class="col-sm-2">
-                    <nb-checkbox (checkedChange)="toggle($event,'nuclei')" [checked]="addEngineModel.infos.nuclei"></nb-checkbox>
+                    <nb-checkbox (checkedChange)="toggle($event,'nuclei')"></nb-checkbox>
                   </div>
                 </div>
                 <div class="form-group ">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">All Nuclei templates</label>
                   <div class="col-sm-2">
-                    <nb-checkbox (checkedChange)="toggle($event,'all_templates')" [checked]="addEngineModel.infos.all_templates" ></nb-checkbox>
+                    <nb-checkbox (checkedChange)="toggle($event,'all_templates')" ></nb-checkbox>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Domain permutation</label>
                   <div class="col-sm-2">
-                    <nb-checkbox (checkedChange)="toggle($event,'permutation')" [checked]="addEngineModel.infos.permutation" ></nb-checkbox>
+                    <nb-checkbox (checkedChange)="toggle($event,'permutation')"  ></nb-checkbox>
                   </div>
                 </div>
                 <div class="form-group ">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Get all URL (like Wayback)</label>
                   <div class="col-sm-2">
-                    <nb-checkbox (checkedChange)="toggle($event,'gau')" [checked]="addEngineModel.infos.gau"></nb-checkbox>
+                    <nb-checkbox (checkedChange)="toggle($event,'gau')" ></nb-checkbox>
                   </div>
                 </div>
                 

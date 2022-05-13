@@ -58,7 +58,11 @@ export class UsersComponent implements OnInit {
       this.messageService.showToast(err.message,'danger')
     })
   }
-
+  parseDate(date:any){
+    let dateObject = new Date(date)
+    let options:any = { hour: 'numeric',minute: 'numeric',second: 'numeric' ,weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return dateObject.toLocaleDateString("fr-FR",options)
+  }
   
   deleteUser(id:number){
     this.loading = true 

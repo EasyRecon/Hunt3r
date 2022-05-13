@@ -26,7 +26,7 @@ export class UserService  {
     return this.httpService.post<UserResponse>('/admin/users',data)
   }
   deleteUser(id:number): Observable<UserResponse> {
-    return this.httpService.delete<UserResponse>('/admin/user/'+id)
+    return this.httpService.delete<UserResponse>('/admin/users/'+id)
   }
   logoutUser(): Observable<any> {
     return this.httpService.delete<UserResponse>('/auth/logout')
