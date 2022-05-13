@@ -2,3 +2,5 @@
 frontend/.vscode/
 
 *.pem
+
+backend/lib/json_web_token.rb
