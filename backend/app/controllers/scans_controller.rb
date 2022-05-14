@@ -30,8 +30,8 @@ class ScansController < ApplicationController
       return render status: 422, json: { message: I18n.t('errors.controllers.scans.invalid'), data: nil }
     end
 
-    # Needed for the last scan update 
-    base_domain = scan.domain
+    # Needed for the last scan update
+    base_domain = scan.domain.dup
     scan_cmd = build_scan_cmd(scan)
     if scan_cmd[:errors]
       scan.destroy
