@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class EnginesController < ApplicationController
   before_action :authenticate_user
 
@@ -50,7 +51,8 @@ class EnginesController < ApplicationController
   def get_engine_infos
     params.require(:engine).permit(
       :name, infos: [:type_scan, :instance_type, :provider, :notifs, :active_recon, :intel, :leak, :nuclei,
-                     :all_templates, :permutation, :gau, custom_templates: [] ]
+                     :all_templates, :permutation, :gau, :custom_interactsh, custom_templates: [], meshs: [],
+                     nuclei_severity: []]
     )
   end
 end
