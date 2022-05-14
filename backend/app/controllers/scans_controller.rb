@@ -17,7 +17,7 @@ class ScansController < ApplicationController
   def create
     scan_infos = params.require(:scan).permit(
       :domain, :meshs, :type_scan, :instance_type, :provider, :notifs, :active_recon, :intel, :leak, :nuclei,
-      :all_templates, :custom_interactsh, :permutation, :gau, nuclei_severity: [], custom_templates: []
+      :all_templates, :custom_interactsh, :permutation, :gau, excludes: [], nuclei_severity: [], custom_templates: []
     )
 
     if Provider.find_by(name: scan_infos[:provider]).nil?
