@@ -51,7 +51,7 @@ class EnginesController < ApplicationController
   def get_engine_infos
     params.require(:engine).permit(
       :name, infos: [:type_scan, :instance_type, :provider, :notifs, :active_recon, :intel, :leak, :nuclei,
-                     :all_templates, :permutation, :gau, :custom_interactsh, custom_templates: [], meshs: [],
+                     :all_templates, :permutation, :gau, :custom_interactsh, :meshs, custom_templates: [],
                      nuclei_severity: []]
     )
   end
