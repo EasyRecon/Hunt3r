@@ -7,4 +7,4 @@ json.data do
     json.updated_at domain.updated_at.to_date
   end
 end
-json.total_pages @domains.total_pages
+json.total_pages @domains.total_pages == 0 ? 1 : @domains.total_pages

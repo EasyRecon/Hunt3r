@@ -6,4 +6,4 @@ json.data do
     json.infos subdomain.infos
   end
 end
-json.total_pages @subdomains.total_pages
+json.total_pages @subdomains.total_pages == 0 ? 1 : @subdomains.total_pages
