@@ -102,7 +102,7 @@ class ScansController < ApplicationController
     end
 
     scan_cmd[:cmd] += ' --gau true' if scan.gau
-    scan_cmd[:cmd] += ' --active-amass true' if scan.active_recon
+    scan_cmd[:cmd] += ' --amass-active true' if scan.active_recon
     scan_cmd[:cmd] += " --excludes #{scan.excludes.join('|')}" unless scan.excludes.empty?
     scan_cmd
   end
