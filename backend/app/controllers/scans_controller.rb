@@ -76,10 +76,10 @@ class ScansController < ApplicationController
     scan_cmd[:cmd] += " --hunt3r-token #{hunt3r_token['api_key']} --url #{hunt3r_url}" if hunt3r_token
 
     # If launched from the scope page we remove the wildcard and the https://
-    domain = scan.domain.gsub('*.', '')
-    domain.gsub!(%r{^https?://}, '')
+    scan.domain.gsub!('*.', '')
+    scan.domain.gsub!(%r{^https?://}, '')
 
-    scan_cmd[:cmd] += " --scan-id #{scan.id} --type-scan #{scan.type_scan} -d #{domain}"
+    scan_cmd[:cmd] += " --scan-id #{scan.id} --type-scan #{scan.type_scan} -d #{scan.domain}"
 
     slack_webhook = Tool.find_by(name: 'slack')
     scan_cmd[:errors] = 'missing_webhook' if scan.notifs && slack_webhook.nil?
