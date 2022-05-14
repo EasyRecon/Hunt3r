@@ -61,6 +61,15 @@
                     </nb-select>
                   </div>
                 </div>
+                <div class="form-group row">
+                  <label for="inputEmail1" class="label col-sm-3 col-form-label">Regex exclusion</label>
+                  <div class="col-sm-9">
+                                                  <button type="button" (click)="addRegex()" nbButton status="success"><nb-icon icon="plus-circle-outline"></nb-icon></button>
+                              <button type="button" (click)="removeRegex()" nbButton status="danger"><nb-icon icon="close-circle-outline"></nb-icon></button>
+                        <input *ngFor="let regex of regexList;let i = index" type="text" class="offset-md-4 col-md-4 row" nbInput (change)="setValue($event,i)" [value]="regexList[i]">                 
+                  </div>
+                </div>                        
+
                 <div class="col">
                   <button nbButton (click)="closeModal()">Cancel</button>
                 </div>

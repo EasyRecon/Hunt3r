@@ -153,7 +153,7 @@
                               <button type="button" (click)="addRegex(item)" nbButton status="success"><nb-icon icon="plus-circle-outline"></nb-icon></button>
                               <button type="button" (click)="removeRegex(item)" nbButton status="danger"><nb-icon icon="close-circle-outline"></nb-icon></button>
                               <div >
-                                <input *ngFor="let regex of regexList[item];let i = index" type="text" class="row" nbInput (change)="setValue($event,i,item)" [value]="regexList[item][i]">
+                                <input *ngFor="let regex of regexList[item];let i = index" type="text" nbInput (change)="setValue($event,i,item)" [value]="regexList[item][i]">
                               </div>
                             </td>
                             <td>

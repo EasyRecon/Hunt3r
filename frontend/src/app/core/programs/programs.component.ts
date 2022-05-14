@@ -170,7 +170,8 @@ export class ProgramsComponent  {
       this.regexList[name as keyof typeof this.regexList].pop()    
     }
   }
-  setValue(event:any,i:number,domain:string){
-    this.regexList[domain as keyof typeof this.regexList][i] = event.target.value
+  setValue(value:any,i:number,domain:string){
+    console.log(value)
+    this.regexList[domain as keyof typeof this.regexList][i]=value.value
   }
 }

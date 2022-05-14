@@ -24,6 +24,7 @@ export class ScansComponent implements OnInit {
   enginesList:Engine[]=<any>[]
   addScanModal:any;
   engine:number=0
+  regexList = Array()
   engineForm:FormGroup = <FormGroup> {};
   constructor(private fbuilder: FormBuilder,
     private scansService : ScanService,
@@ -61,6 +62,17 @@ export class ScansComponent implements OnInit {
 
    
   }
+  removeRegex() {
+    if (this.regexList.length > 1) {
+      this.regexList.pop()
+    }
+  }
+addRegex(){
+  this.regexList.push('')
+}
+  setValue(event: any, i: number) {
+    this.regexList[i] = event.target.value
+  }
   onChange(event:any){
     console.log(event)
     this.engine=event
@@ -82,6 +94,9 @@ export class ScansComponent implements OnInit {
     this.enginesList.forEach((element)=>{
       console.log(element,this.engine)
       if(element.id==this.engine){
+        element.infos.excludes = this.regexList.filter((element: any) => {
+          return element !== '';
+        });
         scanProperties= Object.assign(element.infos,{"domain":domain})
         this.scansService.addScans({"scan":scanProperties}).subscribe((result)=>{
           this.loadingModal=false
