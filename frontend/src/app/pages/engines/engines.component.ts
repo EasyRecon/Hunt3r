@@ -42,6 +42,8 @@ export class EnginesComponent implements OnInit {
          "intel": false,
          "leak": false,
          "nuclei": false,
+         "custom_interactsh":false,
+         "nuclei_severity":[],
          "all_templates": false,
          "permutation": false,
          "gau": false,
