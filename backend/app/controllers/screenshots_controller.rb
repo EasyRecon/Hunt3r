@@ -4,7 +4,7 @@ class ScreenshotsController < ApplicationController
   # GET /screenshots
   def index
     screenshot = Screenshot.find_by(subdomain_id: params[:subdomain_id])
-    if screenshot.nil? || !base64?(screenshot.screenshot)
+    if screenshot.nil?
       return render status: 422, json: { message: I18n.t('errors.controllers.screenshots.invalid'), data: nil }
     end
 

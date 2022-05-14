@@ -17,7 +17,7 @@ services:
 
   backend:
     build: ./backend
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: bash -c "sed -i 's;YOUR_JWT_SUPER_SECRET;'$$(openssl rand -base64 32)';' ./lib/json_web_token.rb && rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - ./backend:/hunt3r
     networks:

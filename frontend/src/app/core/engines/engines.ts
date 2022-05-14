@@ -14,13 +14,13 @@ export interface Engine {
       all_templates: boolean,
       custom_interactsh:boolean,
       nuclei_severity:string[],
+      meshs:boolean,
+      excludes:string[]
       permutation: boolean,
       gau: boolean,
       custom_templates: string[]
    }
-
 }
-
 export interface AddEngineResponse {
    message:string
    data: string

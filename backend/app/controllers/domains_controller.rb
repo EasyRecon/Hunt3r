@@ -20,7 +20,7 @@ class DomainsController < ApplicationController
     domains = if mesh_infos[:type] == 'domain'
                 Domain.all&.pluck(:name)
               else
-                Domain.find_by(name: mesh_infos[:domain])&.subdomains&.pluck(:url)
+                Domain.find_by(name: mesh_infos[:domain])&.subdomains&.pluck(:url, :infos)
               end
 
     render json: { data: domains }, status: 200

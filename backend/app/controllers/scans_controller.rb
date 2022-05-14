@@ -30,6 +30,8 @@ class ScansController < ApplicationController
       return render status: 422, json: { message: I18n.t('errors.controllers.scans.invalid'), data: nil }
     end
 
+    # Needed for the last scan update
+    base_domain = scan.domain.dup
     scan_cmd = build_scan_cmd(scan)
     if scan_cmd[:errors]
       scan.destroy
@@ -45,7 +47,7 @@ class ScansController < ApplicationController
     server = Server.create(server_infos[:infos])
     scan_cmd[:cmd] += " --server-uid #{server[:uid]}"
 
-    launch_scan(scan_cmd[:cmd], scan, server)
+    launch_scan(scan_cmd[:cmd], scan, server, base_domain)
 
     render status: 200, json: { message: I18n.t('success.controllers.scans.launched'), data: nil }
   end
@@ -68,20 +70,21 @@ class ScansController < ApplicationController
   private
 
   def build_scan_cmd(scan)
-    scan_cmd = { cmd: 'ruby scan.rb' }
+    scan_cmd = { cmd: 'ruby /tmp/tools/scan.rb' }
     hunt3r_token = Tool.find_by(name: 'hunt3r_token')&.infos
     scan_cmd[:errors] = 'hunt3r_token' if hunt3r_token.nil?
 
     hunt3r_url = request.protocol + request.host_with_port
     scan_cmd[:cmd] += " --hunt3r-token #{hunt3r_token['api_key']} --url #{hunt3r_url}" if hunt3r_token
-    scan_cmd[:cmd] += " --scan-id #{scan.id} --type-scan #{scan.type_scan} -d #{scan.domain}"
-
-    slack_webhook = Tool.find_by(name: 'slack')
-    scan_cmd[:errors] = 'missing_webhook' if scan.notifs && slack_webhook.nil?
 
     # If launched from the scope page we remove the wildcard and the https://
     scan.domain.gsub!('*.', '')
     scan.domain.gsub!(%r{^https?://}, '')
+
+    scan_cmd[:cmd] += " --scan-id #{scan.id} --type-scan #{scan.type_scan} -d #{scan.domain}"
+
+    slack_webhook = Tool.find_by(name: 'slack')
+    scan_cmd[:errors] = 'missing_webhook' if scan.notifs && slack_webhook.nil?
 
     scan_cmd = build_recon_scan_cmd(scan, scan_cmd) if scan.type_scan == 'recon'
     scan_cmd = build_nuclei_scan_cmd(scan, scan_cmd) if scan.nuclei || scan.type_scan == 'nuclei'
@@ -101,8 +104,8 @@ class ScansController < ApplicationController
     end
 
     scan_cmd[:cmd] += ' --gau true' if scan.gau
-    scan_cmd[:cmd] += ' --active-amass true' if scan.active_recon
-    scan_cmd[:cmd] += " --excludes #{scan.excludes.join('|')}" if scan.excludes
+    scan_cmd[:cmd] += ' --amass-active true' if scan.active_recon
+    scan_cmd[:cmd] += " --excludes #{scan.excludes.join('|')}" unless scan.excludes.empty?
     scan_cmd
   end
 
@@ -221,9 +224,9 @@ class ScansController < ApplicationController
     server_infos
   end
 
-  def launch_scan(cmd, scan, server)
-    Domain.create(name: scan.domain, scan_id: scan.id) if scan.type_scan == 'recon' && Domain.find_by(name: scan.domain).nil?
-    Scope.where('scope LIKE ?', "%.#{scan.domain}").first&.update(last_scan: Time.now) unless scan.type_scan == 'nuclei'
+  def launch_scan(cmd, scan, server, base_domain)
+    Domain.create(name: scan.domain) if scan.type_scan == 'recon' && Domain.find_by(name: scan.domain).nil?
+    Scope.find_by(scope: base_domain)&.update(last_scan: Time.now) unless scan.type_scan == 'nuclei'
 
     Thread.start do
       # Sleep until the server starts and install the necessary tools
