@@ -239,7 +239,7 @@ class ScansController < ApplicationController
         end
 
         Net::SSH.start(server.ip, 'root', keys: "/root/.ssh/#{scan.provider}_id_rsa") do |ssh|
-          ssh.exec!("screen -dm -S Scan #{cmd}")
+          ssh.exec!("screen -dm -S Scan /tmp/tools/#{cmd}")
         end
       rescue Net::SSH::AuthenticationFailed
         server_delete(server, 'Stopped')
