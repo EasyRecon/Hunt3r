@@ -45,6 +45,7 @@ export class EnginesComponent implements OnInit {
          "custom_interactsh":false,
          "nuclei_severity":[],
          "all_templates": false,
+         "meshs":false,
          "permutation": false,
          "gau": false,
          "custom_templates": []

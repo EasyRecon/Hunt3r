@@ -22,6 +22,6 @@ export class MeshsService  {
     return this.httpService.patch<MeshData>('/admin/meshs',data)
   }
   deleteMeshs(id:number): Observable<MeshResponse> {
-    return this.httpService.delete<MeshData>('/admin/meshs'+id)
+    return this.httpService.delete<MeshData>('/admin/meshs/'+id)
   }
 }
