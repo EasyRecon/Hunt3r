@@ -30,6 +30,8 @@ class ScansController < ApplicationController
       return render status: 422, json: { message: I18n.t('errors.controllers.scans.invalid'), data: nil }
     end
 
+    # Needed for the last scan update 
+    base_domain = scan.domain
     scan_cmd = build_scan_cmd(scan)
     if scan_cmd[:errors]
       scan.destroy
@@ -45,7 +47,7 @@ class ScansController < ApplicationController
     server = Server.create(server_infos[:infos])
     scan_cmd[:cmd] += " --server-uid #{server[:uid]}"
 
-    launch_scan(scan_cmd[:cmd], scan, server)
+    launch_scan(scan_cmd[:cmd], scan, server, base_domain)
 
     render status: 200, json: { message: I18n.t('success.controllers.scans.launched'), data: nil }
   end
@@ -222,9 +224,9 @@ class ScansController < ApplicationController
     server_infos
   end
 
-  def launch_scan(cmd, scan, server)
+  def launch_scan(cmd, scan, server, base_domain)
     Domain.create(name: scan.domain) if scan.type_scan == 'recon' && Domain.find_by(name: scan.domain).nil?
-    Scope.find_by(scope: scan.domain)&.update(last_scan: Time.now) unless scan.type_scan == 'nuclei'
+    Scope.find_by(scope: base_domain)&.update(last_scan: Time.now) unless scan.type_scan == 'nuclei'
 
     Thread.start do
       # Sleep until the server starts and install the necessary tools
