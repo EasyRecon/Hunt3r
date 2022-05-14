@@ -6,4 +6,4 @@ json.data do
     json.content_length url.content_length
   end
 end
-json.total_pages @urls.total_pages
+json.total_pages @urls.total_pages == 0 ? 1 : @urls.total_pages

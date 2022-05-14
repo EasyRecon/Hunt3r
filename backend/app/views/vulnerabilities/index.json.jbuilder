@@ -8,4 +8,4 @@ json.data do
     json.created_at vulnerability.created_at
   end
 end
-json.total_pages @vulnerabilities.total_pages
+json.total_pages @vulnerabilities.total_pages == 0 ? 1 : @vulnerabilities.total_pages

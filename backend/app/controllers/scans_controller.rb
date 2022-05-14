@@ -74,14 +74,15 @@ class ScansController < ApplicationController
 
     hunt3r_url = request.protocol + request.host_with_port
     scan_cmd[:cmd] += " --hunt3r-token #{hunt3r_token['api_key']} --url #{hunt3r_url}" if hunt3r_token
-    scan_cmd[:cmd] += " --scan-id #{scan.id} --type-scan #{scan.type_scan} -d #{scan.domain}"
+
+    # If launched from the scope page we remove the wildcard and the https://
+    domain = scan.domain.gsub('*.', '')
+    domain.gsub!(%r{^https?://}, '')
+
+    scan_cmd[:cmd] += " --scan-id #{scan.id} --type-scan #{scan.type_scan} -d #{domain}"
 
     slack_webhook = Tool.find_by(name: 'slack')
     scan_cmd[:errors] = 'missing_webhook' if scan.notifs && slack_webhook.nil?
-
-    # If launched from the scope page we remove the wildcard and the https://
-    scan.domain.gsub!('*.', '')
-    scan.domain.gsub!(%r{^https?://}, '')
 
     scan_cmd = build_recon_scan_cmd(scan, scan_cmd) if scan.type_scan == 'recon'
     scan_cmd = build_nuclei_scan_cmd(scan, scan_cmd) if scan.nuclei || scan.type_scan == 'nuclei'
@@ -102,7 +103,7 @@ class ScansController < ApplicationController
 
     scan_cmd[:cmd] += ' --gau true' if scan.gau
     scan_cmd[:cmd] += ' --active-amass true' if scan.active_recon
-    scan_cmd[:cmd] += " --excludes #{scan.excludes.join('|')}" if scan.excludes
+    scan_cmd[:cmd] += " --excludes #{scan.excludes.join('|')}" unless scan.excludes.empty?
     scan_cmd
   end
 
@@ -222,8 +223,8 @@ class ScansController < ApplicationController
   end
 
   def launch_scan(cmd, scan, server)
-    Domain.create(name: scan.domain, scan_id: scan.id) if scan.type_scan == 'recon' && Domain.find_by(name: scan.domain).nil?
-    Scope.where('scope LIKE ?', "%.#{scan.domain}").first&.update(last_scan: Time.now) unless scan.type_scan == 'nuclei'
+    Domain.create(name: scan.domain) if scan.type_scan == 'recon' && Domain.find_by(name: scan.domain).nil?
+    Scope.find_by(scope: scan.domain)&.update(last_scan: Time.now) unless scan.type_scan == 'nuclei'
 
     Thread.start do
       # Sleep until the server starts and install the necessary tools
@@ -238,7 +239,7 @@ class ScansController < ApplicationController
         end
 
         Net::SSH.start(server.ip, 'root', keys: "/root/.ssh/#{scan.provider}_id_rsa") do |ssh|
-          ssh.exec!("screen -dm -S Scan #{cmd}")
+          ssh.exec!("screen -dm -S Scan /tmp/tools/#{cmd}")
         end
       rescue Net::SSH::AuthenticationFailed
         server_delete(server, 'Stopped')

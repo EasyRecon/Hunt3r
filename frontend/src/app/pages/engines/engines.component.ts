@@ -45,6 +45,7 @@ export class EnginesComponent implements OnInit {
          "custom_interactsh":false,
          "nuclei_severity":[],
          "all_templates": false,
+         "meshs":false,
          "permutation": false,
          "gau": false,
          "custom_templates": []
@@ -60,7 +61,22 @@ export class EnginesComponent implements OnInit {
 
   addEngineModal(dialog: TemplateRef<any>){
     this.loadingModal=true
-    this.engineModal = this.dialogService.open(dialog, { context: '' });
+    this.engineModal = this.dialogService.open(dialog, { context: '-1' });
+    this.nucleiService.getTemplate().subscribe((result)=> {
+      this.loadingModal=false
+      this.templatList=result.data
+    },(err)=>{
+      this.loadingModal=false
+      this.messageService.showToast(err.message,'danger')
+    })
+  }
+  openUpdateTemplate(id:number,dialog: TemplateRef<any>){
+    this.loadingModal=true
+    this.engineModal = this.dialogService.open(dialog, { context: `${id}` });
+    this.enginesList.forEach((element)=>{
+      if(element.id==id){
+      }
+    })
     this.nucleiService.getTemplate().subscribe((result)=> {
       this.loadingModal=false
       this.templatList=result.data
@@ -84,6 +100,20 @@ export class EnginesComponent implements OnInit {
     if(infos.custom_templates==null)infos.custom_templates=[]
     let corp:Engine = {"id":0,"name":name,"infos":infos}
     this.enginesService.createEngine(corp).subscribe( (result)=> {
+      this.loadingModal=false
+      this.closeAddEngineModal()
+      this.getEngines()
+    },(err)=> {
+      this.loadingModal=false
+      this.messageService.showToast(err.message,'danger')
+    })
+  }
+  updateEngine(event:any,name:string,id:number){
+    this.loadingModal=true
+    let infos = this.addEngineForm.value
+    if(infos.custom_templates==null)infos.custom_templates=[]
+    let corp:Engine = {"id":0,"name":name,"infos":infos}
+    this.enginesService.updateEngine(corp,id).subscribe( (result)=> {
       this.loadingModal=false
       this.closeAddEngineModal()
       this.getEngines()
