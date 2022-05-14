@@ -79,9 +79,11 @@ export class ScansComponent implements OnInit {
   addScan(domain:any){
     this.loadingModal=true
     let scanProperties:AddScanData;
+    let scanFound=false
     this.enginesList.forEach((element)=>{
       console.log(element,this.engine)
       if(element.id==this.engine){
+        scanFound=true
         scanProperties= Object.assign(element.infos,{"domain":domain})
         this.scansService.addScans({"scan":scanProperties}).subscribe((result)=>{
           this.loadingModal=false
@@ -93,5 +95,9 @@ export class ScansComponent implements OnInit {
         })
       }
     })
+    if(scanFound==false){
+      this.loading=false
+      this.messageService.showToast('Please select engine','danger')
+    }
   }
 }
