@@ -7,7 +7,7 @@ json.data do
   json.notifs false
   json.active_recon false
   json.intel false
-  json.excludes
+  json.excludes %w[pattern1 pattern2]
   json.leak false
   json.nuclei false
   json.all_templates false
