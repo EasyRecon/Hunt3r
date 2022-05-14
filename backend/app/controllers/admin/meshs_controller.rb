@@ -55,6 +55,13 @@ class Admin::MeshsController < ApplicationController
     return unless Mesh.find_by(url: mesh[:url], token: mesh[:token])
 
     domains = get_mesh_domains(mesh[:url], mesh[:token], mesh[:type], mesh[:domain])
+    if mesh[:type]
+      domain = Domain.find_by(name: mesh[:domain])
+      domain = Domain.create(name: mesh[:domain]) if domain.nil?
+
+      register_subdomains(domains, domain)
+    end
+
 
     render status: 200, json: { message: nil, data: domains }
   end
@@ -72,5 +79,17 @@ class Admin::MeshsController < ApplicationController
     return unless response&.code == 200
 
     JSON.parse(response.body)['data']
+  end
+
+  def register_subdomains(subdomains, domain)
+    subdomains.each do |subdomain|
+      new_subdomain = {
+        url: subdomain[0],
+        infos: subdomain[1],
+        domain_id: domain.id
+      }
+
+      Subdomain.create(new_subdomain)
+    end
   end
 end
