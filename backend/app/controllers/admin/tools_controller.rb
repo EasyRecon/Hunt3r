@@ -99,29 +99,22 @@ class Admin::ToolsController < ApplicationController
   def dehashed_valid?(tool)
     return false unless tool['infos']['user'] && tool['infos']['api_key']
 
-    request = Typhoeus::Request.new(
+    response = Typhoeus::Request.get(
       'https://api.dehashed.com/search?query=domain:hunt3r.ovh',
       userpwd: "#{tool['infos']['user']}:#{tool['infos']['api_key']}",
       headers: { 'Accept' => 'application/json' }
     )
-    request.run
-    response = request.response
-
     response&.code == 200 && JSON.parse(response.body)['balance'].positive?
   end
 
   def slack_valid?(tool)
     return false unless tool['infos']['webhook']
 
-    request = Typhoeus::Request.new(
+    response = Typhoeus::Request.post(
       tool['infos']['webhook'],
-      method: :post,
       body: { text: 'Hunt3r Test' }.to_json,
       headers: { 'Content-Type': 'application/json' }
     )
-    request.run
-    response = request.response
-
     response&.code == 200 && response.body == 'ok'
   end
 end
@@ -129,35 +122,26 @@ end
 def interactsh_valid?(tool)
   return false unless tool['infos']['url']
 
-  request = Typhoeus::Request.new(
+  response = Typhoeus::Request.get(
     tool['infos']['url']
   )
-  request.run
-  response = request.response
-
-  response.body.include?('<h1> Interactsh Server </h1>')
+  response&.body&.include?('<h1> Interactsh Server </h1>')
 end
 
 def c99_valid?(tool)
   return false unless tool['infos']['api_key']
 
-  request = Typhoeus::Request.new(
+  response = Typhoeus::Request.get(
     "https://api.c99.nl/passwordgenerator?key=#{tool['infos']['api_key']}&length=1&include=numbers&json"
   )
-  request.run
-  response = request.response
-
   response&.code == 200 && JSON.parse(response.body)['success']
 end
 
 def whoxy_valid?(tool)
   return false unless tool['infos']['api_key']
 
-  request = Typhoeus::Request.new(
+  response = Typhoeus::Request.get(
     "http://api.whoxy.com/?key=#{tool['infos']['api_key']}&account=balance"
   )
-  request.run
-  response = request.response
-
   response&.code == 200 && JSON.parse(response.body)['reverse_whois_balance']&.positive?
 end

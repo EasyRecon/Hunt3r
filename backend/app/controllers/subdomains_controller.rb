@@ -5,7 +5,7 @@ class SubdomainsController < ApplicationController
   def index
     @subdomains = if params[:domain]
                     domain = Domain.find_by_name(params[:domain])
-                    domain.nil? ? [] : domain.subdomain
+                    domain.nil? ? [] : domain.subdomains
                   else
                     Subdomain.all
                   end

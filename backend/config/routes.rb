@@ -86,6 +86,7 @@ Rails.application.routes.draw do
 
       # Domains management
       get '/domains', to: 'domains#index'
+      post '/domains/mesh', to: 'domains#index_outside'
       delete '/domains/:id', to: 'domains#destroy'
 
       # Subdomains management

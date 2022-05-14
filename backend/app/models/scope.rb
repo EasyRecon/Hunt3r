@@ -1,7 +1,9 @@
 class Scope < ApplicationRecord
+  belongs_to :program
   scope :filtered, ->(query_params) { where('scope LIKE ?', "%#{query_params}%") }
 
   def nb_leaks
+    # TODO : Update this
     0
   end
 

@@ -25,7 +25,7 @@ class ScansController < ApplicationController
     end
 
     scan = Scan.create(scan_infos)
-    unless scan.valid? || scan.type_scan != 'recon' || scan.type_scan != 'nuclei'
+    unless scan.valid? && (scan.type_scan != 'recon' || scan.type_scan != 'nuclei')
       scan.destroy
       return render status: 422, json: { message: I18n.t('errors.controllers.scans.invalid'), data: nil }
     end
@@ -37,11 +37,12 @@ class ScansController < ApplicationController
     end
 
     server_infos = launch_server(scan)
-    unless server_infos.is_a?(Hash)
-      return render status: 422, json: { message: I18n.t("errors.controllers.scans.#{server_infos}"), data: nil }
+    if server_infos[:error]
+      scan.destroy
+      return render status: 422, json: { message: I18n.t("errors.controllers.scans.#{server_infos[:error]}"), data: nil }
     end
 
-    server = Server.create(server_infos)
+    server = Server.create(server_infos[:infos])
     scan_cmd[:cmd] += " --server-uid #{server[:uid]}"
 
     launch_scan(scan_cmd[:cmd], scan, server)
@@ -71,14 +72,16 @@ class ScansController < ApplicationController
     hunt3r_token = Tool.find_by(name: 'hunt3r_token')&.infos
     scan_cmd[:errors] = 'hunt3r_token' if hunt3r_token.nil?
 
-    scan_cmd[:cmd] += " --hunt3r-token #{hunt3r_token['api_key']} --url #{ENV['APP_URL']}" if hunt3r_token
+    hunt3r_url = request.protocol + request.host_with_port
+    scan_cmd[:cmd] += " --hunt3r-token #{hunt3r_token['api_key']} --url #{hunt3r_url}" if hunt3r_token
     scan_cmd[:cmd] += " --scan-id #{scan.id} --type-scan #{scan.type_scan} -d #{scan.domain}"
 
     slack_webhook = Tool.find_by(name: 'slack')
     scan_cmd[:errors] = 'missing_webhook' if scan.notifs && slack_webhook.nil?
 
-    # If launched from the scope page we remove the wildcard
+    # If launched from the scope page we remove the wildcard and the https://
     scan.domain.gsub!('*.', '')
+    scan.domain.gsub!(%r{^https?://}, '')
 
     scan_cmd = build_recon_scan_cmd(scan, scan_cmd) if scan.type_scan == 'recon'
     scan_cmd = build_nuclei_scan_cmd(scan, scan_cmd) if scan.nuclei || scan.type_scan == 'nuclei'
@@ -89,33 +92,41 @@ class ScansController < ApplicationController
   def build_recon_scan_cmd(scan, scan_cmd)
     scan_cmd[:errors] = 'missing_amass' unless File.exist?(File.join(scan_config_files, 'amass/config.ini'))
 
-    if scan.leak
-      dehashed = Tool.find_by(name: 'dehashed')
-      if dehashed.nil?
-        scan_cmd[:errors] = 'dehashed_credentials'
-      else
-        scan_cmd[:cmd] += " --leak true --dehashed-username #{dehashed[:infos]['user']} --dehashed-token #{dehashed[:infos]['api_key']}"
-      end
-    end
-
-    if scan.intel
-      c99 = Tool.find_by(name: 'c99')&.infos
-      whoxy = Tool.find_by(name: 'whoxy')&.infos
-
-      if c99.nil? || whoxy.nil?
-        scan_cmd[:errors] = 'missing_intel'
-      else
-        scan_cmd[:cmd] += " --intel true --c99-token #{c99['api_key']} --whoxy-token #{whoxy['api_key']}"
-      end
-    end
+    scan_cmd = build_recon_scan_leak_cmd(scan_cmd) if scan.leak
+    scan_cmd = build_recon_scan_intel_cmd(scan_cmd) if scan.intel
 
     if scan.meshs
       meshs = Mesh.all.select(:url, :token)
-      meshs.empty? ? scan_cmd[:errors] = 'missing_meshs' : scan_cmd[:cmd] += " --meshs #{meshs.to_json}"
+      meshs.empty? ? scan_cmd[:errors] = 'missing_meshs' : scan_cmd[:cmd] += " --meshs #{meshs.to_json(except: :id)}"
     end
 
     scan_cmd[:cmd] += ' --gau true' if scan.gau
     scan_cmd[:cmd] += ' --active-amass true' if scan.active_recon
+    scan_cmd[:cmd] += " --excludes #{scan.excludes.join('|')}" if scan.excludes
+    scan_cmd
+  end
+
+  def build_recon_scan_leak_cmd(scan_cmd)
+    dehashed = Tool.find_by(name: 'dehashed')
+    if dehashed.nil?
+      scan_cmd[:errors] = 'dehashed_credentials'
+      return scan_cmd
+    end
+
+    scan_cmd[:cmd] += " --leak true --dehashed-username #{dehashed[:infos]['user']}"
+    scan_cmd[:cmd] += " --dehashed-token #{dehashed[:infos]['api_key']}"
+    scan_cmd
+  end
+
+  def build_recon_scan_intel_cmd(scan_cmd)
+    c99 = Tool.find_by(name: 'c99')&.infos
+    whoxy = Tool.find_by(name: 'whoxy')&.infos
+    if c99.nil? || whoxy.nil?
+      scan_cmd[:errors] = 'missing_intel'
+      return scan_cmd
+    end
+
+    scan_cmd[:cmd] += " --intel true --c99-token #{c99['api_key']} --whoxy-token #{whoxy['api_key']}"
     scan_cmd
   end
 
@@ -179,31 +190,35 @@ class ScansController < ApplicationController
   end
 
   def launch_server(scan)
-    case scan.provider
-    when 'scaleway'
-      # Force default value to DEV1-S
-      scan.update(instance_type: 'DEV1-S') unless scan[:instance_type]
-      cmd_output = launch_scaleway_server(scan.instance_type)
+    server_infos = {}
 
-      begin
-        cmd_output_json = JSON.parse(cmd_output)
-      rescue JSON::ParserError
-        return 'parse_error'
-      end
-
-      scan.update(state: 'Deploy In Progress')
-
-      {
-        uid: cmd_output_json['id'],
-        name: cmd_output_json['name'],
-        ip: cmd_output_json['public_ip']['address'],
-        state: 'Launched',
-        scan_id: scan.id
-      }
-    else
-      scan.destroy
-      'unknown_provider'
+    unless scan.provider == 'scaleway'
+      server_infos[:error] = 'unknown_provider'
+      return server_infos
     end
+
+    # Force default value to DEV1-S
+    scan.update(instance_type: 'DEV1-S') unless scan[:instance_type]
+    cmd_output = launch_scaleway_server(scan.instance_type)
+
+    begin
+      cmd_output_json = JSON.parse(cmd_output)
+    rescue JSON::ParserError
+      server_infos[:error] = 'parse_error'
+      return server_infos
+    end
+
+    scan.update(state: 'Deploy In Progress')
+
+    server_infos[:infos] = {
+      uid: cmd_output_json['id'],
+      name: cmd_output_json['name'],
+      ip: cmd_output_json['public_ip']['address'],
+      state: 'Launched',
+      scan_id: scan.id
+    }
+
+    server_infos
   end
 
   def launch_scan(cmd, scan, server)

@@ -1,5 +1,5 @@
 class DomainsController < ApplicationController
-  before_action :authenticate_user
+  before_action :authenticate_user, except: %i[index_outside]
 
   # GET /domains
   def index
@@ -11,12 +11,22 @@ class DomainsController < ApplicationController
     render status: 200, template: 'domains/index'
   end
 
+  # POST /domains/mesh
+  # Accessible from outside
+  def index_outside
+    mesh_infos = params.require(:meshs).permit(:url, :token, :domain)
+    return unless Mesh.find_by(url: mesh_infos[:url], token: mesh_infos[:token])
+
+    subdomains = Domain.find_by(name: mesh_infos[:domain])&.subdomains&.pluck(:url)
+    render json: { message: nil, data: subdomains }, status: 200
+  end
+
   # DELETE /domains/:id
   def destroy
-    domain = Domain.find_by_id(params[:id]).destroy
-    return render json: { message: I18n.t('errors.controllers.domains.unknown') }, status: 200 if domain.nil?
+    domain = Domain.find_by(id: params[:id]).destroy
+    return render json: { message: I18n.t('errors.controllers.domains.unknown'), data: nil }, status: 200 if domain.nil?
 
-    render json: { message: I18n.t('success.controllers.domains.deleted') }, status: 200
+    render json: { message: I18n.t('success.controllers.domains.deleted'), data: nil }, status: 200
   end
 
   private

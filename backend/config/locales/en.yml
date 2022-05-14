@@ -118,7 +118,6 @@ en:
           dehashed_invalid: "The Dehashed API informations is invalid or your API key is exhausted"
           amass_invalid: "The Amass configuration sent is invalid, check the file content"
           nuclei_invalid: "The Nuclei configuration sent is invalid, check the file content"
-          missing_amass: "Please add your Amass configuration file first"
         meshs:
           created: "Problem with adding mesh. A strong token is needed"
           unknown: "The specified mesh does not exist"
@@ -138,6 +137,7 @@ en:
         hunt3r_token: "A scan can't be launched without hunt3r_token configured"
         dehashed_credentials: "A scan with leak search is desired but the Dehashed information has not been entered"
         parse_error: "JSON Parse Error. Unable to start scan, check provider settings"
+        missing_amass: "Please add your Amass configuration file first"
         missing_webhook: "You have selected notifications but the slack webhook is not filled in"
         missing_intel: "The recon in intel mode is selected but C99 and/or Whoxy information are not filled in"
         missing_meshs: "The meshes are selected but none are recorded"

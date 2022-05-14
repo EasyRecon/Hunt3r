@@ -22,13 +22,6 @@ git clone https://github.com/EasyRecon/Hunt3r
 cd Hunt3r
 ```
 
-Modify the `.env` file taking care to indicate a JWT Robust secret, the `APP_URL` variable corresponds to your domain (ex: http://your_ip)
-
-```bash
-mv backend/.env.example backend/.env  
-nano backend/.env
-```
-
 Launching the dockers
 
 ```docker
@@ -84,13 +77,6 @@ Now clone the Hunt3r repository :
 cd /root
 git clone https://github.com/EasyRecon/Hunt3r
 cd Hunt3r
-```
-
-Modify the `.env` file taking care to indicate a JWT Robust secret, the `APP_URL` variable corresponds to your domain (ex: https://hunt3r.domain.tld)
-
-```bash
-mv backend/.env.example backend/.env  
-nano backend/.env
 ```
 
 Get the configuration file with the Traefik directives

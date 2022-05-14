@@ -5,6 +5,7 @@ class CreateScans < ActiveRecord::Migration[7.0]
       t.string :state
       t.string :type_scan
       t.boolean :meshs
+      t.string :excludes, array: true
       t.string :instance_type
       t.string :provider
       t.boolean :notifs

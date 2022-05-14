@@ -27,6 +27,7 @@
               <nb-option selected value="all">All</nb-option>
               <nb-option value="intigriti">Intigriti</nb-option>
               <nb-option value="yeswehack">YesWeHack</nb-option>
+              <nb-option value="hackerone">HackerOne</nb-option>
             </nb-select>
             <button type="button" class="col" (click)="getProgram(searchText.value,selectedPlateform)"  nbButton status="success"><nb-icon icon="search-outline"></nb-icon></button>
 
@@ -81,7 +82,7 @@
                 <td><a target="_blank" href="{{ item.slug}}"></a></td>
                 <td><nb-icon icon="{{ item.vdp==true ? 'close-square-outline' :'checkmark-square-2-outline'}}"></nb-icon></td>
                 <td>{{ item.scopes}}</td>
-                <td>Intigriti</td>
+                <td>HackerOne</td>
                 <td>
                   <div class="row actionGrp" >
                     <div class="col">
@@ -154,7 +155,7 @@
                                 <nb-option *ngFor="let engine of this.listEngines" value="{{engine.id}}">{{engine.name}}</nb-option>
                               </nb-select>
                             </td>
-                            <td><button type="button" (click)="lauchScan(data)" nbButton status="success"><nb-icon icon="log-out-outline"></nb-icon></button></td>
+                            <td><button type="button" (click)="lauchScan(item)" nbButton status="success"><nb-icon icon="log-out-outline"></nb-icon></button></td>
                           </tr>
                         </table>
                         <br>
