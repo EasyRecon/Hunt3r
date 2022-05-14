@@ -91,6 +91,7 @@ addRegex(){
   addScan(domain:any){
     this.loadingModal=true
     let scanProperties:AddScanData;
+    let scanFound=false
     this.enginesList.forEach((element)=>{
       console.log(element,this.engine)
       if(element.id==this.engine){
@@ -108,5 +109,9 @@ addRegex(){
         })
       }
     })
+    if(scanFound==false){
+      this.loading=false
+      this.messageService.showToast('Please select engine','danger')
+    }
   }
 }
