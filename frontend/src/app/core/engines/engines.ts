@@ -12,6 +12,8 @@ export interface Engine {
       leak: boolean,
       nuclei: boolean,
       all_templates: boolean,
+      custom_interactsh:boolean,
+      nuclei_severity:string[],
       permutation: boolean,
       gau: boolean,
       custom_templates: string[]
