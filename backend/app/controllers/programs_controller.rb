@@ -38,7 +38,7 @@ def launch_sync(platforms)
     next if rate_limited.include?(platform.name)
 
     update_programs(platform)
-    platform.programs.last.update(updated_at: Time.now)
+    platform.programs.last.update(updated_at: Time.now) if platform.programs.last
   end
 
   rate_limited
