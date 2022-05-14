@@ -25,8 +25,9 @@ class SubdomainsController < ApplicationController
     new_subdomains = params.require(:subdomains).permit(:token, :domain, subdomains: [
                                                           :url,
                                                           {
-                                                            infos: %i[title status_code content_length location ip
-                                                                      cname body_hash cdn]
+                                                            infos: [:title, :status_code, :content_length, :location,
+                                                                    :ip, :cname, :body_hash, :cdn, technologies: [],
+                                                                    ports: []]
                                                           }
                                                         ])
 
