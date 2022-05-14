@@ -37,11 +37,12 @@ class ScansController < ApplicationController
     end
 
     server_infos = launch_server(scan)
-    unless server_infos.is_a?(Hash)
-      return render status: 422, json: { message: I18n.t("errors.controllers.scans.#{server_infos}"), data: nil }
+    if server_infos[:error]
+      scan.destroy
+      return render status: 422, json: { message: I18n.t("errors.controllers.scans.#{server_infos[:error]}"), data: nil }
     end
 
-    server = Server.create(server_infos)
+    server = Server.create(server_infos[:infos])
     scan_cmd[:cmd] += " --server-uid #{server[:uid]}"
 
     launch_scan(scan_cmd[:cmd], scan, server)
@@ -78,8 +79,9 @@ class ScansController < ApplicationController
     slack_webhook = Tool.find_by(name: 'slack')
     scan_cmd[:errors] = 'missing_webhook' if scan.notifs && slack_webhook.nil?
 
-    # If launched from the scope page we remove the wildcard
+    # If launched from the scope page we remove the wildcard and the https://
     scan.domain.gsub!('*.', '')
+    scan.domain.gsub!(%r{^https?://}, '')
 
     scan_cmd = build_recon_scan_cmd(scan, scan_cmd) if scan.type_scan == 'recon'
     scan_cmd = build_nuclei_scan_cmd(scan, scan_cmd) if scan.nuclei || scan.type_scan == 'nuclei'
@@ -188,31 +190,35 @@ class ScansController < ApplicationController
   end
 
   def launch_server(scan)
-    case scan.provider
-    when 'scaleway'
-      # Force default value to DEV1-S
-      scan.update(instance_type: 'DEV1-S') unless scan[:instance_type]
-      cmd_output = launch_scaleway_server(scan.instance_type)
+    server_infos = {}
 
-      begin
-        cmd_output_json = JSON.parse(cmd_output)
-      rescue JSON::ParserError
-        return 'parse_error'
-      end
-
-      scan.update(state: 'Deploy In Progress')
-
-      {
-        uid: cmd_output_json['id'],
-        name: cmd_output_json['name'],
-        ip: cmd_output_json['public_ip']['address'],
-        state: 'Launched',
-        scan_id: scan.id
-      }
-    else
-      scan.destroy
-      'unknown_provider'
+    unless scan.provider == 'scaleway'
+      server_infos[:error] = 'unknown_provider'
+      return server_infos
     end
+
+    # Force default value to DEV1-S
+    scan.update(instance_type: 'DEV1-S') unless scan[:instance_type]
+    cmd_output = launch_scaleway_server(scan.instance_type)
+
+    begin
+      cmd_output_json = JSON.parse(cmd_output)
+    rescue JSON::ParserError
+      server_infos[:error] = 'parse_error'
+      return server_infos
+    end
+
+    scan.update(state: 'Deploy In Progress')
+
+    server_infos[:infos] = {
+      uid: cmd_output_json['id'],
+      name: cmd_output_json['name'],
+      ip: cmd_output_json['public_ip']['address'],
+      state: 'Launched',
+      scan_id: scan.id
+    }
+
+    server_infos
   end
 
   def launch_scan(cmd, scan, server)
