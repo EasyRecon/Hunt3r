@@ -68,7 +68,7 @@ class ScansController < ApplicationController
   private
 
   def build_scan_cmd(scan)
-    scan_cmd = { cmd: 'ruby scan.rb' }
+    scan_cmd = { cmd: 'ruby /tmp/tools/scan.rb' }
     hunt3r_token = Tool.find_by(name: 'hunt3r_token')&.infos
     scan_cmd[:errors] = 'hunt3r_token' if hunt3r_token.nil?
 
@@ -239,7 +239,7 @@ class ScansController < ApplicationController
         end
 
         Net::SSH.start(server.ip, 'root', keys: "/root/.ssh/#{scan.provider}_id_rsa") do |ssh|
-          ssh.exec!("screen -dm -S Scan /tmp/tools/#{cmd}")
+          ssh.exec!("screen -dm -S Scan #{cmd}")
         end
       rescue Net::SSH::AuthenticationFailed
         server_delete(server, 'Stopped')
