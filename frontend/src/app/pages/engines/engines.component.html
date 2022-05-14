@@ -101,10 +101,10 @@
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Instance type</label>
                   <div class="col-sm-8">
                     <nb-select placeholder="Select server type"   (selectedChange)="toggle($event,'instance_type')">
-                      <nb-option value="DEV1_S">DEV1_S: 2vCPUs 2GB RAM 0.01/hour</nb-option>
-                      <nb-option value="DEV1_M">DEV1_M: 3vCPUs 4GB RAM 0.02/hour</nb-option>
-                      <nb-option value="DEV1_L">DEV1_L: 4vCPUs 8GB RAM 0.04/hour</nb-option>
-                      <nb-option value="DEV1_XL">DEV1_XL: 4vCPUs 12GB RAM 0.06/hour</nb-option>
+                      <nb-option value="DEV1-S">DEV1_S: 2vCPUs 2GB RAM 0.01/hour</nb-option>
+                      <nb-option value="DEV1-M">DEV1_M: 3vCPUs 4GB RAM 0.02/hour</nb-option>
+                      <nb-option value="DEV1-L">DEV1_L: 4vCPUs 8GB RAM 0.04/hour</nb-option>
+                      <nb-option value="DEV1-XL">DEV1_XL: 4vCPUs 12GB RAM 0.06/hour</nb-option>
                     </nb-select>
                   </div>
                 </div>
@@ -113,6 +113,19 @@
                   <div class="col-sm-8">
                     <nb-select multiple placeholder="Select custom template"  (selectedChange)="toggle($event,'custom_templates')">
                       <nb-option *ngFor="let template of this.templatList"  value="{{template}}">{{template}}</nb-option>
+                    </nb-select>
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label for="inputEmail1" class="label col-sm-4 col-form-label">Select Nuclei criticity</label>
+                  <div class="col-sm-8">
+                    <nb-select multiple placeholder="Select Nuclei criticity"   (selectedChange)="toggle($event,'nuclei_severity')">
+                      <nb-option value="info">info</nb-option>
+                      <nb-option value="low">low</nb-option>
+                      <nb-option value="medium">medium</nb-option>
+                      <nb-option value="high">high</nb-option>
+                      <nb-option value="critical">critical</nb-option>
+                      <nb-option value="unknown">unknown</nb-option>
                     </nb-select>
                   </div>
                 </div>
@@ -126,6 +139,12 @@
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Active recon</label>
                   <div class="col-sm-2">
                     <nb-checkbox (checkedChange)="toggle($event,'active_recon')" ></nb-checkbox>
+                  </div>
+                </div>
+                <div class="form-group ">
+                  <label for="inputEmail1" class="label col-sm-4 col-form-label">Use custom interactSh</label>
+                  <div class="col-sm-2">
+                    <nb-checkbox (checkedChange)="toggle($event,'custom_interactsh')" ></nb-checkbox>
                   </div>
                 </div>
                 <div class="form-group ">
