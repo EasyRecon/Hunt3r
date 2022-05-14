@@ -5,7 +5,7 @@ import {
 } from '@nebular/theme';
 
 import { MeshsService } from '../../core/meshs/meshs.service';
-
+import { Router } from '@angular/router';
 import { MeshConfig } from '../../core/meshs/meshs';
 
 
@@ -43,7 +43,8 @@ export class MeshsComponent implements  OnInit  {
   constructor(private messageService: MessageService,
               private meshsService:MeshsService,
               private fbuilder: FormBuilder,
-              private dialogService: NbDialogService) {
+              private dialogService: NbDialogService,
+              private router:Router) {
     this.updateMeshForm = this.fbuilder.group({
       name: '',
       url: '',
@@ -57,7 +58,9 @@ export class MeshsComponent implements  OnInit  {
     this.getMesh()
   }
 
-
+gotToSyncMesh(id:number){
+  this.router.navigate(['admin','meshs','sync',id]);
+}
   getMesh() {
     this.loading = true;
     this.meshsService.getMeshs().subscribe( (result)=> {
