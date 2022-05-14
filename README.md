@@ -23,11 +23,6 @@
 
 # Quick Installation Instructions
 
-```bash
-mv backend/.env.example backend/.env  
-nano backend/.env
-```
-
 ```docker
 docker-compose up --build
 docker-compose run backend rake db:create
@@ -43,4 +38,8 @@ Once the Docker environment is up, you can access the application through the We
 
 | Light Dashboard | Dark Dashboard |
 :---:|:---:
-![](docs/assets/light_dashboard.png) | ![](docs/assets/dark_dashboard.png)
+![](docs/assets/images/light_dashboard.png) | ![](docs/assets/images/dark_dashboard.png)
+| Platform statistics | Tools Settings |
+![](docs/assets/images/BBStats.png) | ![](docs/assets/images/install_amass.png)
+| Meshs management | / |
+![](docs/assets/images/meshs_management.png) |

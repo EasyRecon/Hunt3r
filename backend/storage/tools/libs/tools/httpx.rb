@@ -5,6 +5,12 @@ class Httpx
     file = File.read("#{OPTIONS[:output]}/naabu.json")
     data = JSON.parse(file)
 
+    # TODO : Prepare HTTPX Thread
+    #thread_pool = ThreadPool.new
+    #thread_pool.start
+    #thread_pool.schedule do; end
+    #sleep(5) until thread_pool.inactive?
+
     urls = []
     data.each do |host, infos|
       httpx_ports = infos['ports'].join(',')

@@ -1,8 +1,6 @@
 class Naabu
   def self.check_domains
-    # TODO : Update this
-    ports = '80,443'
-    cmd = "naabu -l #{OPTIONS[:output]}/all_domains.txt -p #{ports} -ec -c 2 -silent -json -o #{OPTIONS[:output]}/naabu.json"
+    cmd = "naabu -l #{OPTIONS[:output]}/all_domains.txt -tp -ec -c 2 -silent -json -o #{OPTIONS[:output]}/naabu.json"
     system(cmd)
 
     return unless File.zero?("#{OPTIONS[:output]}/naabu.json")

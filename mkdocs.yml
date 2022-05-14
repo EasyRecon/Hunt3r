@@ -13,8 +13,8 @@ theme:
   features:
     - navigation.tabs
     - navigation.tabs.sticky
-  logo: assets/logo.png
-  favicon: assets/logo.png
+  logo: assets/images/logo.png
+  favicon: assets/images/logo.png
 extra:
   social:
     - icon: fontawesome/brands/github
@@ -30,10 +30,16 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
       emoji_generator: !!python/name:materialx.emoji.to_svg
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
 nav:
   - 'index.md'
   - Getting Started:
     - 'getting_started/installation.md'
     - 'getting_started/first_setup.md'
-  - 'features.md'
+  - Features:
+      - 'features/index.md'
+      - 'features/meshs.md'
+      - 'features/api_key.md'
   - 'faq.md'

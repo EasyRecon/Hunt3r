@@ -11,6 +11,7 @@ import {
 
 
 
+
 @Component({
   
   templateUrl: './engines.component.html',
@@ -24,7 +25,7 @@ export class EnginesComponent implements OnInit {
   addEngineForm: FormGroup = <FormGroup> {};
   engineModal:any;
   templatList:string[]=<any>[]
-  addEngineModel:Engine=<any>{}
+
 
 
   constructor(private enginesService : EnginesService,
@@ -41,11 +42,14 @@ export class EnginesComponent implements OnInit {
          "intel": false,
          "leak": false,
          "nuclei": false,
+         "custom_interactsh":false,
+         "nuclei_severity":[],
          "all_templates": false,
          "permutation": false,
          "gau": false,
          "custom_templates": []
   });
+    
   this.addEngineModel={   "id":0,
   "name": "",
   "infos":{
@@ -66,6 +70,7 @@ export class EnginesComponent implements OnInit {
      "gau": false,
      "custom_templates": []
   }}
+
 
     this.getEngines()
   }
@@ -98,6 +103,7 @@ export class EnginesComponent implements OnInit {
   addEngine(event:any,name:string){
     this.loadingModal=true
     let infos = this.addEngineForm.value
+    if(infos.custom_templates==null)infos.custom_templates=[]
     let corp:Engine = {"id":0,"name":name,"infos":infos}
     this.enginesService.createEngine(corp).subscribe( (result)=> {
       this.loadingModal=false

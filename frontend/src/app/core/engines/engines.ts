@@ -16,6 +16,8 @@ export interface Engine {
       nuclei_severity:string[]
       custom_interactsh: boolean,
       all_templates: boolean,
+      custom_interactsh:boolean,
+      nuclei_severity:string[],
       permutation: boolean,
       gau: boolean,
       custom_templates: string[]

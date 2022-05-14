@@ -21,38 +21,44 @@ services:
     volumes:
       - ./backend:/hunt3r
     networks:
-      - hunt3r_network
-      - traefik-global-proxy
+      hunt3r_network:
+        aliases:
+          - backend.local
     logging:
       options:
         max-file: "1"
         max-size: "2m"
     depends_on:
       - db
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.hunt3r.rule=Host(`api.domain.tld`)"
-      - "traefik.http.routers.hunt3r.entrypoints=websecure"
-      - "traefik.http.routers.hunt3r.tls.certresolver=letsencrypt"
-      - "traefik.http.services.hunt3r.loadbalancer.server.port=3000"
 
   frontend:
     build: ./frontend
-    command: ng serve --host 0.0.0.0
-    volumes:
-      - ./frontend:/hunt3r
     networks:
-      - traefik-global-proxy
+      hunt3r_network:
+        aliases:
+          - frontend.local
     logging:
       options:
         max-file: "1"
         max-size: "2m"
+
+  proxy_hunt3r:
+    restart: always
+    image: nginx:alpine
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - hunt3r_network
+      - traefik-global-proxy
+    volumes:
+      - ./conf/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.hunt3r.rule=Host(`hunt3r.domain.tld`)"
       - "traefik.http.routers.hunt3r.entrypoints=websecure"
       - "traefik.http.routers.hunt3r.tls.certresolver=letsencrypt"
-      - "traefik.http.services.hunt3r.loadbalancer.server.port=4200"
+      - "traefik.http.services.hunt3r.loadbalancer.server.port=80"
 
 networks:
   hunt3r_network:

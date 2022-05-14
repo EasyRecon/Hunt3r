@@ -7,10 +7,11 @@ json.data do
   json.notifs false
   json.active_recon false
   json.intel false
+  json.excludes %w[pattern1 pattern2]
   json.leak false
   json.nuclei false
   json.all_templates false
-  json.nuclei_severity 'info,medium'
+  json.nuclei_severity %w[info medium]
   json.custom_templates %w[template1 template2]
   json.custom_interactsh false
   json.permutation false

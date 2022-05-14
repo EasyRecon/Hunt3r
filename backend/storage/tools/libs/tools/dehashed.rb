@@ -3,13 +3,11 @@ class Dehashed
     return unless OPTIONS[:dehashed_username] && OPTIONS[:dehashed_token]
 
     # We limit ourselves to 5000 entries dehashed max to not explode the DB and burn all the API keys
-    request = Typhoeus::Request.new(
+    response = Typhoeus::Request.get(
       "https://api.dehashed.com/search?query=domain:#{OPTIONS[:domain]}&size=5000",
       userpwd: "#{OPTIONS[:dehashed_username]}:#{OPTIONS[:dehashed_token]}",
       headers: { 'Accept' => 'application/json' }
     )
-    request.run
-    response = request.response
     return unless response&.code == 200
 
     dehashed_leaks = JSON.parse(response.body)
