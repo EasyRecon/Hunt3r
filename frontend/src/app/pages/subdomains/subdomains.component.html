@@ -110,7 +110,7 @@
               <td ><nb-badge  *ngFor="let port of item.infos.ports"  class="badgeSub" text="{{port}}" status="primary" ></nb-badge></td>
               <td> <nb-badge class="badgeSub" text="{{ item.infos.status_code }}" status="{{ item.infos.status_code> 399 ? 'danger' : item.infos.status_code> 299 ? 'warning' : 'success' }}" ></nb-badge></td>
               <td>{{ item.infos.content_length }}</td>
-              <td  *ngFor="let techno of item.infos.technologies"><nb-badge class="badgeSub" text="{{techno}}" status="primary" ></nb-badge></td>
+              <td  ><div *ngFor="let techno of item.infos.technologies"> <nb-badge class="badgeSub" text="{{techno}}" status="primary" ></nb-badge></div></td>
               <td><img (click)="screenModal(apiUrl+'/screenshots/'+item.id)" class="screenpreview" id='screen{{item.id}}' [src]="apiUrl+'/screenshots/'+item.id | useHttpImgSrc:'/assets/img/loading.gif':'/assets/img/not-found.png'" loading="lazy"></td>
             </tr>
           </table>

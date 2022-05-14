@@ -34,7 +34,7 @@
             <th>Permutation</th>
             <th>Gau</th>
             <th>Custom templates</th>
-            <th>Delete</th>
+            <th>Action</th>
           </tr>
           <tr *ngFor="let item of this.enginesList">
             <td>{{ item.name }}</td>
@@ -54,6 +54,7 @@
               <div class="row actionGrp" >
                 <div class="col">
                   <button type="button" (click)="deleteEngine(item.id)" nbButton status="danger"><nb-icon icon="trash-outline" ></nb-icon></button>
+                  <button type="button" (click)="openUpdateTemplate(item.id,dialogAddEngine)" nbButton status="success"><nb-icon icon="trash-outline" ></nb-icon></button>
                 </div>
               </div>
             </td>
@@ -72,12 +73,12 @@
       <nb-card   [nbSpinner]="loadingModal" nbSpinnerStatus="primary"  class="dialogAddEngine">
         <nb-card-header>Create Engine</nb-card-header>
         <nb-card-body>
-
+            <form>
               <div class=" modaleBth">
                 <div class="form-group">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Engine name</label>
                   <div class="col-sm-8">
-                    <input class="col" nbInput type="text" (selectedChange)="toggle($event,'name')" #name>
+                    <input class="col" nbInput type="text"(selectedChange)="toggle($event,'name')" #name>
                   </div>
                 </div>
                 <div class="form-group ">
@@ -92,7 +93,7 @@
                 <div class="form-group ">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Provider</label>
                   <div class="col-sm-8">
-                    <nb-select placeholder="Select provider"  (selectedChange)="toggle($event,'provider')">
+                    <nb-select placeholder="Select provider"   (selectedChange)="toggle($event,'provider')">
                       <nb-option value="scaleway">Scaleway</nb-option>
                     </nb-select>
                   </div>
@@ -111,7 +112,7 @@
                 <div class="form-group ">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Personnal Nuclei template</label>
                   <div class="col-sm-8">
-                    <nb-select multiple placeholder="Select custom template"  (selectedChange)="toggle($event,'custom_templates')">
+                    <nb-select multiple placeholder="Select custom template"   (selectedChange)="toggle($event,'custom_templates')">
                       <nb-option *ngFor="let template of this.templatList"  value="{{template}}">{{template}}</nb-option>
                     </nb-select>
                   </div>
@@ -132,25 +133,25 @@
                 <div class="form-group ">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Notifications</label>
                   <div class="col-sm-2">
-                    <nb-checkbox (checkedChange)="toggle($event,'notifs')" ></nb-checkbox>
+                    <nb-checkbox formControlName="notifs"  (checkedChange)="toggle($event,'notifs')" ></nb-checkbox>
                   </div>
                 </div>
                 <div class="form-group ">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Active recon</label>
                   <div class="col-sm-2">
-                    <nb-checkbox (checkedChange)="toggle($event,'active_recon')" ></nb-checkbox>
+                    <nb-checkbox notifs (checkedChange)="toggle($event,'active_recon')" ></nb-checkbox>
                   </div>
                 </div>
                 <div class="form-group ">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Use custom interactSh</label>
                   <div class="col-sm-2">
-                    <nb-checkbox (checkedChange)="toggle($event,'custom_interactsh')" ></nb-checkbox>
+                    <nb-checkbox  (checkedChange)="toggle($event,'custom_interactsh')" ></nb-checkbox>
                   </div>
                 </div>
                 <div class="form-group ">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Intel recon</label>
                   <div class="col-sm-2">
-                    <nb-checkbox (checkedChange)="toggle($event,'intel')" ></nb-checkbox>
+                    <nb-checkbox  (checkedChange)="toggle($event,'intel')" ></nb-checkbox>
                   </div>
                 </div>
                 <div class="form-group ">
@@ -162,25 +163,25 @@
                 <div class="form-group ">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Nuclei</label>
                   <div class="col-sm-2">
-                    <nb-checkbox (checkedChange)="toggle($event,'nuclei')"></nb-checkbox>
+                    <nb-checkbox  (checkedChange)="toggle($event,'nuclei')"></nb-checkbox>
                   </div>
                 </div>
                 <div class="form-group ">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">All Nuclei templates</label>
                   <div class="col-sm-2">
-                    <nb-checkbox (checkedChange)="toggle($event,'all_templates')" ></nb-checkbox>
+                    <nb-checkbox  (checkedChange)="toggle($event,'all_templates')" ></nb-checkbox>
                   </div>
                 </div>
                 <div class="form-group">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Domain permutation</label>
                   <div class="col-sm-2">
-                    <nb-checkbox (checkedChange)="toggle($event,'permutation')"  ></nb-checkbox>
+                    <nb-checkbox  (checkedChange)="toggle($event,'permutation')"  ></nb-checkbox>
                   </div>
                 </div>
                 <div class="form-group ">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Get all URL (like Wayback)</label>
                   <div class="col-sm-2">
-                    <nb-checkbox (checkedChange)="toggle($event,'gau')" ></nb-checkbox>
+                    <nb-checkbox  (checkedChange)="toggle($event,'gau')" ></nb-checkbox>
                   </div>
                 </div>
                 
@@ -189,17 +190,14 @@
                     <button nbButton (click)="closeAddEngineModal()">Cancel</button>
                   </div>
                   <div class="col">
-                    <button type="button" nbButton (click)="addEngine($event,name.value)" status="success">Create</button>
+                    <button type="button" nbButton (click)="data==-1 ?addEngine($event,name.value) : updateEngine($event,name.value,data)" status="success">Create</button>
                   </div>
                 </div>
-        
-              </div>
 
+              </div>
+            </form>
         </nb-card-body>
       </nb-card>
     </ng-template>
   </nb-layout-column>
-
-
-
 </nb-layout>
