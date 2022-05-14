@@ -14,11 +14,16 @@ class DomainsController < ApplicationController
   # POST /domains/mesh
   # Accessible from outside
   def index_outside
-    mesh_infos = params.require(:meshs).permit(:url, :token, :domain)
+    mesh_infos = params.require(:meshs).permit(:url, :token, :type, :domain)
     return unless Mesh.find_by(url: mesh_infos[:url], token: mesh_infos[:token])
 
-    subdomains = Domain.find_by(name: mesh_infos[:domain])&.subdomains&.pluck(:url)
-    render json: { message: nil, data: subdomains }, status: 200
+    domains = if mesh_infos[:type] == 'domain'
+                Domain.all&.pluck(:name)
+              else
+                Domain.find_by(name: mesh_infos[:domain])&.subdomains&.pluck(:url)
+              end
+
+    render json: { data: domains }, status: 200
   end
 
   # DELETE /domains/:id

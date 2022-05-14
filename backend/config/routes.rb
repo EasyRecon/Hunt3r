@@ -43,6 +43,7 @@ Rails.application.routes.draw do
         # Other Hunt3r Platforms management
         get 'meshs', to: 'meshs#index'
         post 'meshs', to: 'meshs#create'
+        post 'meshs/sync', to: 'meshs#sync'
         patch 'meshs', to: 'meshs#update'
         delete 'meshs/:id', to: 'meshs#destroy'
       end
