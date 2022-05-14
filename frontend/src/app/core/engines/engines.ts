@@ -11,6 +11,10 @@ export interface Engine {
       intel: boolean,
       leak: boolean,
       nuclei: boolean,
+      excludes:string[]
+      meshs:boolean
+      nuclei_severity:string[]
+      custom_interactsh: boolean,
       all_templates: boolean,
       permutation: boolean,
       gau: boolean,

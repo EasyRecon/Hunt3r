@@ -9,6 +9,10 @@ export interface Scan {
     intel:boolean
     leak:boolean
     nuclei:boolean
+    excludes:string[]
+    meshs:boolean
+    nuclei_severity:string[]
+    custom_interactsh: boolean,
     all_template:boolean
     permutation:boolean
     gau:boolean
@@ -27,6 +31,10 @@ export interface AddScanData {
     leak: boolean,
     nuclei: boolean,
     all_templates: boolean,
+    excludes:string[]
+    meshs:boolean
+    nuclei_severity:string[]
+    custom_interactsh: boolean,
     permutation: boolean,
     gau: boolean,
     custom_templates: string[]

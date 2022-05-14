@@ -41,6 +41,7 @@ export class ProgramsComponent  {
   listEngines:Engine[]=<any>[]
   currentScope=0
   engineByDomain:any[]=[]
+  regexList=Array()
   constructor(private messageService: MessageService,
               private programsService:ProgramsService,
               private scopeService:ScopeService,
@@ -67,7 +68,9 @@ export class ProgramsComponent  {
     this.listEngines.forEach((element)=>{
       if(element.id==this.engineByDomain[domain as keyof typeof this.engineByDomain]){
         scanAttr=Object.assign(element.infos,{"domain":domain})
-
+        element.infos.excludes = this.regexList[domain].filter((element:any) => {
+          return element !== '';
+        });
         this.scansService.addScans({"scan":scanAttr}).subscribe((result)=>{
           this.loadingModal=false
           this.messageService.showToast(result.message,'success')
@@ -116,6 +119,10 @@ export class ProgramsComponent  {
   }
   openModal(dialog: TemplateRef<any>,domains:string[]){
     domains=domains.map( domain => this.cleanScope(domain))
+    for (var i = 0; i < domains.length; i++) {
+      // this.regexList.push(domains[i])
+       this.regexList[domains[i] as keyof typeof this.regexList]=Array('')
+    };
     this.loadingModal=true
     this.enginesService.getEngines().subscribe((result)=>{
       this.loadingModal=false
@@ -159,5 +166,16 @@ export class ProgramsComponent  {
   }
   back(){
     this.flipped=false
+  }
+  addRegex(name:string){
+    this.regexList[name as keyof typeof this.regexList].push('')
+  }
+  removeRegex(name: string) {
+    if (this.regexList[name as keyof typeof this.regexList].length>1){
+      this.regexList[name as keyof typeof this.regexList].pop()    
+    }
+  }
+  setValue(event:any,i:number,domain:string){
+    this.regexList[domain as keyof typeof this.regexList][i] = event.target.value
   }
 }
