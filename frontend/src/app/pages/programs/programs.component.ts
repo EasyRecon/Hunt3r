@@ -71,6 +71,7 @@ export class ProgramsComponent  {
         this.scansService.addScans({"scan":scanAttr}).subscribe((result)=>{
           this.loadingModal=false
           this.messageService.showToast(result.message,'success')
+          this.scopeModal.close()
           this.getScope(this.currentScope)
         },(err)=>{
           this.loadingModal=false
