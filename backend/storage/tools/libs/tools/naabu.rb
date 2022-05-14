@@ -1,6 +1,6 @@
 class Naabu
   def self.check_domains
-    cmd = "naabu -l #{OPTIONS[:output]}/all_domains.txt -tp -ec -c 2 -silent -json -o #{OPTIONS[:output]}/naabu.json"
+    cmd = "naabu -l #{OPTIONS[:output]}/all_domains.txt -tp 100 -ec -c 2 -silent -json -o #{OPTIONS[:output]}/naabu.json"
     system(cmd)
 
     return unless File.zero?("#{OPTIONS[:output]}/naabu.json")
