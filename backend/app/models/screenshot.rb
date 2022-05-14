@@ -1,3 +1,3 @@
 class Screenshot < ApplicationRecord
-  belongs_to :subdomains
+  belongs_to :subdomain
 end
