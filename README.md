@@ -39,5 +39,7 @@ Once the Docker environment is up, you can access the application through the We
 | Light Dashboard | Dark Dashboard |
 :---:|:---:
 ![](docs/assets/images/light_dashboard.png) | ![](docs/assets/images/dark_dashboard.png)
-| Platform statistics | / |
-![](docs/assets/images/BBStats.png) | 
+| Platform statistics | Tools Settings |
+![](docs/assets/images/BBStats.png) | ![](docs/assets/images/install_amass.png)
+| Meshs management | / |
+![](docs/assets/images/meshs_management.png) |
