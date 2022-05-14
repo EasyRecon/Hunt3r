@@ -26,7 +26,7 @@ import { AdminComponent } from './admin.component';
 import { AdminRoutingModule } from './admin-routing.module';
 
 
-
+import {MeshsSyncComponent} from './meshsSync/meshsSync.component'
 
 import { UsersComponent } from './users/users.component';
 import { CloudSettingsComponent } from './cloudSettings/cloudSettings.component';
@@ -112,7 +112,8 @@ echarts.use(
     BugbountyStatComponent,
     InvoicesComponent,
     ToolsComponent,
-    MeshsComponent
+    MeshsComponent,
+    MeshsSyncComponent
     
   ],
   providers:[
