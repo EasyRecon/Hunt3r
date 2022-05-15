@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class EnginesController < ApplicationController
   before_action :authenticate_user
 
@@ -22,9 +23,9 @@ class EnginesController < ApplicationController
     end
   end
 
-  # PATCH /engines
+  # PATCH /engines/:id
   def update
-    engine = Engine.find_by_id(params[:id]).destroy
+    engine = Engine.find_by(id: params[:id])
     return render status: 422, json: { message: I18n.t('errors.controllers.engines.unknown'), data: nil } if engine.nil?
 
     engine_infos = get_engine_infos
@@ -39,7 +40,7 @@ class EnginesController < ApplicationController
 
   # DELETE /engines/:id
   def destroy
-    engine = Engine.find_by_id(params[:id]).destroy
+    engine = Engine.find_by(id: params[:id])&.destroy
     return render json: { message: I18n.t('errors.controllers.engines.unknown') }, status: 422 if engine.nil?
 
     render json: { message: I18n.t('success.controllers.engines.deleted') }, status: 200
@@ -50,7 +51,8 @@ class EnginesController < ApplicationController
   def get_engine_infos
     params.require(:engine).permit(
       :name, infos: [:type_scan, :instance_type, :provider, :notifs, :active_recon, :intel, :leak, :nuclei,
-                     :all_templates, :permutation, :gau, custom_templates: [] ]
+                     :all_templates, :permutation, :gau, :custom_interactsh, :meshs, custom_templates: [],
+                     nuclei_severity: []]
     )
   end
 end

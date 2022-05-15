@@ -56,6 +56,16 @@ hr { display: block;
         
     }
 }
+.breakSentance {
+    white-space: pre-wrap;
+    display: inline-block;
+    width: 500px;
+    overflow-wrap: break-word;
+}
+
+.badgeSubDiv{
+    padding:5px
+}
 
 .roundBadge {
     background-color: var(--badge-success-background-color);

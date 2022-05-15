@@ -37,6 +37,9 @@
                 <div class="col">
                   <button type="button" (click)="deleteMesh(item.id)" nbButton status="danger"><nb-icon icon="trash-outline" ></nb-icon></button>
                 </div>
+                <div class="col">
+                  <button type="button" (click)="gotToSyncMesh(item.id)" nbButton status="success">Choose domain to sync</button>
+                </div>
               </div>
             </td>
           </tr>

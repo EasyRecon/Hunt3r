@@ -14,6 +14,7 @@ import { BugbountyStatComponent } from './bugbountyStat/bugbountyStat.component'
 import { InvoicesComponent } from './invoices/invoices.component';
 import { ToolsComponent } from './tools/tools.component';
 import { MeshsComponent } from './meshs/meshs.component';
+import { MeshsSyncComponent } from './meshsSync/meshsSync.component';
 
 const routes: Routes = [{
   path: '',
@@ -50,6 +51,10 @@ const routes: Routes = [{
     {
       path: 'meshs',
       component: MeshsComponent,
+    },
+    {
+      path: 'meshs/sync/:id',
+      component: MeshsSyncComponent,
     },
     {
       path: '',

@@ -1,0 +1,42 @@
+<nb-layout>
+
+  <nb-layout-header>
+    <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
+  </nb-layout-header>
+
+  <nb-sidebar left tag="left" state="expanded">
+    <nb-menu-services></nb-menu-services>
+  </nb-sidebar>
+
+
+
+
+  <nb-layout-column>
+    
+    <nb-card  [nbSpinner]="loading" nbSpinnerStatus="primary" >
+      <nb-card-body>
+        <h3>Meshs sync choice</h3><br>
+       <table>
+          <tr>
+            <th>Domain</th>
+            <th>Actions</th>
+          </tr>
+          <tr *ngFor="let item of this.listDomain">
+            <td>{{ item }}</td>
+            <td>
+              <div class="row actionGrp" >
+                <div class="col">
+                  <button type="button" (click)="syncDomain(item)" nbButton status="success"><nb-icon icon="sync-outline" ></nb-icon></button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </nb-card-body>
+  </nb-card>
+
+  </nb-layout-column>
+
+
+
+</nb-layout>

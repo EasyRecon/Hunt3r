@@ -16,6 +16,7 @@ export interface Scan {
     state:string
 }
 
+
 export interface AddScanData {
     domain:string
     type_scan: "recon"|"nuclei",

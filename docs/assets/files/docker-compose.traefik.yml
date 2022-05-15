@@ -19,7 +19,7 @@ services:
         max-file: "1"
         max-size: "2m"
     labels:
-      - "traefik.enable=true"
+      - "traefik.enable=false"
       - "traefik.http.routers.traefik.rule=Host(`traefik.domain.tld`)"
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"

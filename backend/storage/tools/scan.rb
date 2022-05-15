@@ -115,8 +115,8 @@ optparse = OptionParser.new do |opts|
     OPTIONS[:slack] = value
   end
 
-  opts.on('--meshs meshs_data', 'List of meshes to query to retrieve domains') do |value|
-    OPTIONS[:meshs] = value
+  opts.on('--meshs true|false', 'Query meshs to retrieve subdomains data') do |v|
+    OPTIONS[:meshs] = v
   end
 
   opts.on('--excludes regex', 'Regex list for subdomain exclusion') do |value|

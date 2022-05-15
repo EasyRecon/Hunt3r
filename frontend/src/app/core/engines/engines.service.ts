@@ -17,4 +17,7 @@ export class EnginesService  {
   deleteEngine(id:number): Observable<AddEngineResponse> {
     return this.httpService.delete<AddEngineResponse>('/engines/'+id)
   }
+  updateEngine(data:Engine,id:number): Observable<AddEngineResponse> {
+    return this.httpService.patch<AddEngineResponse>('/engines/'+id,data)
+  }
 }

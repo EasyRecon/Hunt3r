@@ -48,4 +48,65 @@ class Admin::MeshsController < ApplicationController
       render status: 200, json: { message: I18n.t('success.controllers.admin.meshs.deleted'), data: nil }
     end
   end
+
+  # POST /admin/meshs/sync
+  def sync
+    mesh = params.require(:meshs).permit(:url, :token, :type, :domain)
+    return unless Mesh.find_by(url: mesh[:url], token: mesh[:token])
+
+    domains = get_mesh_domains(mesh[:url], mesh[:token], mesh[:type], mesh[:domain])
+    if mesh[:type] == 'subdomain'
+      domain = Domain.find_by(name: mesh[:domain])
+      domain = Domain.create(name: mesh[:domain]) if domain.nil?
+
+      register_subdomains(domains, domain, mesh[:url], mesh[:token])
+    end
+
+
+    render status: 200, json: { message: nil, data: domains }
+  end
+
+  private
+
+  def get_mesh_domains(url, token, type, domain)
+    hunt3r_url = request.protocol + request.host_with_port
+
+    response = Typhoeus::Request.post(
+      File.join(url, 'api/domains/mesh'),
+      body: { meshs: { url: hunt3r_url, token: token, type: type, domain: domain } }.to_json,
+      headers: { 'Content-Type' => 'application/json' }
+    )
+    return unless response&.code == 200
+
+    JSON.parse(response.body)['data']
+  end
+
+  def register_subdomains(subdomains, domain, url, token)
+    subdomains.each do |subdomain|
+      new_subdomain = {
+        url: subdomain[0],
+        infos: subdomain[1],
+        domain_id: domain.id
+      }
+
+      subdomain = Subdomain.create(new_subdomain)
+      screenshot = get_mesh_screenshot(url, token, subdomain)
+      next if screenshot.nil?
+
+      Screenshot.create(screenshot: screenshot, subdomain_id: subdomain.id)
+    end
+  end
+
+  def get_mesh_screenshot(url, token, subdomain)
+    hunt3r_url = request.protocol + request.host_with_port
+
+    response = Typhoeus::Request.post(
+      File.join(url, 'api/screenshots/mesh'),
+      body: { meshs: { url: hunt3r_url, token: token, subdomain: subdomain.url } }.to_json,
+      headers: { 'Content-Type' => 'application/json' }
+    )
+    return unless response&.code == 200
+
+    JSON.parse(response.body)['data']
+  end
 end

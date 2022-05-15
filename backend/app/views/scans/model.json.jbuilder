@@ -11,7 +11,7 @@ json.data do
   json.leak false
   json.nuclei false
   json.all_templates false
-  json.nuclei_severity 'info,medium'
+  json.nuclei_severity %w[info medium]
   json.custom_templates %w[template1 template2]
   json.custom_interactsh false
   json.permutation false

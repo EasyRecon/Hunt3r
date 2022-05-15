@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MeshData,CreateMesh,MeshResponse } from './meshs';
+import { MeshData,CreateMesh,MeshResponse,MeshSyncData,MeshSyn } from './meshs';
 import { Observable} from 'rxjs';
 import {HttpService} from '../../shared/http.service'
 @Injectable()
@@ -22,6 +22,12 @@ export class MeshsService  {
     return this.httpService.patch<MeshData>('/admin/meshs',data)
   }
   deleteMeshs(id:number): Observable<MeshResponse> {
-    return this.httpService.delete<MeshData>('/admin/meshs'+id)
+    return this.httpService.delete<MeshData>('/admin/meshs/'+id)
+  }
+  postMeshsDomain(data:MeshSyncData): Observable<MeshResponse>{
+    return this.httpService.post<MeshData>('/admin/meshs/sync',data)
+  }
+  postMeshsSync(data:MeshSyn): Observable<MeshResponse>{
+    return this.httpService.post<MeshData>('/admin/meshs/sync',data)
   }
 }
