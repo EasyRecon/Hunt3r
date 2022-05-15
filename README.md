@@ -41,5 +41,7 @@ Once the Docker environment is up, you can access the application through the We
 ![](docs/assets/images/light_dashboard.png) | ![](docs/assets/images/dark_dashboard.png)
 | Platform statistics | Tools Settings |
 ![](docs/assets/images/BBStats.png) | ![](docs/assets/images/install_amass.png)
-| Meshs management | / |
-![](docs/assets/images/meshs_management.png) |
+| Meshs management | Domains pages |
+![](docs/assets/images/meshs_management.png) | ![](docs/assets/images/domains.png)
+| Scans | Vulnerabilities |
+![](docs/assets/images/scans.png) | ![](docs/assets/images/vulnerabilities.png)
