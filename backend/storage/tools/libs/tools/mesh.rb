@@ -1,6 +1,7 @@
 class Mesh
   def self.get_domains
-    meshs_json = JSON.parse(OPTIONS[:meshs])
+    meshs = File.read('/tmp/meshs.txt')
+    meshs_json = JSON.parse(meshs)
     meshs_json.each do |mesh|
       random = (0...8).map { rand(65..90).chr }.join
       subdomains = get_mesh_domains(mesh[:url], mesh[:token])

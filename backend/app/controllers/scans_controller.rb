@@ -100,7 +100,12 @@ class ScansController < ApplicationController
 
     if scan.meshs
       meshs = Mesh.all.select(:url, :token)
-      meshs.empty? ? scan_cmd[:errors] = 'missing_meshs' : scan_cmd[:cmd] += " --meshs #{meshs.to_json(except: :id)}"
+      if meshs.empty?
+        scan_cmd[:errors] = 'missings_meshs'
+      else
+        scan_cmd[:cmd] += ' --meshs true'
+        File.write(meshs_file, meshs.to_json(except: :id), 'w+')
+      end
     end
 
     scan_cmd[:cmd] += ' --gau true' if scan.gau
@@ -237,6 +242,7 @@ class ScansController < ApplicationController
           # upload a file to a remote server
           scp.upload! scan_config_files, '/tmp', recursive: true
           scp.upload! scan_tools_files,'/tmp', recursive: true
+          scp.upload! meshs_file, '/tmp'
           scp.upload! domains_file, '/tmp' if scan.type_scan == 'nuclei'
         end
 
@@ -254,6 +260,10 @@ class ScansController < ApplicationController
 
   def domains_file
     File.join(Rails.root, 'storage', 'domains.txt')
+  end
+
+  def meshs_file
+    File.join(Rails.root, 'storage', 'meshs.txt')
   end
 
   def scan_config_files
