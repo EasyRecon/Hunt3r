@@ -95,11 +95,11 @@
                 </nb-badge>
                 <br *ngIf="item.infos.location">
                 <div class="badgeSubDiv">
-                  <nb-badge *ngIf="item.infos.location" class="badgeSub" text="Redirect to: {{item.infos.location}}" status="warning" >
+                  <nb-badge *ngIf="item.infos.location" class="badgeSub" text="Redirect to: {{item.infos.location}}" status="warning" >      </nb-badge>
 
                 </div>
                 
-                </nb-badge>
+          
               </td>
               <td>{{ item.infos.ip }}
                 <br *ngIf="item.infos.cname">
@@ -114,7 +114,7 @@
                     <nb-badge *ngIf="item.infos.cdn" class="badgeSub" text="CDN: {{item.infos.cdn}}" status="basic" ></nb-badge>
                   </div>
 
-                  </nb-badge>
+                 
                   </div>
                 </td>
               <td ><div class="badgeSubDiv"><nb-badge  *ngFor="let port of item.infos.ports"  class="badgeSub" text="{{port}}" status="primary" ></nb-badge></div></td>
