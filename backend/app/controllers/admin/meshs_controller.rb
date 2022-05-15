@@ -59,7 +59,7 @@ class Admin::MeshsController < ApplicationController
       domain = Domain.find_by(name: mesh[:domain])
       domain = Domain.create(name: mesh[:domain]) if domain.nil?
 
-      register_subdomains(domains, domain)
+      register_subdomains(domains, domain, mesh[:url], mesh[:token])
     end
 
 
@@ -81,7 +81,7 @@ class Admin::MeshsController < ApplicationController
     JSON.parse(response.body)['data']
   end
 
-  def register_subdomains(subdomains, domain)
+  def register_subdomains(subdomains, domain, url, token)
     subdomains.each do |subdomain|
       new_subdomain = {
         url: subdomain[0],
@@ -89,7 +89,24 @@ class Admin::MeshsController < ApplicationController
         domain_id: domain.id
       }
 
-      Subdomain.create(new_subdomain)
+      subdomain = Subdomain.create(new_subdomain)
+      screenshot = get_mesh_screenshot(url, token, subdomain)
+      next if screenshot.nil?
+
+      Screenshot.create(screenshot: screenshot, subdomain_id: subdomain.id)
     end
+  end
+
+  def get_mesh_screenshot(url, token, subdomain)
+    hunt3r_url = request.protocol + request.host_with_port
+
+    response = Typhoeus::Request.post(
+      File.join(url, 'api/screenshots/mesh'),
+      body: { meshs: { url: hunt3r_url, token: token, subdomain: subdomain.url } }.to_json,
+      headers: { 'Content-Type' => 'application/json' }
+    )
+    return unless response&.code == 200
+
+    JSON.parse(response.body)['data']
   end
 end

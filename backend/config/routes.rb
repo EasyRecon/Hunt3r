@@ -82,30 +82,31 @@ Rails.application.routes.draw do
       delete 'notifications', to: 'notifications#destroy'
 
       # Leaks management
-      get '/leaks', to: 'leaks#index'
-      post '/leaks', to: 'leaks#create_outside'
+      get 'leaks', to: 'leaks#index'
+      post 'leaks', to: 'leaks#create_outside'
 
       # Domains management
-      get '/domains', to: 'domains#index'
-      post '/domains/mesh', to: 'domains#index_outside'
-      delete '/domains/:id', to: 'domains#destroy'
+      get 'domains', to: 'domains#index'
+      post 'domains/mesh', to: 'domains#index_outside'
+      delete 'domains/:id', to: 'domains#destroy'
 
       # Subdomains management
-      get '/subdomains', to: 'subdomains#index'
-      post '/subdomains', to: 'subdomains#create_outside'
+      get 'subdomains', to: 'subdomains#index'
+      post 'subdomains', to: 'subdomains#create_outside'
 
       # Screenshot management
-      get '/screenshots/:subdomain_id', to: 'screenshots#index'
-      post '/screenshots', to: 'screenshots#create_outside'
+      get 'screenshots/:subdomain_id', to: 'screenshots#index'
+      post 'screenshots', to: 'screenshots#create_outside'
+      post 'screenshots/mesh', to: 'screenshots#index_outside'
 
       # Vulnerabilities management
-      get '/vulnerabilities', to: 'vulnerabilities#index'
-      post '/vulnerabilities', to: 'vulnerabilities#create_outside'
-      delete '/vulnerabilities/:id', to: 'vulnerabilities#destroy'
+      get 'vulnerabilities', to: 'vulnerabilities#index'
+      post 'vulnerabilities', to: 'vulnerabilities#create_outside'
+      delete 'vulnerabilities/:id', to: 'vulnerabilities#destroy'
 
       # URLS management
-      get '/urls/:subdomain_id', to: 'urls#index'
-      post '/urls', to: 'urls#create_outside'
+      get 'urls/:subdomain_id', to: 'urls#index'
+      post 'urls', to: 'urls#create_outside'
 
       # Scans engine management
       get 'engines', to: 'engines#index'

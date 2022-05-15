@@ -23,7 +23,7 @@ class DomainsController < ApplicationController
                 Domain.find_by(name: mesh_infos[:domain])&.subdomains&.pluck(:url, :infos)
               end
 
-    render json: { data: domains }, status: 200
+    render json: { message: nil, data: domains }, status: 200
   end
 
   # DELETE /domains/:id
