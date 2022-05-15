@@ -87,28 +87,37 @@
               <td>
                 <a href="{{ item.url }}" target="_blank">{{ item.url }}</a>
                 <br *ngIf="item.infos.title">
-                <nb-badge *ngIf="item.infos.title" class="badgeSub" text="Title: {{item.infos.title}}" status="info" >
+                <div class="badgeSubDiv">
+                  <nb-badge *ngIf="item.infos.title" class="badgeSub" text="Title: {{item.infos.title}}" status="info" ></nb-badge>
+                </div>
+                
 
-                </nb-badge>
                 <br *ngIf="item.infos.location">
-                <nb-badge *ngIf="item.infos.location" class="badgeSub" text="Redirect to: {{item.infos.location}}" status="warning" >
+                <div class="badgeSubDiv">
+                  <nb-badge *ngIf="item.infos.location" class="badgeSub" text="Redirect to: {{item.infos.location}}" status="warning" >      </nb-badge>
 
-                </nb-badge>
+                </div>
+                
+          
               </td>
               <td>{{ item.infos.ip }}
                 <br *ngIf="item.infos.cname">
                 <div *ngIf="item.infos.cname" class="p5">
-                  <nb-badge *ngIf="item.infos.cname" class="badgeSub" text="CNAME: {{item.infos.cname}}" status="warning" ></nb-badge>
+                  <div class="badgeSubDiv">
+                    <nb-badge *ngIf="item.infos.cname" class="badgeSub" text="CNAME: {{item.infos.cname}}" status="warning" ></nb-badge>
+                  </div>
                 </div>
                 <br *ngIf="item.infos.cdn">
                 <div *ngIf="item.infos.cdn" class="p5">
-                  <nb-badge *ngIf="item.infos.cdn" class="badgeSub" text="CDN: {{item.infos.cdn}}" status="basic" >
+                  <div class="badgeSubDiv">
+                    <nb-badge *ngIf="item.infos.cdn" class="badgeSub" text="CDN: {{item.infos.cdn}}" status="basic" ></nb-badge>
+                  </div>
 
-                  </nb-badge>
+                 
                   </div>
                 </td>
-              <td ><nb-badge  *ngFor="let port of item.infos.ports"  class="badgeSub" text="{{port}}" status="primary" ></nb-badge></td>
-              <td> <nb-badge class="badgeSub" text="{{ item.infos.status_code }}" status="{{ item.infos.status_code> 399 ? 'danger' : item.infos.status_code> 299 ? 'warning' : 'success' }}" ></nb-badge></td>
+              <td ><div class="badgeSubDiv"><nb-badge  *ngFor="let port of item.infos.ports"  class="badgeSub" text="{{port}}" status="primary" ></nb-badge></div></td>
+              <td><div class="badgeSubDiv"> <nb-badge class="badgeSub" text="{{ item.infos.status_code }}" status="{{ item.infos.status_code> 399 ? 'danger' : item.infos.status_code> 299 ? 'warning' : 'success' }}" ></nb-badge></div></td>
               <td>{{ item.infos.content_length }}</td>
               <td  ><div class="badgeSubDiv" *ngFor="let techno of item.infos.technologies"> <nb-badge class="badgeSub" text="{{techno}}" status="primary" ></nb-badge></div></td>
               <td><img (click)="screenModal(apiUrl+'/screenshots/'+item.id)" class="screenpreview" id='screen{{item.id}}' [src]="apiUrl+'/screenshots/'+item.id | useHttpImgSrc:'/assets/img/loading.gif':'/assets/img/not-found.png'" loading="lazy"></td>
