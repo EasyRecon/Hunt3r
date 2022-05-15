@@ -28,7 +28,9 @@ class DomainsController < ApplicationController
 
   # DELETE /domains/:id
   def destroy
-    domain = Domain.find_by(id: params[:id]).destroy
+    domain = Domain.find_by(id: params[:id])
+    domain.subdomains.destroy_all
+    domain.destroy
     return render json: { message: I18n.t('errors.controllers.domains.unknown'), data: nil }, status: 200 if domain.nil?
 
     render json: { message: I18n.t('success.controllers.domains.deleted'), data: nil }, status: 200
