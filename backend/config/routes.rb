@@ -110,7 +110,7 @@ Rails.application.routes.draw do
 
       # Scans engine management
       get 'engines', to: 'engines#index'
-      post 'engines', to: 'engines#create'
+      post 'engines/:id', to: 'engines#create'
       patch 'engines', to: 'engines#update'
       delete 'engines/:id', to: 'engines#destroy'
     end
