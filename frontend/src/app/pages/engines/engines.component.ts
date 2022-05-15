@@ -25,7 +25,7 @@ export class EnginesComponent implements OnInit {
   addEngineForm: FormGroup = <FormGroup> {};
   engineModal:any;
   templatList:string[]=<any>[]
-
+  modelEngine:Engine=<Engine>{}
 
 
   constructor(private enginesService : EnginesService,
@@ -33,24 +33,8 @@ export class EnginesComponent implements OnInit {
               private fbuilder: FormBuilder,
               private dialogService: NbDialogService,
               private nucleiService: NucleiService) {
-    this.addEngineForm = this.fbuilder.group({
-         "type_scan": "",
-         "instance_type": "",
-         "provider": "",
-         "notifs": false,
-         "active_recon": false,
-         "intel": false,
-         "leak": false,
-         "nuclei": false,
-         "custom_interactsh":false,
-         "nuclei_severity":[],
-         "all_templates": false,
-         "meshs":false,
-         "permutation": false,
-         "gau": false,
-         "custom_templates": []
-  });
-
+    
+this.initEngineForm()
     this.getEngines()
   }
 
@@ -58,13 +42,57 @@ export class EnginesComponent implements OnInit {
 
    
   }
+initEngineForm(){
+  this.addEngineForm = this.fbuilder.group({
+    "type_scan": "",
+    "instance_type": "",
+    "provider": "",
+    "notifs": false,
+    "active_recon": false,
+    "intel": false,
+    "leak": false,
+    "nuclei": false,
+    "custom_interactsh":false,
+    "nuclei_severity":[],
+    "all_templates": false,
+    "meshs":false,
+    "permutation": false,
+    "gau": false,
+    "custom_templates": []
+});
+}
+initEmptyEngine():any{
+  return {
+    "name":"",
+    "infos":  {
+      "type_scan": "",
+      "instance_type": "",
+      "provider": "",
+      "notifs": false,
+      "active_recon": false,
+      "intel": false,
+      "leak": false,
+      "nuclei": false,
+      "custom_interactsh":false,
+      "nuclei_severity":[],
+      "all_templates": false,
+      "meshs":false,
+      "permutation": false,
+      "gau": false,
+      "custom_templates": []
+  }
+  }
 
+}
   addEngineModal(dialog: TemplateRef<any>){
     this.loadingModal=true
     this.engineModal = this.dialogService.open(dialog, { context: '-1' });
     this.nucleiService.getTemplate().subscribe((result)=> {
+      this.modelEngine=this.initEmptyEngine()
       this.loadingModal=false
       this.templatList=result.data
+      this.initEngineForm()
+      
     },(err)=>{
       this.loadingModal=false
       this.messageService.showToast(err.message,'danger')
@@ -75,6 +103,9 @@ export class EnginesComponent implements OnInit {
     this.engineModal = this.dialogService.open(dialog, { context: `${id}` });
     this.enginesList.forEach((element)=>{
       if(element.id==id){
+       this.modelEngine=element
+       this.loadingModal=false
+       this.upddateModlaValue(element)
       }
     })
     this.nucleiService.getTemplate().subscribe((result)=> {
@@ -83,6 +114,11 @@ export class EnginesComponent implements OnInit {
     },(err)=>{
       this.loadingModal=false
       this.messageService.showToast(err.message,'danger')
+    })
+  }
+  upddateModlaValue(element:any){
+    Object.keys(element.infos).forEach((key) => {
+      this.addEngineForm.get(key)!.setValue(element.infos[key as keyof typeof element.infos])
     })
   }
   closeAddEngineModal(){
