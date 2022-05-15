@@ -88,13 +88,13 @@
                 <a href="{{ item.url }}" target="_blank">{{ item.url }}</a>
                 <br *ngIf="item.infos.title">
                 <div class="badgeSubDiv">
-                  <nb-badge *ngIf="item.infos.title" class="badgeSub" text="Title: {{item.infos.title}}" status="info" ></nb-badge>
+                  <nb-badge *ngIf="item.infos.title" class="badgeSub breakSentance" text="Title: {{item.infos.title}}" status="info" ></nb-badge>
                 </div>
                 
 
                 <br *ngIf="item.infos.location">
                 <div class="badgeSubDiv">
-                  <nb-badge *ngIf="item.infos.location" class="badgeSub" text="Redirect to: {{item.infos.location}}" status="warning" >      </nb-badge>
+                  <nb-badge *ngIf="item.infos.location" class="badgeSub breakSentance" text="Redirect to: {{item.infos.location}}" status="warning" >      </nb-badge>
 
                 </div>
                 
