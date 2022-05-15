@@ -19,7 +19,7 @@ private
 def get_mesh_domains(url, token)
   response = Typhoeus::Request.post(
     File.join(url, 'api/domains/mesh'),
-    body: { meshs: { url: OPTIONS[:url], token: token, domain: OPTIONS[:domain] } }.to_json,
+    body: { meshs: { url: OPTIONS[:url].sub('/api', ''), token: token, domain: OPTIONS[:domain] } }.to_json,
     headers: { 'Content-Type' => 'application/json' }
   )
   return unless response&.code == 200
