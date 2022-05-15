@@ -46,7 +46,7 @@ domain:any
     this.loading=true
     this.meshsService.getMeshs().subscribe((result)=>{
       result.data.forEach(element => {
-        if(this.id=element.id){
+        if(this.id==element.id){
           this.meshsService.postMeshsDomain({"meshs":{"url":element.url,"token":element.token,"type":"domain"}}).subscribe((domain)=> {
             this.loading=false
             this.listDomain=domain.data
