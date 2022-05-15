@@ -104,7 +104,7 @@ class ScansController < ApplicationController
         scan_cmd[:errors] = 'missings_meshs'
       else
         scan_cmd[:cmd] += ' --meshs true'
-        File.write(meshs_file, meshs.to_json(except: :id), 'w+')
+        File.write(meshs_file, meshs.to_json(except: :id), mode: 'w+')
       end
     end
 

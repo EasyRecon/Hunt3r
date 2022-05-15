@@ -4,7 +4,7 @@ class Mesh
     meshs_json = JSON.parse(meshs)
     meshs_json.each do |mesh|
       random = (0...8).map { rand(65..90).chr }.join
-      subdomains = get_mesh_domains(mesh[:url], mesh[:token])
+      subdomains = get_mesh_domains(mesh['url'], mesh['token'])
       next if subdomains.nil?
 
       File.open("#{OPTIONS[:output]}/#{random}_mesh_domains.txt", 'w+') do |f|
