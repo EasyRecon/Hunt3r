@@ -60,7 +60,7 @@ wget -O docker-compose.yml https://docs.hunt3r.ovh/assets/files/docker-compose.t
 nano docker-compose.yml # Update 'traefik.domain.tld' line 23 with your custom subdomain
 
 wget -O traefik.toml https://docs.hunt3r.ovh/assets/files/traefik.toml
-nano traefik.tml # Update 'contact@domain.tld' line 16 with your email
+nano traefik.toml # Update 'contact@domain.tld' line 16 with your email
 
 mkdir letsencrypt
 touch letsencrypt/acme.json
@@ -89,6 +89,7 @@ nano docker-compose.yml # Modify 'traefik.domain.tld' with your custom domain li
 Launching the dockers
 
 ```docker
+docker-compose up -d
 docker-compose run backend rake db:create
 docker-compose run backend rake db:migrate
 docker-compose run backend rake db:seed
