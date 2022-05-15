@@ -242,7 +242,7 @@ class ScansController < ApplicationController
           # upload a file to a remote server
           scp.upload! scan_config_files, '/tmp', recursive: true
           scp.upload! scan_tools_files,'/tmp', recursive: true
-          scp.upload! meshs_file, '/tmp'
+          scp.upload! meshs_file, '/tmp' if scan.meshs
           scp.upload! domains_file, '/tmp' if scan.type_scan == 'nuclei'
         end
 
