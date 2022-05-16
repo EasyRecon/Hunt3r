@@ -43,7 +43,7 @@
         - [X] CDN Filtering
         - [X] Get All URLs
         - [X] Screenshots
-        - [ ] Permutations
+        - [X] Permutations
         - [X] Nuclei
             - [X] With all templates
             - [X] With custom templates

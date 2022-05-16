@@ -14,6 +14,7 @@ require_relative 'libs/tools/amass'
 require_relative 'libs/tools/c99'
 require_relative 'libs/tools/dehashed'
 require_relative 'libs/tools/gau'
+require_relative 'libs/tools/gotator'
 require_relative 'libs/tools/gowitness'
 require_relative 'libs/tools/httpx'
 require_relative 'libs/tools/mesh'
@@ -105,6 +106,10 @@ optparse = OptionParser.new do |opts|
 
   opts.on('--interactsh-token token', 'Custom InteractSH URL Token') do |value|
     OPTIONS[:interactsh_token] = value
+  end
+
+  opts.on('--permutation true|false', 'Subdomains permutation') do |v|
+    OPTIONS[:permutation] = v
   end
 
   opts.on('--gau true|false', 'Recovery of valid URLs with GAU') do |v|

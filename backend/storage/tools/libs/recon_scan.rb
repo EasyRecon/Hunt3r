@@ -22,8 +22,9 @@ class ReconScan
     # **-- END OF THE HARVESTING PHASE OF SUBDOMAINS
 
     `cat #{OPTIONS[:output]}/*_domains.txt | sort -u >> #{OPTIONS[:output]}/all_domains.txt`
-
     clean_domains if OPTIONS[:excludes]
+
+    Gotator.permutation if OPTIONS[:permutation]
 
     # **-- START OF THE ACTIVE CHECK PHASE
     InteractDashboard.update_scan_status('Recon - Port Scanning')
