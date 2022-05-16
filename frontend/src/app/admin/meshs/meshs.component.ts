@@ -6,7 +6,7 @@ import {
 
 import { MeshsService } from '../../core/meshs/meshs.service';
 import { Router } from '@angular/router';
-import { MeshConfig } from '../../core/meshs/meshs';
+import { MeshConfig,MeshUpdate } from '../../core/meshs/meshs';
 
 
 import { FormGroup,FormBuilder   } from '@angular/forms';
@@ -92,7 +92,7 @@ gotToSyncMesh(id:number){
     event.preventDefault()
     this.loadingModalUpdate = true 
     let data = this.updateMeshForm.value
-    this.meshsService.updateMeshs(data).subscribe( (result) => {
+    this.meshsService.updateMeshs({"mesh":data}).subscribe( (result) => {
       this.loadingModalUpdate = false 
       this.messageService.showToast(result.message,'success')
       this.closeUpdate()
