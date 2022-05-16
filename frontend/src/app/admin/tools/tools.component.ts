@@ -54,16 +54,20 @@ toolsFormGlobal: FormGroup = <FormGroup> {};
   ngAfterViewInit() {
 
   }
+  blankFrom(){
+    this.toolsFormGlobal= this.fbuilder.group({ name: '',user: '', password: '',api_key:'',webhook:'',url:'',config_value:''});
+  }
 
   closeModal() {
     this.dialogueRefCreate.close();
   }
   createModal(tool:any){
-   console.log(this.toolModel[tool])
+   this.blankFrom()
    this.dialogueRefCreate= this.dialogService.open(this.dialogCreateGlobal, { context: {name:tool,required:this.toolModel[tool]} });
    this.toolsFormGlobal.controls['name'].setValue(tool);
   }
   updateModal(tool:any){
+   this.blankFrom()
    this.dialogueRefCreate= this.dialogService.open(this.dialogCreateGlobal, { context: {name:tool,required:this.toolModel[tool]} });
    this.setElement(tool,this.toolModel[tool])
 

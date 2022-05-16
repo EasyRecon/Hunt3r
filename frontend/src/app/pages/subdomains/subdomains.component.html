@@ -116,7 +116,7 @@
                  
                   </div>
                 </td>
-              <td ><div class="badgeSubDiv"><nb-badge  *ngFor="let port of item.infos.ports"  class="badgeSub" text="{{port}}" status="primary" ></nb-badge></div></td>
+              <td ><div class="badgeSubDivPort"><nb-badge  *ngFor="let port of item.infos.ports"  class="badgeSubPort" text="{{port}}" status="primary" ></nb-badge></div></td>
               <td><div class="badgeSubDiv"> <nb-badge class="badgeSub" text="{{ item.infos.status_code }}" status="{{ item.infos.status_code> 399 ? 'danger' : item.infos.status_code> 299 ? 'warning' : 'success' }}" ></nb-badge></div></td>
               <td>{{ item.infos.content_length }}</td>
               <td  ><div class="badgeSubDiv" *ngFor="let techno of item.infos.technologies"> <nb-badge class="badgeSub" text="{{techno}}" status="primary" ></nb-badge></div></td>
