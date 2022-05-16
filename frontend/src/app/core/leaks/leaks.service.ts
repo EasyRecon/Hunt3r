@@ -31,7 +31,7 @@ export class LeaksService  {
     if(domain!='')domainParam='domain='+domain
     return this.http
       .get<LeakData>(
-        this.baseurl + '/leaks?'+domain+'&page='+page+'&limit='+limit,
+        this.baseurl + '/leaks?domain='+domain+'&page='+page+'&limit='+limit,
         this.httpOptions
       )
       .pipe(retry(1), catchError(this.errorService.errorHandl));

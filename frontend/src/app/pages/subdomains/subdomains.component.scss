@@ -59,14 +59,17 @@ hr { display: block;
 .breakSentance {
     white-space: pre-wrap;
     display: inline-block;
-    width: 500px;
+    max-width: 500px;
     overflow-wrap: break-word;
 }
 
 .badgeSubDiv{
     padding:5px
 }
-
+.badgeSubDiv{
+    width:260px;
+    display: flex;
+}
 .roundBadge {
     background-color: var(--badge-success-background-color);
     padding:3px;
@@ -78,6 +81,15 @@ hr { display: block;
     margin: 2px;
     font-size: 13px;
     font-weight: 500;
+}
+.badgeSubPort {
+    position: relative;
+    border-radius: 10px;
+    margin: 2px;
+    font-size: 13px;
+    font-weight: 500;
+    width:50px;
+    display: grid;
 }
 .p5{
     //padding:5px
