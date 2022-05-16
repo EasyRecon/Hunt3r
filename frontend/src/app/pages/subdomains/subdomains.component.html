@@ -103,7 +103,7 @@
               <td>{{ item.infos.ip }}
                 <br *ngIf="item.infos.cname">
                 <div *ngIf="item.infos.cname" class="p5">
-                  <div class="badgeSubDiv">
+                  <div class="col-md-12 badgeSubDiv">
                     <nb-badge *ngIf="item.infos.cname" class="badgeSub" text="CNAME: {{item.infos.cname}}" status="warning" ></nb-badge>
                   </div>
                 </div>
