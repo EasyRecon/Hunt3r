@@ -4,12 +4,17 @@ export interface MeshConfig {
    url:string;
    token:string;
 }
+export interface MeshUpdate{
+   name:string;
+   url:string;
+   token:string;
+}
 export interface MeshData {
    message: string;
    data: MeshConfig[];
 }
 export interface CreateMesh {
-   mesh: MeshConfig;
+   mesh: MeshUpdate;
 }
 
 export interface MeshResponse{

@@ -9,7 +9,7 @@ export class SubdomainsService  {
 
 
   getSubdomain(page:number,limit:number,domain:string='',url:string='',technolgy:string=''): Observable<SubdomainData> {
-    return this.httpService.get<SubdomainData>('/subdomains?page='+page+'&limit='+limit+'&domain='+domain+'&url='+url+'&technolgy='+technolgy)
+    return this.httpService.get<SubdomainData>('/subdomains?page='+page+'&limit='+limit+'&domain='+domain+'&subdomain='+url+'&technology='+technolgy)
   }
 
   getScreenshot(id:number):Observable<SubdomainScreenshot> {

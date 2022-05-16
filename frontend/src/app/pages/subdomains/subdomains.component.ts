@@ -21,7 +21,7 @@ export class SubdomainsComponent implements OnInit {
   loadingSubomain=true
   searchTechno=''
   searchDomain=''
-  searchUrl=''
+  searchSubdomain=''
   searchStatusCode=''
   @ViewChild('dialogScreen', { read: TemplateRef }) dialogScreen:any;
   domain=''
@@ -45,7 +45,7 @@ export class SubdomainsComponent implements OnInit {
 
   getSubdomains() {
     this.loadingSubomain=true
-    this.subdomainService.getSubdomain(this.page,this.limit,this.domain,this.searchUrl,this.searchTechno).subscribe( (result)=> {
+    this.subdomainService.getSubdomain(this.page,this.limit,this.domain,this.searchSubdomain,this.searchTechno).subscribe( (result)=> {
       this.loadingSubomain=false
       this.subdomainsList=result.data
       this.total_pages=result.total_pages
@@ -67,10 +67,10 @@ export class SubdomainsComponent implements OnInit {
   closeModal(){
     this.screenModaldialog.close()
   }
-  searchSubomainInit(technologieSearch:string,urlSearch:string,statusCodeSearch:string,domainSearch:string){
+  searchSubomainInit(technologieSearch:string,subdomainSearch:string,statusCodeSearch:string,domainSearch:string){
     this.searchDomain=domainSearch
     this.searchTechno=technologieSearch
-    this.searchUrl=urlSearch
+    this.searchSubdomain=subdomainSearch
     this.searchStatusCode=statusCodeSearch
     this.getSubdomains() 
   }
