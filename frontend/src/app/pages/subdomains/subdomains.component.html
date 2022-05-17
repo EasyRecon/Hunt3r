@@ -119,7 +119,21 @@
               <td ><div class="badgeSubDivPort"><nb-badge  *ngFor="let port of item.infos.ports"  class="badgeSubPort" text="{{port}}" status="primary" ></nb-badge></div></td>
               <td><div class="badgeSubDiv"> <nb-badge class="badgeSub" text="{{ item.infos.status_code }}" status="{{ item.infos.status_code> 399 ? 'danger' : item.infos.status_code> 299 ? 'warning' : 'success' }}" ></nb-badge></div></td>
               <td>{{ item.infos.content_length }}</td>
-              <td  ><div class="badgeSubDiv" *ngFor="let techno of item.infos.technologies"> <nb-badge class="badgeSub" text="{{techno}}" status="primary" ></nb-badge></div></td>
+              <td  ><div class="badgeSubDiv" *ngFor="let techno of item.infos.technologies">
+                <div class="badge">
+                  <div class="ImageTech">
+                    <span>
+                      <img src="/assets/icons/{{getImgTech(techno)}}">
+                    </span>
+                  </div>
+                  <div class="name">
+                    <span>
+                      {{techno}}
+                    </span>
+                  </div>
+                </div>
+                </div><!--<div class="badgeSubTechno" ><div class="imgtech"><img src="/assets/icons/{{getImgTech(techno)}}"></div><div class="textTechno">{{techno}}</div></div></div>-->
+              </td>
               <td><img (click)="screenModal(apiUrl+'/screenshots/'+item.id)" class="screenpreview" id='screen{{item.id}}' [src]="apiUrl+'/screenshots/'+item.id | useHttpImgSrc:'/assets/img/loading.gif':'/assets/img/not-found.png'" loading="lazy"></td>
             </tr>
           </table>
@@ -147,13 +161,13 @@
     </nb-card>
     <ng-template #dialogScreen let-data let-ref="dialogScreen"  >
       <nb-card >
-        <nb-card-header>Create new scan</nb-card-header>
+        <nb-card-header class="close">      
+          <button class="close" aria-label="Close" (click)="ref.close()">
+            <nb-icon icon="close"></nb-icon>
+          </button>
+        </nb-card-header>
         <nb-card-body>
           <img id="modalImgSRC" [src]="data | useHttpImgSrc:'/assets/img/loading.gif':'/assets/img/not-found.png'" loading="lazy" >    
-                <div class="col">
-                  <button nbButton (click)="closeModal()">Close</button>
-                </div>
-
         </nb-card-body>
       </nb-card>
     </ng-template>
