@@ -5,6 +5,7 @@ import { SubdomainsService } from '../../core/subdomains/subdomains.service';
 import { Subdomain } from '../../core/subdomains/subdomains';
 import {baseUrl } from "../../../environments/environment";
 import { MessageService  } from '../../shared/message.service';
+
 import {
   NbDialogService
 
@@ -76,13 +77,7 @@ export class SubdomainsComponent implements OnInit {
     this.searchStatusCode=statusCodeSearch
     this.getSubdomains() 
   }
-  getImg(id:number){
-    return this.subdomainService.getScreenshot(id).subscribe((result)=>{
-      return 'data:image/png;'+result.data.screenshot
-    },(err)=>{
-      return ''
-    })
-  }
+
 
   back(): void {
     this.location.back()

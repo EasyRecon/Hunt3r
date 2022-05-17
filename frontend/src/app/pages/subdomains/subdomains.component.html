@@ -134,7 +134,7 @@
                 </div>
                 </div><!--<div class="badgeSubTechno" ><div class="imgtech"><img src="/assets/icons/{{getImgTech(techno)}}"></div><div class="textTechno">{{techno}}</div></div></div>-->
               </td>
-              <td><img (click)="screenModal(apiUrl+'/screenshots/'+item.id)" class="screenpreview" id='screen{{item.id}}' [src]="apiUrl+'/screenshots/'+item.id | useHttpImgSrc:'/assets/img/loading.gif':'/assets/img/not-found.png'" loading="lazy"></td>
+              <td><img (click)="screenModal(apiUrl+'/screenshots/'+item.id)" class="screenpreview" id='screen{{item.id}}' appLazyLoad [src]="item.id.toString()" loading="lazy"></td>
             </tr>
           </table>
           <div class="pagination col-md-4 offset-md-8">
