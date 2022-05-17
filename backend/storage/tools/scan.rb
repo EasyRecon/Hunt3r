@@ -127,6 +127,10 @@ optparse = OptionParser.new do |opts|
   opts.on('--excludes regex', 'Regex list for subdomain exclusion') do |value|
     OPTIONS[:excludes] = value
   end
+
+  opts.on('--concurrency 1', 'Concurrency multiplier') do |value|
+    OPTIONS[:concurrency] = value.to_i
+  end
 end
 
 begin
