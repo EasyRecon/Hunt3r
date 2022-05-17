@@ -7,8 +7,7 @@ class ProgramsController < ApplicationController
 
   # GET /programs
   def index
-    @programs = params[:name] ? Platform.find_by(name: params[:name])&.programs : Program.all
-    @programs&.order(id: :asc)&.filtered(query_params)
+    @programs = params[:name] ? Platform.find_by(name: params[:name])&.programs&.filtered(query_params) : Program.all
 
     render status: 200, template: 'programs/index'
   end
