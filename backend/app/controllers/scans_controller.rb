@@ -89,6 +89,8 @@ class ScansController < ApplicationController
     scan_cmd = build_recon_scan_cmd(scan, scan_cmd) if scan.type_scan == 'recon'
     scan_cmd = build_nuclei_scan_cmd(scan, scan_cmd) if scan.nuclei || scan.type_scan == 'nuclei'
 
+    scan_cmd[:cmd] += " --concurrency #{scan.concurrency}"
+
     scan_cmd
   end
 
@@ -111,7 +113,7 @@ class ScansController < ApplicationController
     scan_cmd[:cmd] += ' --permutation true' if scan.permutation
     scan_cmd[:cmd] += ' --gau true' if scan.gau
     scan_cmd[:cmd] += ' --amass-active true' if scan.active_recon
-    scan_cmd[:cmd] += " --excludes #{scan.excludes.join('|')}" unless scan.excludes.empty?
+    scan_cmd[:cmd] += " --excludes #{scan.excludes.join('|')}" unless scan.excludes.nil? || scan.excludes.empty?
     scan_cmd
   end
 

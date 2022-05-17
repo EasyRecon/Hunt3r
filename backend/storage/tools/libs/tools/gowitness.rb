@@ -1,6 +1,8 @@
 class GoWitness
   def self.get_screenshots
-    `gowitness file -f #{OPTIONS[:output]}/httpx.txt --disable-db --disable-logging -P #{OPTIONS[:output]}/screenshots/ -X 1280 -Y 720`
+    cmd = "gowitness file -f #{OPTIONS[:output]}/httpx.txt --threads #{20 * OPTIONS[:concurrency]}"
+    cmd += " --disable-db --disable-logging -P #{OPTIONS[:output]}/screenshots/ -X 1280 -Y 720"
+    system(cmd)
 
     File.readlines("#{OPTIONS[:output]}/httpx.txt").each do |subdomain|
       subdomain.chomp!
