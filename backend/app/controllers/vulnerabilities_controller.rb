@@ -4,7 +4,11 @@ class VulnerabilitiesController < ApplicationController
 
   # GET /vulnerabilities
   def index
-    @vulnerabilities = Vulnerability.order(:severity).page(params[:page]).per(params[:limit])
+    @vulnerabilities = if params[:severity]
+                         Vulnerability.order(:severity).page(params[:page]).per(params[:limit]).filtered(params[:severity])&.all
+                       else
+                         Vulnerability.order(:severity).page(params[:page]).per(params[:limit])
+                       end
 
     render status: 200, template: 'vulnerabilities/index'
   end
