@@ -9,7 +9,6 @@ packages:
   - ruby-dev
   - make
   - gcc
-  - golang-go
 
 runcmd:
   # Amass
@@ -58,18 +57,6 @@ runcmd:
   - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   - apt install ./google-chrome-stable_current_amd64.deb -y
   - rm google-chrome-stable_current_amd64.deb
-  # MassDNS
-  - git clone https://github.com/blechschmidt/massdns.git
-  - cd massdns
-  - make
-  - make install
-  - cd ../ && rm -r massdns
-  # PureDNS
-  - export HOME=/root && export GOMODCACHE=/root/go/cache && go install github.com/d3mondev/puredns/v2@latest
-  - mv /root/go/bin/puredns /usr/local/bin/
-  # GoTator
-  - go env -w GO111MODULE="auto" && go get github.com/Josue87/gotator
-  - mv /root/go/bin/gotator /usr/local/bin/gotator
   # Typhoeus
   - gem install typhoeus
 
