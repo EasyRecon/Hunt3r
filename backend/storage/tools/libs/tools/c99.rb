@@ -1,6 +1,6 @@
 class C99
   def self.check_domains
-    return if File.zero?('')
+    return unless File.exist?("#{OPTIONS[:output]}/whoxy_domains.txt")
 
     domains = File.open("#{OPTIONS[:output]}/whoxy_domains.txt").read
     domains.each_line do |domain|
