@@ -7,7 +7,7 @@ class LeaksController < ApplicationController
                domain = Domain.find_by(name: params[:domain])&.leaks
                domain.nil? ? [] : domain.page(params[:page]).per(params[:limit])
              else
-               Leak.all
+               Leak.all.per(params[:limit])
              end
 
     render status: 200, template: 'leaks/index'
