@@ -6,4 +6,4 @@ json.data do
     json.password leak.password
   end
 end
-json.total_pages @leaks.total_pages == 0 ? 1 : @leaks.total_pages
+json.total_pages @leaks.total_pages == 0 ? 1 : @leaks.total_pages unless @leaks.empty?
