@@ -17,7 +17,7 @@ class C99
       # If there are not at least 2 sub-domains we don't care
       next if response_json['subdomains'].size < 3
 
-      Amass.get_domains(domain.chomp)
+      Amass.recursive_check(domain.chomp)
     end
   end
 end
