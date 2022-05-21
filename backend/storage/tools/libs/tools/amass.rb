@@ -7,7 +7,8 @@ class Amass
 
     cmd = 'amass enum'
     cmd += ' -active' if OPTIONS[:amass_active]
-    cmd += " -d #{domain} -trf #{resolver_path} -o #{OPTIONS[:output]}/amass_#{random}_domains.txt"
+    cmd += " -d #{domain} -config #{config_path} -trf #{resolver_path}"
+    cmd += " -o #{OPTIONS[:output]}/amass_#{random}_domains.txt"
 
     system(cmd)
   end
