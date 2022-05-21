@@ -4,7 +4,7 @@ class C99
 
     domains = File.open("#{OPTIONS[:output]}/whoxy_domains.txt").read
     domains.each_line do |domain|
-      next if domain.end_with?(".#{OPTIONS[:domain]}")
+      next if domain == OPTIONS[:domain]
 
       response = Typhoeus::Request.get(
         "https://api.c99.nl/subdomainfinder?key=#{OPTIONS[:c99_token]}&domain=#{domain.chomp}&json"
