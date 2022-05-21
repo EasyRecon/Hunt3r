@@ -25,11 +25,6 @@ class ReconScan
     `cat #{OPTIONS[:output]}/*_domains.txt | sort -u >> #{OPTIONS[:output]}/all_domains.txt`
     clean_domains if OPTIONS[:excludes]
 
-    if OPTIONS[:permutation]
-      InteractDashboard.update_scan_status('Recon - Permutation')
-      Gotator.permutation
-    end
-
     # **-- START OF THE ACTIVE CHECK PHASE
     InteractDashboard.update_scan_status('Recon - Port Scanning')
     Naabu.check_domains
