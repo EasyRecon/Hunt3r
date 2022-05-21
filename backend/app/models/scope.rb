@@ -58,7 +58,7 @@ class Scope < ApplicationRecord
 
   def normalize_intigriti_scope
     self.scope_type = case scope_type
-                      when 1
+                      when '1'
                         'Web Application'
                       else
                         scope_type
