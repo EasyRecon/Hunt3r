@@ -15,6 +15,7 @@ class ReconScan
     Mesh.get_domains if OPTIONS[:meshs]
 
     if OPTIONS[:intel]
+      InteractDashboard.update_scan_status('Recon - Intel')
       Whoxy.get_domains
       C99.check_domains
     end
@@ -23,8 +24,6 @@ class ReconScan
 
     `cat #{OPTIONS[:output]}/*_domains.txt | sort -u >> #{OPTIONS[:output]}/all_domains.txt`
     clean_domains if OPTIONS[:excludes]
-
-    Gotator.permutation if OPTIONS[:permutation]
 
     # **-- START OF THE ACTIVE CHECK PHASE
     InteractDashboard.update_scan_status('Recon - Port Scanning')

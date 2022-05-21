@@ -1,10 +1,11 @@
 import {Component, OnInit,TemplateRef,ViewChild} from '@angular/core';
-
+import { map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { SubdomainsService } from '../../core/subdomains/subdomains.service';
 import { Subdomain } from '../../core/subdomains/subdomains';
 import {baseUrl } from "../../../environments/environment";
 import { MessageService  } from '../../shared/message.service';
+
 import {
   NbDialogService
 
@@ -23,6 +24,7 @@ export class SubdomainsComponent implements OnInit {
   searchDomain=''
   searchSubdomain=''
   searchStatusCode=''
+  techno_icon:Object={}
   @ViewChild('dialogScreen', { read: TemplateRef }) dialogScreen:any;
   domain=''
   limit=10
@@ -41,6 +43,7 @@ export class SubdomainsComponent implements OnInit {
  
    this.domain=this.Activatedroute.snapshot.paramMap.get("domain") || '';
   this.getSubdomains()
+  this.getAllProperties()
   }
 
   getSubdomains() {
@@ -74,13 +77,7 @@ export class SubdomainsComponent implements OnInit {
     this.searchStatusCode=statusCodeSearch
     this.getSubdomains() 
   }
-  getImg(id:number){
-    return this.subdomainService.getScreenshot(id).subscribe((result)=>{
-      return 'data:image/png;'+result.data.screenshot
-    },(err)=>{
-      return ''
-    })
-  }
+
 
   back(): void {
     this.location.back()
@@ -94,5 +91,13 @@ export class SubdomainsComponent implements OnInit {
   goToPage(page:number){
     this.page=page
     this.getSubdomains()
+  }
+  getAllProperties(){
+    this.httpClient.get<{}>('/assets/json/icon.json').subscribe( (result)=> {
+     this.techno_icon=result
+    })
+  }
+  getImgTech(techno:any){
+    return this.techno_icon[techno as keyof typeof this.techno_icon]
   }
 }

@@ -12,7 +12,7 @@ export class SubdomainsService  {
     return this.httpService.get<SubdomainData>('/subdomains?page='+page+'&limit='+limit+'&domain='+domain+'&subdomain='+url+'&technology='+technolgy)
   }
 
-  getScreenshot(id:number):Observable<SubdomainScreenshot> {
-    return this.httpService.get<SubdomainScreenshot>('/screenshots/'+id)
+  getScreenshot(id:number):Observable<Blob> {
+    return this.httpService.getRaw('/screenshots/'+id)
   }
 }

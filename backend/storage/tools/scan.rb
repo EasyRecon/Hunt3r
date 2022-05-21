@@ -14,7 +14,6 @@ require_relative 'libs/tools/amass'
 require_relative 'libs/tools/c99'
 require_relative 'libs/tools/dehashed'
 require_relative 'libs/tools/gau'
-require_relative 'libs/tools/gotator'
 require_relative 'libs/tools/gowitness'
 require_relative 'libs/tools/httpx'
 require_relative 'libs/tools/mesh'
@@ -126,6 +125,10 @@ optparse = OptionParser.new do |opts|
 
   opts.on('--excludes regex', 'Regex list for subdomain exclusion') do |value|
     OPTIONS[:excludes] = value
+  end
+
+  opts.on('--concurrency 1', 'Concurrency multiplier') do |value|
+    OPTIONS[:concurrency] = value.to_i
   end
 end
 

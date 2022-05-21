@@ -22,9 +22,10 @@ import { VulnerabilitiesComponent } from './vulnerabilities/vulnerabilities.comp
 import {LeaksComponent } from './leaks/leaks.component';
 import {DomainsComponent } from './domains/domains.component';
 import {SubdomainsComponent } from './subdomains/subdomains.component';
-
+import { LazyLoadModule   } from '../shared/lazyLoad/lazyLoadModule';
 import { UseHttpImageSourcePipeModule } from '@this-dot/ng-utils';
 import {EnginesComponent } from './engines/engines.component';
+
 
 @NgModule({
   imports: [
@@ -56,6 +57,7 @@ import {EnginesComponent } from './engines/engines.component';
     NbCardModule,
     NbBadgeModule,
     NbCheckboxModule,
+    LazyLoadModule,
     UseHttpImageSourcePipeModule
     
     //MiscellaneousModule
@@ -73,7 +75,8 @@ import {EnginesComponent } from './engines/engines.component';
     LeaksComponent,
     DomainsComponent,
     SubdomainsComponent,
-    EnginesComponent
+    EnginesComponent,
+    
 
   ],
   providers:[
