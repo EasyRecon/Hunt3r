@@ -37,6 +37,14 @@ export class HttpService  {
       )
       .pipe(retry(1), catchError(this.errorService.errorHandl));
   }
+  getRaw(url:string): Observable<Blob>  {
+    return this.http
+      .get(
+        this.baseurl + url,
+        { responseType: 'blob' }
+      )
+      .pipe(retry(1), catchError(this.errorService.errorHandl));
+  }
   post<T>(url:string,data:any={}): Observable<T>  {
     return this.http
       .post<T>(
