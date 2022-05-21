@@ -5,12 +5,12 @@ class LeaksController < ApplicationController
   def index
     @leaks = if params[:domain] && !params[:domain].empty?
                domain = Domain.find_by(name: params[:domain])
-               domain.nil? ? nil : domain.leak
+               domain.nil? ? [] : domain.leak
              else
                Leak.all
              end
 
-    @leaks = if @leaks.nil?
+    @leaks = if @leaks.empty?
                []
              else
                @leaks.page(params[:page]).per(params[:limit])
@@ -36,11 +36,5 @@ class LeaksController < ApplicationController
         Leak.create(username: leak[:username], email: leak[:email].downcase, password: leak[:password], domain_id: domain.id)
       end
     end
-  end
-
-  private
-
-  def query_params
-    params[:program] || ''
   end
 end
