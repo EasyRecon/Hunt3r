@@ -4,7 +4,7 @@ class VulnerabilitiesController < ApplicationController
 
   # GET /vulnerabilities
   def index
-    @vulnerabilities = if params[:severity]
+    @vulnerabilities = if params[:severity] && !params[:severity].empty?
                          Vulnerability.order(:severity).filtered(params[:severity])&.all
                        else
                          Vulnerability.order(:severity)
