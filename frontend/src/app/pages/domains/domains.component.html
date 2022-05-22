@@ -56,10 +56,10 @@
           </div>
           <div class="pagination col-md-4 offset-md-8">
             <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
-              <nb-option value="1">1</nb-option>
+              <nb-option value="10">10</nb-option>
               <nb-option value="50">50</nb-option>
               <nb-option value="100">100</nb-option>
-              <nb-option value="">All</nb-option>
+              <nb-option value="-1">All</nb-option>
             </nb-select>
             <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
               <nb-icon icon="arrow-left-outline"></nb-icon>
@@ -93,10 +93,10 @@
           </table>
           <div class="pagination col-md-4 offset-md-8">
             <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
-              <nb-option value="1">1</nb-option>
+              <nb-option value="10">10</nb-option>
               <nb-option value="50">50</nb-option>
               <nb-option value="100">100</nb-option>
-              <nb-option value="">All</nb-option>
+              <nb-option value="-1">All</nb-option>
             </nb-select>
             <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
               <nb-icon icon="arrow-left-outline"></nb-icon>
