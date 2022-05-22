@@ -23,7 +23,7 @@ export class BugbountyStatComponent implements OnInit {
   loadSyncYwh=false
   scopeYWH = this.scopeTemplate()
 
-  statYWH = this.statTemplate()
+  statYWH = this.statTemplate('yeswehack')
   optionsYWHPie:any ;
   optionsYWHPieReportStatus: any;
   optionsYWHBarre: any = {};
@@ -36,7 +36,7 @@ export class BugbountyStatComponent implements OnInit {
   optionsINTIBarre: any = {};
   optionsINTIEarnedByMonth: any = {};
 
-  statINTI = this.statTemplate()
+  statINTI = this.statTemplate('intigriti')
   scopeINTI = this.scopeTemplate()
   loading=true
   //other
@@ -66,17 +66,21 @@ export class BugbountyStatComponent implements OnInit {
     })
 
   }
-  statTemplate(){
+  statTemplate(platform:"intigriti"|"yeswehack"){
     return {
       earnedEuro:0,
       collab_number:0,
       total_rapports:0,
       average_per_rapport:0.0,
-      rapport_severity:{"C":0,"H":0,"M":0,"L":0},
+      rapport_severity: this.getCriticity(platform),
       report_by_month:{},
       report_by_status:{},
       earn_by_month:{}
     };
+  }
+  getCriticity(platform:"intigriti"|"yeswehack"){
+     if(platform=='intigriti')return {"C":0,"H":0,"M":0,"L":0,"E":0}
+     else return {"C":0,"H":0,"M":0,"L":0,}
   }
   scopeTemplate(){
     return [
@@ -91,15 +95,16 @@ export class BugbountyStatComponent implements OnInit {
       }
     ]
   }
-  countSeverity(severity:string,rapport_severity:any){
-    if(severity=="Low")this.statYWH.rapport_severity.L++
+  countSeverity(severity:string,rapport_severity:any,plateform:'YWH'|'INTI'){
+    if(severity=="Low")rapport_severity.L++
     if(severity=="Medium")rapport_severity.M++
     if(severity=="High")rapport_severity.H++
     if(severity=="Critical")rapport_severity.C++
+    if(plateform=='INTI' && severity=="Exceptional") rapport_severity.E++
     return rapport_severity
   }
   computeStat(platform:'YWH'|'INTI') {
-    this[`stat${platform}`] = this.globalStat(this[`scope${platform}`])
+    this[`stat${platform}`] = this.globalStat(this[`scope${platform}`],platform)
     this[`loading${platform}Global`]=false
     this[`options${platform}Pie`] = this.pieCriticity(this[`stat${platform}`].rapport_severity.L,this[`stat${platform}`].rapport_severity.M,this[`stat${platform}`].rapport_severity.H,this[`stat${platform}`].rapport_severity.C)
     let data = this.initBarreData(this[`stat${platform}`])
@@ -108,7 +113,7 @@ export class BugbountyStatComponent implements OnInit {
     this[`options${platform}PieReportStatus`] = this.pieRepport(dataTwo)
     this[`options${platform}EarnedByMonth`] = this.chartService.barreGraph(data.earn_by_month,data.label,"Earn by month",'value')
   }
-  globalStat(scope:any):any{
+  globalStat(scope:any,platform:'YWH'|'INTI'):any{
     let returnData:{report_by_month:any,earn_by_month:any,report_by_status:any,earnedEuro:number,collab_number:number,rapport_severity:any,average_per_rapport:number,total_rapports:number}={
       "report_by_month":{},
       "earn_by_month":{},
@@ -127,7 +132,7 @@ export class BugbountyStatComponent implements OnInit {
       if(element.collab){
         returnData.collab_number++
       }
-     returnData.rapport_severity=this.countSeverity(element.severity,this.statYWH.rapport_severity)
+     returnData.rapport_severity=this.countSeverity(element.severity,this[`stat${platform}`].rapport_severity,platform)
       //nombre de rapport par mois
       let date = new Date(element.report_date)
       let dateMonth = `${date.getMonth()+1}`.padStart(2, '0');

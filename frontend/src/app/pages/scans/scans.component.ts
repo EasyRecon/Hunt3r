@@ -95,6 +95,7 @@ addRegex(){
     this.enginesList.forEach((element)=>{
       console.log(element,this.engine)
       if(element.id==this.engine){
+        scanFound=true
         element.infos.excludes = this.regexList.filter((element: any) => {
           return element !== '';
         });
@@ -111,6 +112,7 @@ addRegex(){
     })
     if(scanFound==false){
       this.loading=false
+      this.loadingModal=false
       this.messageService.showToast('Please select engine','danger')
     }
   }
