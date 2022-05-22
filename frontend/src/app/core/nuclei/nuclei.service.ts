@@ -12,7 +12,7 @@ export class NucleiService  {
     return this.httpService.get<NucleiResponseTemplate>('/nuclei')
   }
   deleteTemplate(name:string): Observable<NucleiResponse> {
-    return this.httpService.get<NucleiResponse>('/nuclei/'+name)
+    return this.httpService.delete<NucleiResponse>('/nuclei/'+name)
   }
   addTemplate(data:NucleiAddTemplate): Observable<NucleiResponse> {
     return this.httpService.post<NucleiResponse>('/nuclei/',data)

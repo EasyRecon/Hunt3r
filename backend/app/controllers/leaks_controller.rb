@@ -4,13 +4,13 @@ class LeaksController < ApplicationController
   # GET /leaks
   def index
     @leaks = if params[:domain] && !params[:domain].empty?
-               leaks = Domain.find_by(name: params[:domain])&.leaks
-               leaks.nil? ? [] : leaks
+               Domain.find_by(name: params[:domain])&.leaks
              else
                Leak.all
              end
 
-    @leaks = @leaks.page(params[:page]).per(params[:limit])
+    limit = params[:limit] == '-1' ? @leaks.count : params[:limit]
+    @leaks = @leaks.page(params[:page]).per(limit) unless @leaks.nil?
 
     render status: 200, template: 'leaks/index'
   end

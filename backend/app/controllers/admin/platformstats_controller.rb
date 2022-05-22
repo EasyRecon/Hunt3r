@@ -8,6 +8,10 @@ class Admin::PlatformstatsController < ApplicationController
 
   # GET /platforms/:name/stats
   def index
+    if @platform.nil?
+      return render status: 422, json: { message: I18n.t('errors.controllers.admin.platforms.unknown'), data: nil }
+    end
+
     @reports = @platform&.PlatformStat.filtered(query_params).order(report_date: :desc)
 
     render status: 200, template: 'admin/platformstats/index'
@@ -44,5 +48,5 @@ end
 def query_params
   query_params = { from: params[:from], to: params[:to] }
 
-  query_params[:from] || query_params[:to] ? query_params : { from: '2014-01-01', to: '2030-12-31' }
+  query_params[:from] && query_params[:to] ? query_params : { from: '2014-01-01', to: '2030-12-31' }
 end

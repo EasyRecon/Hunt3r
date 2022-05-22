@@ -41,7 +41,7 @@ export class LeaksComponent implements OnInit {
   }
   changeLimit(event:any){
     this.limit=event
-    if(event=='')this.page=1
+    if(event=='-1')this.page=1
     this.getLeaks('')
   }
   goToPage(page:number){

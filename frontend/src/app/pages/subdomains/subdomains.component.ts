@@ -48,7 +48,7 @@ export class SubdomainsComponent implements OnInit {
 
   getSubdomains() {
     this.loadingSubomain=true
-    this.subdomainService.getSubdomain(this.page,this.limit,this.domain,this.searchSubdomain,this.searchTechno).subscribe( (result)=> {
+    this.subdomainService.getSubdomain(this.page,this.limit,this.domain,this.searchSubdomain,this.searchTechno,this.searchStatusCode).subscribe( (result)=> {
       this.loadingSubomain=false
       this.subdomainsList=result.data
       this.total_pages=result.total_pages
@@ -85,7 +85,7 @@ export class SubdomainsComponent implements OnInit {
 
   changeLimit(event:any){
     this.limit=event
-    if(event=='')this.page=1
+    if(event=='-1')this.page=1
     this.getSubdomains()
   }
   goToPage(page:number){
