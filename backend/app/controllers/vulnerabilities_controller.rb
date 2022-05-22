@@ -5,10 +5,13 @@ class VulnerabilitiesController < ApplicationController
   # GET /vulnerabilities
   def index
     @vulnerabilities = if params[:severity]
-                         Vulnerability.order(:severity).page(params[:page]).per(params[:limit]).filtered(params[:severity])&.all
+                         Vulnerability.order(:severity).filtered(params[:severity])&.all
                        else
-                         Vulnerability.order(:severity).page(params[:page]).per(params[:limit])
+                         Vulnerability.order(:severity)
                        end
+
+    limit = params[:limit] == '-1' ? @vulnerabilities.count : params[:limit]
+    @vulnerabilities = @vulnerabilities.page(params[:page]).per(limit)
 
     render status: 200, template: 'vulnerabilities/index'
   end

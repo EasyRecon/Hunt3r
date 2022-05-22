@@ -14,7 +14,8 @@ class SubdomainsController < ApplicationController
       @subdomains = @subdomains.public_send("filtered_by_#{key}", value) if value.present?
     end
 
-    @subdomains = @subdomains.page(params[:page]).per(params[:limit])
+    limit = params[:limit] == '-1' ? @subdomains.count : params[:limit]
+    @subdomains = @subdomains.page(params[:page]).per(limit)
 
     render status: 200, template: 'subdomains/index'
   end

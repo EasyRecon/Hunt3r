@@ -9,7 +9,8 @@ class UrlsController < ApplicationController
               Url.where(subdomain_id: params[:subdomain_id])
             end
 
-    @urls = @urls.page(params[:page]).per(params[:limit])
+    limit = params[:limit] == '-1' ? @urls.count : params[:limit]
+    @urls = @urls.page(params[:page]).per(limit)
 
     render status: 200, template: 'urls/index'
   end
