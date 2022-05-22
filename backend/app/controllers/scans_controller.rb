@@ -234,7 +234,8 @@ class ScansController < ApplicationController
 
   def launch_scan(cmd, scan, server, base_domain)
     if scan.type_scan == 'recon'
-      Domain.find_by(name: scan.domain).nil? ? Domain.create(name: scan.domain) : domain.update(updated_at: Time.now)
+      domain = Domain.find_by(name: scan.domain)
+      domain.nil? ? Domain.create(name: scan.domain) : domain.update(updated_at: Time.now)
     end
 
     Scope.find_by(scope: base_domain)&.update(last_scan: Time.now) unless scan.type_scan == 'nuclei'
