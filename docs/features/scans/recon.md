@@ -21,7 +21,7 @@ The following specific tools are used during a recon scan :
   - [Dehashed](https://dehashed.com/) : Queries the Dehashed API to retrieve known leaks associated with the domain
       - A filtering step is performed to save only the records that contain a password
   - [Amass](https://github.com/OWASP/Amass) : Is not presented anymore, well used it is simply the best or moreover it is able to do a lot of things
-    - It is possible to launch it in active mode with the generation of permutations, it also performs DNS resolution and wildcard cleaning
+    - It is possible to launch it in active mode with the generation of permutations (with subdomains list from [Six2dez](https://gist.github.com/six2dez/ffc2b14d283e8f8eff6ac83e20a3c4b4/raw)), it also performs DNS resolution and wildcard cleaning
   - [Whoxy](https://www.whoxy.com/) : Allows you to perform reverse whois on the target domain, thus recovering all domains associated with the registrant and the company
   - [C99](https://api.c99.nl/) : C99 is a good source of data, before relaunching Amass on each target retrieved via Whoxy we check if there are at least 3 subdomains to avoid launching Amass for nothing and waste time / use API keys
   - [GAU](https://github.com/lc/gau) : Fetch known URLs from AlienVault's Open Threat Exchange, the Wayback Machine, and Common Crawl.
