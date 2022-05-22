@@ -8,8 +8,8 @@ export class SubdomainsService  {
   }
 
 
-  getSubdomain(page:number,limit:number,domain:string='',url:string='',technolgy:string=''): Observable<SubdomainData> {
-    return this.httpService.get<SubdomainData>('/subdomains?page='+page+'&limit='+limit+'&domain='+domain+'&subdomain='+url+'&technology='+technolgy)
+  getSubdomain(page:number,limit:number,domain:string='',subdomain:string='',technolgy:string='',status_code:string=''): Observable<SubdomainData> {
+    return this.httpService.get<SubdomainData>('/subdomains?page='+page+'&limit='+limit+'&domain='+domain+'&subdomain='+subdomain+'&technology='+technolgy+'&status_code='+status_code)
   }
 
   getScreenshot(id:number):Observable<Blob> {
