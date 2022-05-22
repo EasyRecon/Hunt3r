@@ -139,6 +139,9 @@ export class ProgramsComponent  {
     this.scopeModal.close()
   }
   getProgram(search:any='',platform:'all'|'yeswehack'|'intigriti'|'hackerone'='all'){
+    this.listeProgramIntigriti=<any>[]
+    this.listeProgramYeswehack=<any>[]
+    this.listeProgramHackerone=<any>[]
     if(platform=='all'){
       this.getProgramFromPlatform(search, ['yeswehack','intigriti','hackerone'])
     } else {

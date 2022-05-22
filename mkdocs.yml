@@ -33,6 +33,11 @@ markdown_extensions:
   - def_list
   - pymdownx.tasklist:
       custom_checkbox: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 nav:
   - 'index.md'
   - Getting Started:
@@ -42,4 +47,10 @@ nav:
       - 'features/index.md'
       - 'features/meshs.md'
       - 'features/api_key.md'
+      - BugBounty Platforms:
+          - 'features/bounty_platforms/scopes.md'
+          - 'features/bounty_platforms/invoices.md'
+          - 'features/bounty_platforms/statistics.md'
+      - Scans:
+        - 'features/scans/recon.md'
   - 'faq.md'
