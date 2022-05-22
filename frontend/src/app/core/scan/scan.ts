@@ -14,6 +14,7 @@ export interface Scan {
     gau:boolean
     custom_template:string[]
     state:string
+    cost:string
 }
 
 

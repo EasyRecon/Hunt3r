@@ -55,6 +55,15 @@ hr { display: block;
         
     }
 }
+.searchButton {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+.searchButton button {
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
 .page{
     text-align: end;
     padding:10px

@@ -6,7 +6,8 @@ class DomainsController < ApplicationController
     @domains = Domain.filtered(query_params).all
     @domains = [] if @domains.nil?
 
-    @domains = @domains.page(params[:page]).per(params[:limit])
+    limit = params[:limit] == '-1' ? @domains.count : params[:limit]
+    @domains = @domains.page(params[:page]).per(limit)
 
     render status: 200, template: 'domains/index'
   end
