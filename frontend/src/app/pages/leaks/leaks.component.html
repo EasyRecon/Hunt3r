@@ -17,9 +17,23 @@
       <nb-card-body class="example-items-col">
         <h2>Leaks data</h2>
         <br>
-        <input nbInput type="text" #searchText>
-        <button type="button" class="col" (click)="getLeaks(searchText.value)"  nbButton status="success"><nb-icon icon="search-outline"></nb-icon></button>
-        <br>
+        <nb-card >
+          <nb-card-body>
+            <div class="row">
+              <h6>Filter options</h6>
+                <div class="form-group col">
+                  <label for="inputEmail1" class="label col-sm-6 col-form-label">Search by domain</label>
+                  <div class="col-sm-9">
+                    <input nbInput type="text" #searchText>
+                  </div>
+                </div>
+              </div>
+              <div class="searchButton">
+                <button type="button"  nbButton status="success" (click)="getLeaks(searchText.value)" ><nb-icon icon="search-outline" ></nb-icon></button>
+              </div>
+          </nb-card-body>
+        </nb-card>
+        
         <div class="page">
           page {{page}} of {{total_pages}} pages
         </div>
