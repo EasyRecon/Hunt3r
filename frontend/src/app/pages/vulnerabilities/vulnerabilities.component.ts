@@ -19,6 +19,7 @@ export class VulnerabilitiesComponent implements OnInit {
   limit=10
   page=1
   total_pages=1
+  criticity=''
   
 
   constructor(private vulnerabilitiesService : VulnerabilitiesService,private messageService: MessageService) {
@@ -28,7 +29,7 @@ export class VulnerabilitiesComponent implements OnInit {
   }
   getVulnerabilities() {
     this.loading=true
-    this.vulnerabilitiesService.getVulnerabilities(this.limit,this.page).subscribe((result)=> {
+    this.vulnerabilitiesService.getVulnerabilities(this.limit,this.page,this.criticity).subscribe((result)=> {
       this.loading=false
       this.vulnerabilitiesList=result.data
       this.total_pages=result.total_pages
@@ -53,6 +54,9 @@ export class VulnerabilitiesComponent implements OnInit {
   ngOnInit(): void {
 
    
+  }
+  changeCriticity(event:any){
+    this.criticity=event
   }
   changeLimit(event:any){
     this.limit=event
