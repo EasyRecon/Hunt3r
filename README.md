@@ -45,3 +45,9 @@ Once the Docker environment is up, you can access the application through the We
 ![](docs/assets/images/meshs_management.png) | ![](docs/assets/images/domains.png)
 | Scans | Vulnerabilities |
 ![](docs/assets/images/scans.png) | ![](docs/assets/images/vulnerabilities.png)
+| Programs | Scopes |
+![](docs/assets/images/programs.png) | ![](docs/assets/images/scopes.png)
+| Subdomains | Leaks |
+![](docs/assets/images/subdomains.png) | ![](docs/assets/images/leaks.png)
+| Engines | Launch scan |
+![](docs/assets/images/engines.png) | ![](docs/assets/images/create_scan.png)
