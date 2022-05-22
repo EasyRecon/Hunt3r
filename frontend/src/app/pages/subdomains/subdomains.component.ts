@@ -70,8 +70,7 @@ export class SubdomainsComponent implements OnInit {
   closeModal(){
     this.screenModaldialog.close()
   }
-  searchSubomainInit(technologieSearch:string,subdomainSearch:string,statusCodeSearch:string,domainSearch:string){
-    this.searchDomain=domainSearch
+  searchSubomainInit(technologieSearch:string,subdomainSearch:string,statusCodeSearch:string){
     this.searchTechno=technologieSearch
     this.searchSubdomain=subdomainSearch
     this.searchStatusCode=statusCodeSearch
