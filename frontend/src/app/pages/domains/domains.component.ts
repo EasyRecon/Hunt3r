@@ -37,8 +37,7 @@ export class DomainsComponent implements OnInit {
   constructor(private router:Router,
               private dialogService: NbDialogService,
               private domainService:DomainsService,
-              private messageService: MessageService,
-              private httpClient: HttpClient) {
+              private messageService: MessageService) {
   this.getDomains()
   }
 
@@ -60,7 +59,7 @@ export class DomainsComponent implements OnInit {
   }
   changeLimit(event:any){
     this.limit=event
-    if(event=='')this.page=1
+    if(event=='-1')this.page=1
     this.getDomains()
   }
   goToPage(page:number){

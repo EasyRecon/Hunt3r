@@ -106,7 +106,11 @@ export class BugbountyStatComponent implements OnInit {
   computeStat(platform:'YWH'|'INTI') {
     this[`stat${platform}`] = this.globalStat(this[`scope${platform}`],platform)
     this[`loading${platform}Global`]=false
-    this[`options${platform}Pie`] = this.pieCriticity(this[`stat${platform}`].rapport_severity.L,this[`stat${platform}`].rapport_severity.M,this[`stat${platform}`].rapport_severity.H,this[`stat${platform}`].rapport_severity.C)
+    if(platform=='YWH'){
+      this[`options${platform}Pie`] = this.pieCriticity(this[`stat${platform}`].rapport_severity.L,this[`stat${platform}`].rapport_severity.M,this[`stat${platform}`].rapport_severity.H,this[`stat${platform}`].rapport_severity.C)
+    } else {
+      this[`options${platform}Pie`] = this.pieCriticity(this[`stat${platform}`].rapport_severity.L,this[`stat${platform}`].rapport_severity.M,this[`stat${platform}`].rapport_severity.H,this[`stat${platform}`].rapport_severity.C,this[`stat${platform}`].rapport_severity.E)
+    }
     let data = this.initBarreData(this[`stat${platform}`])
     this[`options${platform}Barre`] = this.chartService.barreGraph(data.report_by_month,data.label,'Number of rapport','Number of report')
     let dataTwo   = this.initPie(this[`stat${platform}`])
@@ -221,13 +225,25 @@ export class BugbountyStatComponent implements OnInit {
   pieRepport(data:any[]){
     return this.chartService.pieChart(data,'Report by status')
   }
-  pieCriticity(low:number,medium:number,high:number,critic:number){
-    return this.chartService.pieChart([
-                    { value: low, name: "Low" },
-                    { value: medium, name: "Medium" },
-                    { value: high, name: "High" },
-                    { value: critic, name: "Critical" }
-                  ],
-                'Report by criticity')
-  }
+  pieCriticity(low:number,medium:number,high:number,critic:number,exceptional:any=''){
+    if(exceptional==''){
+        return this.chartService.pieChart([
+          { value: low, name: "Low" },
+          { value: medium, name: "Medium" },
+          { value: high, name: "High" },
+          { value: critic, name: "Critical" }
+        ],
+      'Report by criticity')
+    } else {
+          return this.chartService.pieChart([
+            { value: low, name: "Low" },
+            { value: medium, name: "Medium" },
+            { value: high, name: "High" },
+            { value: critic, name: "Critical" },
+            { value: exceptional, name: "Exceptional" }
+          ],
+        'Report by criticity')
+    }
+    }
+    
 }
