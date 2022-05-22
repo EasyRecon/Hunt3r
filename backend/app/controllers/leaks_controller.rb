@@ -10,7 +10,7 @@ class LeaksController < ApplicationController
                Leak.all
              end
 
-    @leaks = @leaks.page(params[:page]).per(params[:limit])
+    @leaks = @leaks.page(params[:page]).per(params[:limit]) unless @leaks.empty?
 
     render status: 200, template: 'leaks/index'
   end
