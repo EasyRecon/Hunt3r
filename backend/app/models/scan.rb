@@ -29,4 +29,8 @@ class Scan < ApplicationRecord
     }
     multiplicator[instance_type]
   end
+
+  def instance_type_valid?
+    %w[DEV1-S DEV1-M DEV1-M DEV1-XL].include?(instance_type)
+  end
 end
