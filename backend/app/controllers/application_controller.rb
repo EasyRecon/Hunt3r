@@ -26,11 +26,9 @@ class ApplicationController < ActionController::API
   end
 
   def yaml?(value)
-    begin
-      YAML.load(Base64.decode64(value))
-      true
-    rescue Psych::SyntaxError
-      false
-    end
+    YAML.load(Base64.decode64(value))
+    true
+  rescue Psych::SyntaxError
+    false
   end
 end
