@@ -83,7 +83,7 @@ def provider_is_valid?(providers_params)
   valid = false
 
   if providers_params[:name] == 'scaleway'
-    path = File.join(`echo $HOME`.strip, '/.config/scw/config.yaml')
+    path = '/root/.config/scw/config.yaml'
     dir = File.dirname(path)
     FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
 
@@ -108,7 +108,7 @@ end
 def ssh_key_valid?(provider)
   return false unless provider.infos['ssh_key']
 
-  path = File.join(`echo $HOME`.strip, "/.ssh/#{provider.name}_id_rsa")
+  path = "/root/.ssh/#{provider.name}_id_rsa"
   dir = File.dirname(path)
   FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
 
