@@ -71,7 +71,7 @@
         </tr>
         <tr *ngFor="let item of this.vulnerabilitiesList">
           <td>{{ item.name }}</td>
-          <td><nb-badge class="badgeSub" text="{{item.severity}}" status="{{item.severity=='critique'? 'danger' : item.severity=='high'? 'warning':item.severity=='medium'? 'primary':item.severity=='low'? 'info':'basic' }}" ></nb-badge></td>
+          <td><nb-badge class="badgeSub" text="{{item.severity}}" status="{{item.severity=='critical'? 'danger' : item.severity=='high'? 'warning':item.severity=='medium'? 'primary':item.severity=='low'? 'info':'basic' }}" ></nb-badge></td>
           <td>{{ item.matched_at }}</td>
           <td>{{ item.created_at }}</td>
           <td>
