@@ -210,7 +210,7 @@ class ScansController < ApplicationController
 
     # Force default value to DEV1-S
     scan.update(instance_type: 'DEV1-S') unless scan[:instance_type]
-    cmd_output = launch_scaleway_server(scan.instance_type)
+    cmd_output = launch_scaleway_server(scan)
 
     begin
       cmd_output_json = JSON.parse(cmd_output)
@@ -292,7 +292,9 @@ class ScansController < ApplicationController
     (0...12).map { rand(97..122).chr }.join
   end
 
-  def launch_scaleway_server(instance_type)
-    `scw instance server create type=#{instance_type} image=ubuntu_jammy name=scw-hunt3r-#{random_name} cloud-init=@#{cloud_init_file} -o json`.strip
+  def launch_scaleway_server(scan)
+    return unless scan.instance_type_valid?
+
+    `scw instance server create type=#{scan.instance_type} image=ubuntu_jammy name=scw-hunt3r-#{random_name} cloud-init=@#{cloud_init_file} -o json`.strip
   end
 end
