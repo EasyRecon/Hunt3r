@@ -2,10 +2,7 @@
 
 Hunt3r allows you to perform recognition scans trying to get the best quality results possible.
 
-It will first be necessary to create an engine with the scan type set to 'recon'.  
-The use of engines allows to keep predefined parameters and to simplify the launching of scans on several targets with the same parameters.
-
-![](../../assets/images/engines.png)
+It will first be necessary to create an [engine](../engines.md) with the scan type set to 'recon'.
 
 You just have to launch a scan, either directly via the scope of a program or from the 'Scan' tab, at this moment you just have to select the engine configured previously, you can also indicate patterns of exclusions for the subdomains that you do not want scanned / reassembled in your instance Hunt3r
 

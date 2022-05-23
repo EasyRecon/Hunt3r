@@ -15,8 +15,8 @@ from [Jhaddix](https://twitter.com/Jhaddix) explains perfectly why you should bu
 So before using Hunt3r ask yourself if the tool fits you. In our case the tool is mainly developed to scan a lot 
 of targets in parallel with speed by optimizing the results and the time spent.
 
-If your goal is to select a target and stay focused on it for a while, to have a large amount of data and a high 
-quality, we recommend [ReconFTW](https://github.com/six2dez/reconftw).
+If your goal is to select a target and stay focused on it for a while, to have a large high quality amount of data, 
+we recommend [ReconFTW](https://github.com/six2dez/reconftw).
 
 ## Alternatives
 
