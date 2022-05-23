@@ -17,9 +17,32 @@
       <nb-card-body class="example-items-col">
         <h2>Vulnerabilities</h2>
        <br>
-       <div class="page">
-        page {{page}} of {{total_pages}} pages
-      </div>
+       <nb-card >
+        <nb-card-body>
+          <div class="row">
+            <h6>Filter options</h6>
+              <div class="form-group col">
+                <label for="inputEmail1" class="label col-sm-6 col-form-label">Criticity</label>
+                <div class="col-sm-9">
+                  <nb-select placeholder="Select limit" [(selected)]="this.criticity" (selectedChange)="changeCriticity($event)">
+                    <nb-option value="">All</nb-option>
+                    <nb-option value="info">info</nb-option>
+                    <nb-option value="low">low</nb-option>
+                    <nb-option value="medium">medium</nb-option>
+                    <nb-option value="high">high</nb-option>
+                    <nb-option value="critical">critical</nb-option>
+                    <nb-option value="unknown">unknown</nb-option>
+                  </nb-select>
+                </div>
+              </div>
+            </div>
+            <div class="searchButton">
+              <button type="button"  nbButton status="success" (click)="getVulnerabilities()"><nb-icon icon="search-outline" ></nb-icon></button>
+            </div>
+        </nb-card-body>
+      </nb-card>
+      <br>
+
       <div class="pagination col-md-4 offset-md-8">
         <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
           <nb-option value="10">10</nb-option>
@@ -33,6 +56,9 @@
         <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
           <nb-icon icon="arrow-right-outline"></nb-icon>
         </button>
+        <div class="page">
+          page {{page}} of {{total_pages}} pages
+        </div>
       </div>
 
        <table >
@@ -45,7 +71,7 @@
         </tr>
         <tr *ngFor="let item of this.vulnerabilitiesList">
           <td>{{ item.name }}</td>
-          <td><nb-badge class="badgeSub" text="{{item.severity}}" status="{{item.severity=='critique'? 'danger' : item.severity=='high'? 'warning':item.severity=='medium'? 'primary':item.severity=='low'? 'info':'basic' }}" ></nb-badge></td>
+          <td><nb-badge class="badgeSub" text="{{item.severity}}" status="{{item.severity=='critical'? 'danger' : item.severity=='high'? 'warning':item.severity=='medium'? 'primary':item.severity=='low'? 'info':'basic' }}" ></nb-badge></td>
           <td>{{ item.matched_at }}</td>
           <td>{{ item.created_at }}</td>
           <td>
@@ -73,10 +99,11 @@
         <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
           <nb-icon icon="arrow-right-outline"></nb-icon>
         </button>
+        <div class="page">
+          page {{page}} of {{total_pages}} pages
+        </div>
       </div>
-      <div class="page">
-        page {{page}} of {{total_pages}} pages
-      </div>
+
 
       </nb-card-body>
     </nb-card>

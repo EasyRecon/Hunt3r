@@ -233,9 +233,12 @@ class ScansController < ApplicationController
   end
 
   def launch_scan(cmd, scan, server, base_domain)
-    Domain.create(name: scan.domain) if scan.type_scan == 'recon' && Domain.find_by(name: scan.domain).nil?
-    Scope.find_by(scope: base_domain)&.update(last_scan: Time.now) unless scan.type_scan == 'nuclei'
+    if scan.type_scan == 'recon'
+      domain = Domain.find_by(name: scan.domain)
+      domain.nil? ? Domain.create(name: scan.domain) : domain.update(updated_at: Time.now)
+    end
 
+    Scope.find_by(scope: base_domain)&.update(last_scan: Time.now) unless scan.type_scan == 'nuclei'
     Thread.start do
       # Sleep until the server starts and install the necessary tools
       sleep(360)

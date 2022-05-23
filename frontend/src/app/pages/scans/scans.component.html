@@ -27,6 +27,7 @@
                 <th>Scan type</th>
                 <th>Model of server</th>
                 <th>Cloud provider</th>
+                <th>Cost</th>
                 <th>State</th>
               </tr>
               <tr *ngFor="let item of this.scans">
@@ -35,6 +36,7 @@
                 <td>{{ item.type_scan }}</td>
                 <td>{{ item.instance_type}}</td>
                 <td>{{ item.provider}}</td>
+                <td>{{ item.cost}}</td>
                 <td> <nb-badge class="badgeSub" text="{{ item.state }}" status="{{ item.state!=null?item.state.toLowerCase()=='stopped' ? 'danger' : 'success':'' }}"></nb-badge></td>
               </tr>
              

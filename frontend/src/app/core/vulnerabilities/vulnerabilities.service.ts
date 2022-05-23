@@ -11,8 +11,10 @@ export class VulnerabilitiesService  {
   }
 
 
-  getVulnerabilities(limit:number,page:number) {
-    return this.httpService.get<VulnerabilitiesResponse>('/vulnerabilities?limit='+limit+'&page='+page)
+  getVulnerabilities(limit:number,page:number,criticity:string) {
+    let critParam =''
+    if(criticity!='') critParam='&severity='+criticity
+    return this.httpService.get<VulnerabilitiesResponse>('/vulnerabilities?limit='+limit+'&page='+page+critParam)
   }
   
   deleteVulnerabilities(id:number): Observable<VulnerabilitiesDeleteResponse> {

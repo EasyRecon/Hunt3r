@@ -39,35 +39,33 @@
                       <input class="col" nbInput type="text" #statusCodeSearch>
                     </div>
                   </div>
-                  <div class="form-group col">
-                    <label for="inputEmail1" class="label col-sm-6 col-form-label">Domain</label>
-                    <div class="col-sm-9">
-                      <input class="col" nbInput type="text" #domainSearchInput>
-                    </div>
-                  </div>
                 </div>
                 <div class="searchButton">
-                  <button type="button"  nbButton status="success" (click)="searchSubomainInit(technologieSearch.value,subdomainSearch.value,statusCodeSearch.value,domainSearchInput.value)"><nb-icon icon="search-outline" ></nb-icon></button>
+                  <button type="button"  nbButton status="success" (click)="searchSubomainInit(technologieSearch.value,subdomainSearch.value,statusCodeSearch.value)"><nb-icon icon="search-outline" ></nb-icon></button>
                 </div>
             </nb-card-body>
           </nb-card>
-          <div class="page">
-            page {{page}} of {{total_pages}} pages
-          </div>
-          <div class="pagination col-md-4 offset-md-8">
-            <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
-              <nb-option value="10">10</nb-option>
-              <nb-option value="50">50</nb-option>
-              <nb-option value="100">100</nb-option>
-              <nb-option value="-1">All</nb-option>
-            </nb-select>
-            <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
-              <nb-icon icon="arrow-left-outline"></nb-icon>
-            </button>
-            <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
-              <nb-icon icon="arrow-right-outline"></nb-icon>
-            </button>
-          </div>
+
+            
+            <div class="pagination col-md-4 offset-md-8">
+              <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
+                <nb-option value="10">10</nb-option>
+                <nb-option value="50">50</nb-option>
+                <nb-option value="100">100</nb-option>
+                <nb-option value="-1">All</nb-option>
+              </nb-select>
+              <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
+                <nb-icon icon="arrow-left-outline"></nb-icon>
+              </button>
+              <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
+                <nb-icon icon="arrow-right-outline"></nb-icon>
+              </button>
+              <div class="page">
+                page {{page}} of {{total_pages}} pages
+              </div>
+            </div>
+ 
+         
 
           <table class="subdomainTable">
             <tr>
@@ -150,11 +148,11 @@
             <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
               <nb-icon icon="arrow-right-outline"></nb-icon>
             </button><br>
-             
+            <div class="page">
+              page {{page}} of {{total_pages}} pages
+            </div>
           </div>
-          <div class="page">
-            page {{page}} of {{total_pages}} pages
-          </div>
+
       </nb-card-body>
 
 

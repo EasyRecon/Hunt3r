@@ -51,9 +51,7 @@
                 </div>
             </nb-card-body>
           </nb-card>
-          <div class="page">
-            page {{page}} of {{total_pages}} pages
-          </div>
+
           <div class="pagination col-md-4 offset-md-8">
             <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
               <nb-option value="10">10</nb-option>
@@ -67,6 +65,9 @@
             <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
               <nb-icon icon="arrow-right-outline"></nb-icon>
             </button>
+            <div class="page">
+              page {{page}} of {{total_pages}} pages
+            </div>
           </div>
           <table >
             <tr>
@@ -104,10 +105,11 @@
             <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
               <nb-icon icon="arrow-right-outline"></nb-icon>
             </button>
+            <div class="page">
+              page {{page}} of {{total_pages}} pages
+            </div>
           </div>
-          <div class="page">
-            page {{page}} of {{total_pages}} pages
-          </div>
+
       </nb-card-body>
 
       <ng-template #dialogConfirm let-data let-ref="dialogRef">
