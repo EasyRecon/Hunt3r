@@ -54,4 +54,5 @@ nav:
           - 'features/bounty_platforms/scopes.md'
           - 'features/bounty_platforms/invoices.md'
           - 'features/bounty_platforms/statistics.md'
+  - 'security.md'
   - 'faq.md'
