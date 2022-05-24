@@ -42,6 +42,7 @@ export class ProgramsComponent  {
   currentScope=0
   engineByDomain:any[]=[]
   regexList=Array()
+  scrollY:number=0
   constructor(private messageService: MessageService,
               private programsService:ProgramsService,
               private scopeService:ScopeService,
@@ -107,6 +108,7 @@ export class ProgramsComponent  {
     })
   }
   getScope(id:number,search:string=''){
+    this.scrollY=window.pageYOffset
     this.currentScope=id
     this.loading=true
     this.scopeService.getScope(id,search).subscribe( (result)=> {
@@ -118,6 +120,7 @@ export class ProgramsComponent  {
     })
     //this.scopeModal = this.dialogService.open(dialog, { context: '' });
     this.flipped=true
+    window.scroll(0, 0);
   }
   openModal(dialog: TemplateRef<any>,domains:string[]){
    // domains=domains.map( domain => this.cleanScope(domain))
@@ -164,6 +167,7 @@ export class ProgramsComponent  {
     })
   }
   back(){
+    window.scroll(0, this.scrollY);
     this.flipped=false
   }
   addRegex(name:string){
