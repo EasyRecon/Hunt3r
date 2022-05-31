@@ -4,7 +4,13 @@ class Scan < ApplicationRecord
   validates :domain, presence: true
 
   def cost
-    running_time = updated_at.to_i - created_at.to_i
+    last_update = if state == 'Finished' || state == 'Stopped'
+                    updated_at.to_i
+                  else
+                    Time.now.to_i
+                  end
+
+    running_time = last_update - created_at.to_i
 
     return 0 if running_time < 3600
 
