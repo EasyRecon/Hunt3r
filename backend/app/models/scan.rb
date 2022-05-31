@@ -4,7 +4,13 @@ class Scan < ApplicationRecord
   validates :domain, presence: true
 
   def cost
-    running_time = updated_at.to_i - created_at.to_i
+    last_update = if state == 'Finished' || state == 'Stopped'
+                    updated_at.to_i
+                  else
+                    Time.now.to_i
+                  end
+
+    running_time = last_update - created_at.to_i
 
     return 0 if running_time < 3600
 
@@ -25,7 +31,9 @@ class Scan < ApplicationRecord
   def concurrency
     multiplicator = {
       'DEV1-S' => 1,
-      'DEV1-M' => 2
+      'DEV1-M' => 2,
+      'DEV1-L' => 3,
+      'DEV1-XL' => 4
     }
     multiplicator[instance_type]
   end
