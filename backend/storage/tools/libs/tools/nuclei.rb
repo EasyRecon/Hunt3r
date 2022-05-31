@@ -12,7 +12,7 @@ class Nuclei
 
     cmd = "nuclei -l #{OPTIONS[:output]}/#{file}.txt -silent -t #{templates_path}"
     cmd += " -severity #{OPTIONS[:nuclei_severity]}" if OPTIONS[:nuclei_severity]
-    cmd += " -config #{config_path}"
+    cmd += " -config /tmp/tools/nuclei/config.yaml"
 
     if OPTIONS[:interactsh_url]
       cmd += " -iserver #{OPTIONS[:interactsh_url]}"
@@ -50,10 +50,6 @@ end
 
 def templates_path
   '/tmp/scan/nuclei-templates'
-end
-
-def config_path
-  '/tmp/tools/nuclei/config.yaml'
 end
 
 def copy_custom_templates
