@@ -6,7 +6,7 @@
 <p align="center">  
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-_red.svg"></a>  
     <a href="https://github.com/EasyRecon/Hunt3r/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a>  
-    <a href="https://github.com/EasyRecon/Hunt3r"><img src="https://img.shields.io/badge/release-v1.0.0-informational"></a>
+    <a href="https://github.com/EasyRecon/Hunt3r"><img src="https://img.shields.io/badge/release-v1.1.1-informational"></a>
     <a href="https://github.com/easyrecon/hunt3r/issues" target="_blank"><img src="https://img.shields.io/github/issues/easyrecon/hunt3r?color=blue" /></a>
 </p>
 
