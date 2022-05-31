@@ -31,7 +31,9 @@ class Scan < ApplicationRecord
   def concurrency
     multiplicator = {
       'DEV1-S' => 1,
-      'DEV1-M' => 2
+      'DEV1-M' => 2,
+      'DEV1-L' => 3,
+      'DEV1-XL' => 4
     }
     multiplicator[instance_type]
   end
