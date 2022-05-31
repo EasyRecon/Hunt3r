@@ -15,6 +15,7 @@ import {LeaksComponent } from './leaks/leaks.component';
 import {DomainsComponent } from './domains/domains.component';
 import {SubdomainsComponent } from './subdomains/subdomains.component';
 import {EnginesComponent } from './engines/engines.component';
+import {UrlsComponent } from './urls/urls.component';
 
 const routes: Routes = [{
   path: '',
@@ -44,6 +45,10 @@ const routes: Routes = [{
     {
       path: 'subdomains/:domain',
       component: SubdomainsComponent,
+    },
+    {
+      path: 'urls/:idSub',
+      component: UrlsComponent,
     },
     {
       path: 'servers',

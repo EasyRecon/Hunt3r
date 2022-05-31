@@ -108,6 +108,7 @@ export class ProgramsComponent  {
     })
   }
   getScope(id:number,search:string=''){
+    window.scroll(0, 0);
     this.scrollY=window.pageYOffset
     this.currentScope=id
     this.loading=true
@@ -120,7 +121,7 @@ export class ProgramsComponent  {
     })
     //this.scopeModal = this.dialogService.open(dialog, { context: '' });
     this.flipped=true
-    window.scroll(0, 0);
+    
   }
   openModal(dialog: TemplateRef<any>,domains:string[]){
    // domains=domains.map( domain => this.cleanScope(domain))

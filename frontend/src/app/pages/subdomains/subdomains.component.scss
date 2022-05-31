@@ -159,9 +159,9 @@ div.badge {
   }
   .badge .name {
     background: #555555;
-    height: 35px;
-    padding: 6px 5px;
-    font-size: 14px;
+    //height: 35px;
+    //padding: 6px 5px;
+    font-size: 13px;
   }
   .badge .status.green {
     background: #44cc11;
@@ -182,6 +182,6 @@ div.badge {
       background: var( --bs-gray-300);
   }
   .ImageTech span img {
-      height: 29px;
-      width: 29px;
+      height: 15px;
+      width: 15px;
   }
