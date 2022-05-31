@@ -30,6 +30,16 @@ class Httpx
           url.sub!(':443', '')
           url.sub!(':80', '')
 
+          technologies = []
+
+          begin
+            wappalyzer = JSON.load(`node /root/Tools/wappalyzer/src/drivers/npm/cli.js #{url}`)
+            wappalyzer['technologies'].each do |technology|
+              technologies << technology['name']
+            end
+          rescue
+          end
+
           subdomain = {
             url: url,
             infos: {
@@ -37,7 +47,7 @@ class Httpx
               status_code: result_json['status-code'],
               content_length: result_json['content-length'],
               location: result_json['location'],
-              technologies: result_json['technologies'],
+              technologies: technologies,
               ip: infos['ip'],
               cname: result_json.dig('cnames', 0),
               cdn: result_json['cdn-name'],
