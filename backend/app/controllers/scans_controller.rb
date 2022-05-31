@@ -3,7 +3,7 @@ class ScansController < ApplicationController
 
   # GET /scans
   def index
-    @scans = Scan.all
+    @scans = Scan.all.order(:id)
 
     render status: 200, template: 'scans/index'
   end
@@ -142,6 +142,8 @@ class ScansController < ApplicationController
   end
 
   def build_nuclei_scan_cmd(scan, scan_cmd)
+    scan_cmd[:errors] = 'missing_nuclei' unless File.exist?(File.join(scan_config_files, 'nuclei/config.yaml'))
+
     scan_cmd[:cmd] += " --nuclei #{scan.nuclei}"
 
     unless (scan.custom_templates && !scan.custom_templates.empty?) || scan.all_templates

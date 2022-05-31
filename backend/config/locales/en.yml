@@ -138,6 +138,7 @@ en:
         dehashed_credentials: "A scan with leak search is desired but the Dehashed information has not been entered"
         parse_error: "JSON Parse Error. Unable to start scan, check provider settings"
         missing_amass: "Please add your Amass configuration file first"
+        missing_nuclei: "Please add your Nuclei configuration file first"
         missing_webhook: "You have selected notifications but the slack webhook is not filled in"
         missing_intel: "The recon in intel mode is selected but C99 and/or Whoxy information are not filled in"
         missing_meshs: "The meshes are selected but none are recorded"

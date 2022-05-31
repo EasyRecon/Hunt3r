@@ -104,6 +104,7 @@ addRegex(){
           this.loadingModal=false
           this.closeModal()
           this.messageService.showToast(result.message,'success')
+          this.getScan()
         },(err)=>{
           this.loadingModal=false
           this.messageService.showToast(err.message,'danger')

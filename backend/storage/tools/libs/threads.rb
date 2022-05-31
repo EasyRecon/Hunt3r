@@ -1,5 +1,5 @@
 class ThreadPool
-  def initialize(size: 15 * OPTIONS[:concurrency])
+  def initialize(size: 8 * OPTIONS[:concurrency])
     @size = size
     @tasks = Queue.new
     @pool = []
