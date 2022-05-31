@@ -3,7 +3,7 @@ class ScansController < ApplicationController
 
   # GET /scans
   def index
-    @scans = Scan.all
+    @scans = Scan.all.order(:id)
 
     render status: 200, template: 'scans/index'
   end
