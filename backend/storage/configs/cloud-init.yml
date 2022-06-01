@@ -59,6 +59,8 @@ runcmd:
   - rm google-chrome-stable_current_amd64.deb
   # Typhoeus
   - gem install typhoeus
+  # Concurrent Ruby
+  - gem install concurrent-ruby
   # Wappalyzer
   - curl -sL https://deb.nodesource.com/setup_14.x | bash -
   - apt -y install nodejs

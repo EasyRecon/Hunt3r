@@ -3,12 +3,12 @@ require 'optparse'
 require 'typhoeus'
 require 'json'
 require 'base64'
+require 'concurrent'
 
 require_relative 'libs/hunt3r_dashboard'
 require_relative 'libs/slack'
 require_relative 'libs/recon_scan'
 require_relative 'libs/nuclei_scan'
-require_relative 'libs/threads'
 
 require_relative 'libs/tools/amass'
 require_relative 'libs/tools/c99'

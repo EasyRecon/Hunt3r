@@ -5,12 +5,11 @@ class Httpx
     file = File.read("#{OPTIONS[:output]}/naabu.json")
     data = JSON.parse(file)
 
-    thread_pool = ThreadPool.new
-    thread_pool.start
+    pool = Concurrent::FixedThreadPool.new(8 * OPTIONS[:concurrency])
 
     urls = []
     data.each do |host, infos|
-      thread_pool.schedule do
+      pool.post do
         httpx_ports = infos['ports'].join(',')
         httpx = `echo #{host} | httpx -silent -sc -cl -location -title -td -cname -cdn -ports #{httpx_ports} -json`
         next if httpx.empty?
@@ -27,7 +26,8 @@ class Httpx
           next if url.start_with?('http://') && url.match?(%r{https://(www\.)?#{host}(:443)?/?})
           next if url.match?(%r{https://.*:80})
 
-          url.sub!(':443', '')
+          # https://github.com/projectdiscovery/httpx/issues/648
+          url.sub!(':443', '') unless url.start_with?('http://')
           url.sub!(':80', '')
 
           technologies = []
@@ -62,7 +62,8 @@ class Httpx
       end
     end
 
-    sleep(5) until thread_pool.inactive?
+    pool.shutdown
+    pool.wait_for_termination
 
     File.open("#{OPTIONS[:output]}/httpx.txt", 'w+') do |f|
       f.puts(urls)
