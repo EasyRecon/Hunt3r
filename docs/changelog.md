@@ -1,6 +1,16 @@
 # Changelog
 
-## Version 1.1
+## Version 1.2.0
+
+**Frontend Improvements :**
+
+- Add URLs management
+
+**Scan Improvements :**
+
+- Improve concurrency
+
+## Version 1.1.0
 **Bug Fix :**
 
 - Proxy URL [#205](https://github.com/EasyRecon/Hunt3r/pull/205) to not have `backend.local` when an NDD is not setup
