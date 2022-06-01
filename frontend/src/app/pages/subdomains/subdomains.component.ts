@@ -12,6 +12,7 @@ import {
 } from '@nebular/theme';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common'
+import { Router } from '@angular/router';
 @Component({
   templateUrl: './subdomains.component.html',
   styleUrls: ['./subdomains.component.scss']
@@ -35,6 +36,7 @@ export class SubdomainsComponent implements OnInit {
 
   screenModaldialog:any='';
   constructor(private location: Location,
+              private router:Router,
               private Activatedroute:ActivatedRoute,
               private dialogService: NbDialogService,
               private subdomainService:SubdomainsService,
@@ -61,6 +63,9 @@ export class SubdomainsComponent implements OnInit {
   ngOnInit(): void {
 
 
+  }
+  goToUrls(id:number){
+    this.router.navigate(['pages','urls',id]);
   }
 
   screenModal(url:any){

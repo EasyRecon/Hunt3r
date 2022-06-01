@@ -25,6 +25,7 @@ import {SubdomainsComponent } from './subdomains/subdomains.component';
 import { LazyLoadModule   } from '../shared/lazyLoad/lazyLoadModule';
 import { UseHttpImageSourcePipeModule } from '@this-dot/ng-utils';
 import {EnginesComponent } from './engines/engines.component';
+import {UrlsComponent } from './urls/urls.component';
 
 
 @NgModule({
@@ -76,6 +77,7 @@ import {EnginesComponent } from './engines/engines.component';
     DomainsComponent,
     SubdomainsComponent,
     EnginesComponent,
+    UrlsComponent
     
 
   ],

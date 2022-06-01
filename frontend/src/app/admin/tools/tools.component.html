@@ -55,9 +55,9 @@
    <ng-template #dialogCreateGlobal let-data let-ref="dialogCreateGlobal">
     <nb-card  >
       <nb-card-header>Create tool config</nb-card-header>
-      <nb-card-body>
-        <nb-form-field>
-          <form  (ngSubmit)="this.updateTools($event,data.name)"  [formGroup]="toolsFormGlobal">
+      <nb-card-body style="width:900px">
+        <nb-form-field class="col-md-12">
+          <form  (ngSubmit)="this.updateTools($event,data.name)"  [formGroup]="toolsFormGlobal" class="col-md-12">
             <input class="col" nbInput type="hidden" value="{{data.name}}" formControlName="name" >
             <div class=" modaleBth row">
               <div class="form-group row" *ngIf="data.required.includes('webhook')">

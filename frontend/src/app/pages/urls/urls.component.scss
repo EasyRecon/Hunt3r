@@ -56,15 +56,30 @@ hr { display: block;
     }
 }
 
-textarea {
-    background: url('/assets/img/line.png');
-    background-attachment: local;
-    background-repeat: no-repeat;
-    padding-left: 35px!important;
-    padding-top: 10px;
-    height: 600px;
- //   border-color:#ccc;
+.searchButton {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
 }
-nb-form-field {
-    max-width: none!important;
+.searchButton button {
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+.page{
+    text-align: end;
+    padding:10px
+}
+.pagination{
+    margin-top: 20px;
+}
+
+.backIcon {
+    font-size:30px;
+}
+.badgeSub {
+    position: relative;
+    border-radius: 10px;
+    margin: 2px;
+    font-size: 13px;
+    font-weight: 500;
 }

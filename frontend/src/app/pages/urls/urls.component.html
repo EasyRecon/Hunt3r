@@ -1,0 +1,98 @@
+<nb-layout>
+
+  <nb-layout-header>
+    <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
+  </nb-layout-header>
+
+  <nb-sidebar left tag="left" state="expanded">
+    <nb-menu-services></nb-menu-services>
+  </nb-sidebar>
+
+
+
+
+
+  <nb-layout-column>
+
+
+
+  <nb-card  [nbSpinner]="loading" nbSpinnerStatus="primary">
+    <nb-card-body class="example-items-col">
+      <h2><nb-icon icon="arrow-back-outline" (click)="back()" class="backIcon"></nb-icon>Urls list</h2>
+      <br>
+      <nb-card >
+        <nb-card-body>
+          <div class="row">
+            <h6>Filter options</h6>
+              <div class="form-group col">
+                <label for="inputEmail1" class="label col-sm-6 col-form-label">Search by status code</label>
+                <div class="col-sm-9">
+                  <input nbInput type="text" #StatutsCodeText>
+                </div>
+              </div>
+            </div>
+            <div class="searchButton">
+              <button type="button"  nbButton status="success" (click)="search(StatutsCodeText.value)" ><nb-icon icon="search-outline" ></nb-icon></button>
+            </div>
+        </nb-card-body>
+      </nb-card>
+      
+
+      <div class="pagination col-md-4 offset-md-8">
+        <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
+          <nb-option value="10">10</nb-option>
+          <nb-option value="50">50</nb-option>
+          <nb-option value="100">100</nb-option>
+          <nb-option value="-1">All</nb-option>
+        </nb-select>
+        <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
+          <nb-icon icon="arrow-left-outline"></nb-icon>
+        </button>
+        <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
+          <nb-icon icon="arrow-right-outline"></nb-icon>
+        </button>
+        <div class="page">
+          page {{page}} of {{total_pages}} pages
+        </div>
+      </div>
+
+      <table >
+        <tr>
+          <th>Url</th>
+          <th>Status-Code</th>
+          <th>Content-Length</th>
+        </tr>
+        <tr *ngFor="let item of this.urlList">
+          <td><a href="{{ item.url }}">{{ item.url }}</a></td>
+          <td><div class="badgeSubDiv"> <nb-badge class="badgeSub" text="{{ item.status_code }}" status="{{ item.status_code > 399 ? 'danger' : item.status_code> 299 ? 'warning' : 'success' }}" ></nb-badge></div></td>
+          <td>{{ item.content_length }}</td>
+
+        </tr>
+       
+      </table>
+      <div class="pagination col-md-4 offset-md-8">
+        <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
+          <nb-option value="10">10</nb-option>
+          <nb-option value="50">50</nb-option>
+          <nb-option value="100">100</nb-option>
+          <nb-option value="-1">All</nb-option>
+        </nb-select>
+        <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
+          <nb-icon icon="arrow-left-outline"></nb-icon>
+        </button>
+        <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
+          <nb-icon icon="arrow-right-outline"></nb-icon>
+        </button>
+        <div class="page">
+          page {{page}} of {{total_pages}} pages
+        </div>
+      </div>
+    </nb-card-body>
+  </nb-card>
+
+
+
+      
+  </nb-layout-column>
+
+</nb-layout>
