@@ -197,7 +197,7 @@
                     <button nbButton (click)="closeAddEngineModal()">Cancel</button>
                   </div>
                   <div class="col">
-                    <button type="button" nbButton (click)="data==-1 ?addEngine($event,name.value) : updateEngine($event,name.value,data)" status="success">Create</button>
+                    <button type="button" nbButton (click)="data==-1 ?addEngine($event,name.value) : updateEngine($event,name.value,data)" status="success">{{data==-1 ?"Create": "Update"}}</button>
                   </div>
                 </div>
 
