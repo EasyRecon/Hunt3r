@@ -10,7 +10,21 @@ class Httpx
     urls = []
     data.each do |host, infos|
       pool.post do
-        httpx_ports = infos['ports'].join(',')
+
+        httpx_ports = ''
+        infos['ports'].each do |port|
+          httpx_ports += case port
+                         when 80
+                           "http:#{port}"
+                         when 443
+                           "https:#{port}"
+                         else
+                           port.to_s
+                         end
+
+          httpx_ports += ',' unless infos['ports'].last == port
+        end
+
         httpx = `echo #{host} | httpx -silent -sc -cl -location -title -td -cname -cdn -ports #{httpx_ports} -json`
         next if httpx.empty?
 
@@ -26,8 +40,7 @@ class Httpx
           next if url.start_with?('http://') && url.match?(%r{https://(www\.)?#{host}(:443)?/?})
           next if url.match?(%r{https://.*:80})
 
-          # https://github.com/projectdiscovery/httpx/issues/648
-          url.sub!(':443', '') unless url.start_with?('http://')
+          url.sub!(':443', '')
           url.sub!(':80', '')
 
           technologies = []
