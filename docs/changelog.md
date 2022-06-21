@@ -1,5 +1,17 @@
 # Changelog
 
+## Version 1.3.0
+
+**Scan Improvements :**
+
+- Improve Amass recursive check
+- Improve HTTPX scan
+
+**Backend Improvements :**
+
+- Dependabot fix
+- Reverse scan order
+
 ## Version 1.2.0
 
 **Frontend Improvements :**
