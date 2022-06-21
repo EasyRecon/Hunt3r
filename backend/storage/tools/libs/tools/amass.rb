@@ -1,27 +1,19 @@
 class Amass
-  def self.get_domains
-    prepare_config
-    update_resolvers
+  def self.get_domains(domain = OPTIONS[:domain])
+    if domain == OPTIONS[:domain]
+      prepare_config
+      update_resolvers
+      update_permutation_list
+    end
+
+    random = (0...8).map { rand(65..90).chr }.join
 
     cmd = 'amass enum'
     if OPTIONS[:amass_active]
       cmd += ' -active'
-
-      if OPTIONS[:permutation]
-        update_permutation_list
-        cmd += " -aw #{permutation_path}"
-      end
+      cmd += " -aw #{permutation_path}" if OPTIONS[:permutation]
     end
-    cmd += " -d #{OPTIONS[:domain]} -config #{config_path} -trf #{resolver_path}"
-    cmd += " -o #{OPTIONS[:output]}/amass_domains.txt"
 
-    system(cmd)
-  end
-
-  def self.recursive_check(domain)
-    random = (0...8).map { rand(65..90).chr }.join
-
-    cmd = 'amass enum'
     cmd += " -d #{domain} -config #{config_path} -trf #{resolver_path}"
     cmd += " -o #{OPTIONS[:output]}/amass_#{random}_domains.txt"
 

@@ -4,10 +4,11 @@ class C99
 
     domains = File.open("#{OPTIONS[:output]}/whoxy_domains.txt").read
     domains.each_line do |domain|
+      domain.chomp!
       next if domain == OPTIONS[:domain]
 
       response = Typhoeus::Request.get(
-        "https://api.c99.nl/subdomainfinder?key=#{OPTIONS[:c99_token]}&domain=#{domain.chomp}&json"
+        "https://api.c99.nl/subdomainfinder?key=#{OPTIONS[:c99_token]}&domain=#{domain}&json"
       )
       next unless response&.code == 200
 
@@ -17,7 +18,7 @@ class C99
       # If there are not at least 2 sub-domains we don't care
       next if response_json['subdomains'].size < 3
 
-      Amass.recursive_check(domain.chomp)
+      Amass.get_domains(domain)
     end
   end
 end
