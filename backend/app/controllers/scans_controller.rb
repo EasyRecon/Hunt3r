@@ -113,7 +113,7 @@ class ScansController < ApplicationController
     scan_cmd[:cmd] += ' --permutation true' if scan.permutation
     scan_cmd[:cmd] += ' --gau true' if scan.gau
     scan_cmd[:cmd] += ' --amass-active true' if scan.active_recon
-    scan_cmd[:cmd] += " --excludes #{scan.excludes.join('|')}" unless scan.excludes.nil? || scan.excludes.empty?
+    scan_cmd[:cmd] += " --excludes #{scan.excludes.join(',')}" unless scan.excludes.nil? || scan.excludes.empty?
     scan_cmd
   end
 

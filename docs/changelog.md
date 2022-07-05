@@ -4,6 +4,12 @@
 
 **Scan Improvements :**
 
+- Fix exclusions when multiples regex is used
+
+## Version 1.3.0
+
+**Scan Improvements :**
+
 - Improve Amass recursive check
 - Improve HTTPX scan
 
