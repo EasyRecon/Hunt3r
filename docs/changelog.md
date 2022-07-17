@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 1.4.0
+
+**Scan Improvements :**
+
+- Fix exclusions when multiples regex is used
+- Improve subdomains filtering
+
 ## Version 1.3.0
 
 **Scan Improvements :**

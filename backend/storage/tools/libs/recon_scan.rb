@@ -52,7 +52,7 @@ end
 private
 
 def clean_domains
-  regex_string = OPTIONS[:excludes].split('|')
+  regex_string = OPTIONS[:excludes].split(',')
   regex = []
   regex_string.each do |rs|
     regex << Regexp.new(".*#{rs}.*")
