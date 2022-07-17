@@ -37,11 +37,12 @@ class Httpx
 
           # Allows not to pollute the recon with useless domains
           # Ex http://www.domain.tld 302 to https://www.domain.tld
-          next if url.start_with?('http://') && url.match?(%r{https://(www\.)?#{host}(:443)?/?})
-          next if url.match?(%r{https://.*:80})
+          next if url.start_with?('http://') && result_json['location'].match?(%r{https://(www\.)?#{host}(:443)?/?})
+          next if url.start_with?('https://') && url.end_with?(':80')
+          next if url.start_with?('http://') && url.end_with?(':443')
 
-          url.sub!(':443', '')
-          url.sub!(':80', '')
+          url.sub!(':443', '') if url.end_with?(':443')
+          url.sub!(':80', '') if url.end_with?(':80')
 
           technologies = []
 
