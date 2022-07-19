@@ -203,14 +203,20 @@ class ScansController < ApplicationController
   def launch_server(scan)
     server_infos = {}
 
-    unless scan.provider == 'scaleway'
+    unless scan.provider == 'scaleway' || scan.provider == 'aws'
       server_infos[:error] = 'unknown_provider'
       return server_infos
     end
 
-    # Force default value to DEV1-S
-    scan.update(instance_type: 'DEV1-S') unless scan[:instance_type]
-    cmd_output = launch_scaleway_server(scan)
+    cmd_output = if scan.provider == 'scaleway'
+                   # Force default value to DEV1-S
+                   scan.update(instance_type: 'DEV1-S') unless scan[:instance_type]
+                   launch_scaleway_server(scan)
+                 else
+                   # Force default value to t2.small
+                   scan.update(instance_type: 't2.small') unless scan[:instance_type]
+                   launch_aws_server(scan)
+                 end
 
     begin
       cmd_output_json = JSON.parse(cmd_output)
@@ -297,4 +303,11 @@ class ScansController < ApplicationController
 
     `scw instance server create type=#{scan.instance_type} image=ubuntu_jammy name=scw-hunt3r-#{random_name} cloud-init=@#{cloud_init_file} -o json`.strip
   end
+
+  def launch_aws_server(scan)
+    return unless scan.instance_type_valid?
+
+    `aws ec2 run-instances --image-id ami-0a8e758f5e873d1c1 --count 1 --instance-type #{scan.instance_type} --key-name hunt3r --user-data file://#{cloud_init_file} --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=aws-#{random_name}}]'`
+  end
+
 end
