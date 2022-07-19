@@ -70,6 +70,12 @@ hr { display: block;
     border-top-right-radius: 0px;
     border-bottom-left-radius: 0px;
 }
+.searchButton button:first-child {
+    border-bottom-right-radius: 0px;
+}
+.searchButton button:last-child {
+    border-top-left-radius: 0px;
+}
 
 .page{
     text-align: end;

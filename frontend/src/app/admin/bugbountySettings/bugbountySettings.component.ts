@@ -56,6 +56,7 @@ export class BugbountySettingsComponent implements OnInit {
     this.hackeroneForm = this.fbuilder.group({
         email:'',
         password:'',
+        otp:''
     });
   }
 
@@ -98,8 +99,9 @@ export class BugbountySettingsComponent implements OnInit {
     event.preventDefault()
     let formName:'yeswehackForm'|'hackeroneForm'|'intigritiForm'=`${platform}Form`
     let data = this[formName].value
-    if(data.otp == "" ) delete data.otp
     data.name=platform
+    console.log(data)
+    if(data.otp == "" ) delete data.otp
     let finalData = {"platform": data}
     if(this[platform].email!='' ){
       this.updatePlatform(finalData)

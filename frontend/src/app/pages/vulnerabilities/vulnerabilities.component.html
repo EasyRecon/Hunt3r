@@ -37,6 +37,7 @@
               </div>
             </div>
             <div class="searchButton">
+              <button type="button"  nbButton status="basic" (click)="this.criticity='';getVulnerabilities()">reset</button>
               <button type="button"  nbButton status="success" (click)="getVulnerabilities()"><nb-icon icon="search-outline" ></nb-icon></button>
             </div>
         </nb-card-body>
