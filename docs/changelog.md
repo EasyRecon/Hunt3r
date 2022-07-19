@@ -1,5 +1,16 @@
 # Changelog
 
+## Version 1.5.0
+
+**Backend Improvements :**
+
+- Add AWS as cloud provider
+- Improve Nuclei configuration managements
+
+**Scan Improvements :**
+
+- Add Slack notifications
+
 ## Version 1.4.0
 
 **Scan Improvements :**
