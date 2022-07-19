@@ -75,7 +75,6 @@ export class DomainsComponent implements OnInit {
     this.getDomains() 
   }
 
-
   deleteDomain(id:string){
     this.confirmDialogModal.close()
     this.loadingDomain=true
