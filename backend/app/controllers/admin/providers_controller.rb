@@ -80,9 +80,8 @@ def set_provider
 end
 
 def provider_is_valid?(providers_params)
-  valid = false
-
-  if providers_params[:name] == 'scaleway'
+  case providers_params[:name]
+  when 'scaleway'
     path = '/root/.config/scw/config.yaml'
     dir = File.dirname(path)
     FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
@@ -99,7 +98,36 @@ def provider_is_valid?(providers_params)
     File.write(path, scw_config)
 
     check_config = `scw instance server list -o json`
-    check_config.empty? ? nil : valid = true
+    valid = !check_config.empty?
+  when 'aws'
+    path = '/root/.aws/config'
+    dir = File.dirname(path)
+    FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
+
+    aws_config = <<~HEREDOC
+      [default]
+      region = #{providers_params[:infos][:region]}
+      output = json
+    HEREDOC
+
+    File.write(path, aws_config)
+
+    path = File.join(`echo $HOME`.strip, '/.aws/credentials')
+    dir = File.dirname(path)
+    FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
+
+    aws_credentials = <<~HEREDOC
+      [default]
+      aws_access_key_id = #{providers_params[:infos][:access_key]}
+      aws_secret_access_key = #{providers_params[:infos][:secret_key]}
+    HEREDOC
+
+    File.write(path, aws_credentials)
+
+    check_config = `aws ec2 describe-instances`
+    valid = !check_config.empty?
+  else
+    valid = false
   end
 
   valid
@@ -113,7 +141,7 @@ def ssh_key_valid?(provider)
   FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
 
   ssh_key = Base64.decode64(provider.infos['ssh_key'])
-  return false unless ssh_key.match?(/-----BEGIN OPENSSH PRIVATE KEY-----.*-----END OPENSSH PRIVATE KEY-----/m)
+  return false unless ssh_key.match?(/-----BEGIN (OPENSSH|RSA) PRIVATE KEY-----.*-----END (OPENSSH|RSA) PRIVATE KEY-----/m)
 
   ssh_key += "\n" unless ssh_key.end_with?("\n")
 
