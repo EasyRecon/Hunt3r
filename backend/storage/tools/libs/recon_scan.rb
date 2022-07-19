@@ -42,10 +42,10 @@ class ReconScan
       Nuclei.check_domains
     end
 
-    return unless OPTIONS[:gau]
-
-    InteractDashboard.update_scan_status('Recon - GAU')
-    Gau.get_urls
+    if OPTIONS[:gau]
+      InteractDashboard.update_scan_status('Recon - GAU')
+      Gau.get_urls
+    end
     # **-- END OF THE ACTIVE CHECK PHASE
 
     Slack.notify(build_end_message)
@@ -55,15 +55,15 @@ end
 private
 
 def build_end_message
-  nb_domains = `wc -l #{OPTIONS[:output]}/all_domains.txt`
-  nb_domains_alive = `wc -l #{OPTIONS[:output]}/httpx.txt`
+  nb_domains = `wc -l #{OPTIONS[:output]}/all_domains.txt`.strip.split(' ')[0]
+  nb_domains_alive = `wc -l #{OPTIONS[:output]}/httpx.txt`.strip.split(' ')[0]
 
   output = ":stopwatch: Recon scan finished for #{OPTIONS[:domain]} :"
   output += "\n  - Number of detected domains : #{nb_domains}"
   output += "\n  - Number of detected and accessible domains : #{nb_domains_alive}"
 
   if OPTIONS[:nuclei]
-    nb_vulns = `wc -l #{OPTIONS[:output]}/nuclei.json`
+    nb_vulns = `wc -l #{OPTIONS[:output]}/nuclei.json`.strip.split(' ')[0]
     output += "\n  - Number of detected vulnerabilities : #{nb_vulns}"
   end
 
