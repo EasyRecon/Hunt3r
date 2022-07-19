@@ -1,6 +1,7 @@
 class ReconScan
   def self.start
     InteractDashboard.update_scan_status('Recon - Start')
+    Slack.notify(":new: Recon scan started for #{OPTIONS[:domain]}")
 
     if OPTIONS[:leak]
       InteractDashboard.update_scan_status('Recon - Get Leaks')
@@ -46,10 +47,28 @@ class ReconScan
     InteractDashboard.update_scan_status('Recon - GAU')
     Gau.get_urls
     # **-- END OF THE ACTIVE CHECK PHASE
+
+    Slack.notify(build_end_message)
   end
 end
 
 private
+
+def build_end_message
+  nb_domains = `wc -l #{OPTIONS[:output]}/all_domains.txt`
+  nb_domains_alive = `wc -l #{OPTIONS[:output]}/httpx.txt`
+
+  output = ":stopwatch: Recon scan finished for #{OPTIONS[:domain]} :"
+  output += "\n  - Number of detected domains : #{nb_domains}"
+  output += "\n  - Number of detected and accessible domains : #{nb_domains_alive}"
+
+  if OPTIONS[:nuclei]
+    nb_vulns = `wc -l #{OPTIONS[:output]}/nuclei.json`
+    output += "\n  - Number of detected vulnerabilities : #{nb_vulns}"
+  end
+
+  output
+end
 
 def clean_domains
   regex_string = OPTIONS[:excludes].split(',')

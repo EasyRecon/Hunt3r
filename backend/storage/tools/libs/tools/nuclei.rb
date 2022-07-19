@@ -40,6 +40,7 @@ def parse_result
 
     next unless name && severity && matched_at
 
+    Slack.notify(":bug: New vuln : #{name} | #{severity} | #{matched_at}")
     InteractDashboard.send_vulnerability(name, severity, matched_at)
   end
 end
