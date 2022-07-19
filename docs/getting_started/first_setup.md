@@ -28,6 +28,12 @@ As well as a Keys API for Hunt3r, still on the same page
 
 ![](../assets/images/Scaleway_API_Keys_Configuration.png)
 
+### Nuclei configuration
+
+If you want to use Nuclei, we advise you to use a custom configuration file to add template exclusions on [/admin/tools/settings](http://0.0.0.0/admin/tools/). In case no file is filled in, all templates will be used
+
+If necessary, you can use our [suggested configuration](https://docs.hunt3r.ovh/assets/files/nuclei_config.yml)
+
 ### Amass configuration
 
 The last step is to add your Amass configuration on [/admin/tools/settings](http://0.0.0.0/admin/tools/), it is indeed not possible to start a scan without putting a configuration file.
