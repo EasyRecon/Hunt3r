@@ -17,7 +17,7 @@
       <nb-actions size="small" >
         <nb-action class="user-action"  >
           <nb-action  icon="bell-outline" badgeDot="{{notif.length>1}}" disbled="true"  nbContextMenuTag="notif-context-menu" [nbContextMenu]="notif" nbContextMenuTrigger="click" badgePosition="top right" badgeText="{{notif.length>1 ? (notif.length-1) : '' }}" badgeStatus="danger"  size="large"></nb-action>
-          <nb-user [nbContextMenu]="userMenu" nbContextMenuTag="user-context-menu" name="{{user.user_email}}" >
+          <nb-user [nbContextMenu]="userMenu" id="sidebarre_username" nbContextMenuTag="user-context-menu" name="{{user.user_email}}" onlyPicture="{{this.screen > 960 ? false : true}}" >
           </nb-user>
         </nb-action>
       </nb-actions>

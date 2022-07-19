@@ -37,7 +37,7 @@ export class NbSidebarToggleComponent implements OnInit {
       name: 'Dark',
     },
   ];
-
+  screen = 0
   currentTheme:any = 'default';
   backgroundColor ='black'
 
@@ -68,6 +68,8 @@ export class NbSidebarToggleComponent implements OnInit {
           this.router.navigateByUrl('/auth/login');
         }
       });
+
+
   }
 
  async getNotification(){
@@ -104,6 +106,10 @@ toggleTheme(){
 }
 
   async ngOnInit() {
+    this.screen = window.screen.width
+    if(this.screen < 960){
+      this.toggleLeft()
+    }
     await this.getNotification()
     this.nbMenuService.onItemClick()
     .pipe(
@@ -138,8 +144,10 @@ toggleTheme(){
       .subscribe(themeName => this.currentTheme = themeName);
   }
 
-  toggleLeft(event:any) {
-    event.preventDefault()
+  toggleLeft(event:any="") {
+    if(event !=""){
+      event.preventDefault()
+    }
     this.sidebarService.toggle(true, 'left');
     return false
   }
