@@ -11,6 +11,8 @@ packages:
   - gcc
 
 runcmd:
+  # Allow root connection on AWS
+  - sed -i 's/.*ssh-rsa/ssh-rsa/' /root/.ssh/authorized_keys
   # Amass
   - wget https://github.com/OWASP/Amass/releases/download/v3.19.2/amass_linux_amd64.zip
   - unzip amass_linux_amd64.zip
