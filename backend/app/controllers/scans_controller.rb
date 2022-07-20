@@ -241,7 +241,6 @@ class ScansController < ApplicationController
       server_infos[:infos] = {
         uid: cmd_output_json['Instances'][0]['InstanceId'],
         name: cmd_output_json['Instances'][0]['Tags'][0]['Value'],
-        ip: cmd_output_json['public_ip']['address'],
         state: 'Launched',
         scan_id: scan.id
       }
@@ -325,7 +324,7 @@ class ScansController < ApplicationController
   def launch_aws_server(scan)
     return unless scan.instance_type_valid?
 
-    `aws ec2 run-instances --image-id ami-0a8e758f5e873d1c1 --count 1 --instance-type #{scan.instance_type} --key-name hunt3r --user-data file://#{cloud_init_file} --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=aws-#{random_name}}]'`
+    `aws ec2 run-instances --image-id ami-0d75513e7706cf2d9 --count 1 --instance-type #{scan.instance_type} --key-name hunt3r --user-data file://#{cloud_init_file} --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=aws-#{random_name}}]'`
   end
 
 end
