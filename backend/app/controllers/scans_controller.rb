@@ -228,13 +228,30 @@ class ScansController < ApplicationController
 
     scan.update(state: 'Deploy In Progress')
 
-    server_infos[:infos] = {
-      uid: cmd_output_json['id'],
-      name: cmd_output_json['name'],
-      ip: cmd_output_json['public_ip']['address'],
-      state: 'Launched',
-      scan_id: scan.id
-    }
+    case scan.provider
+    when 'scaleway'
+      server_infos[:infos] = {
+        uid: cmd_output_json['id'],
+        name: cmd_output_json['name'],
+        ip: cmd_output_json['public_ip']['address'],
+        state: 'Launched',
+        scan_id: scan.id
+      }
+    when 'aws'
+      server_infos[:infos] = {
+        uid: cmd_output_json['Instances'][0]['InstanceId'],
+        name: cmd_output_json['Instances'][0]['Tags'][0]['Value'],
+        ip: cmd_output_json['public_ip']['address'],
+        state: 'Launched',
+        scan_id: scan.id
+      }
+
+      sleep 1
+
+      cmd_output = `aws ec2 describe-instances --instance-ids #{server_infos[:infos][:uid]}`
+      json_data = JSON.parse(cmd_output)
+      server_infos[:infos][:ip] = json_data['Reservations'][0]['Instances'][0]['PublicIpAddress']
+    end
 
     server_infos
   end

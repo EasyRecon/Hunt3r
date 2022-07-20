@@ -16,9 +16,12 @@ class ApplicationController < ActionController::API
   def server_delete(server, state)
     server.destroy
     server.scan.update(state: state)
-    return unless server.name.downcase.start_with?('scw-')
 
-    Thread.start { `scw instance server terminate #{server.uid} with-ip=true` }
+    if server.name.downcase.start_with?('scw-')
+      Thread.start { `scw instance server terminate #{server.uid} with-ip=true` }
+    elsif server.name.downcase.start_with?('aws-')
+      Thread.start { `aws ec2 terminate-instances --instance-ids #{server.uid}` }
+    end
   end
 
   def base64?(value)
