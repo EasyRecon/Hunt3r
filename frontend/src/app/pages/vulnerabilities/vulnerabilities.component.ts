@@ -41,6 +41,9 @@ export class VulnerabilitiesComponent implements OnInit {
       this.messageService.showToast(err.message, 'danger');
     })
   }
+  log(a:any){
+    console.log(a)
+  }
   selectAll(checked: boolean){
     this.checkedAll = checked;
     if(checked)this.selectedVuln=this.vulnerabilitiesList

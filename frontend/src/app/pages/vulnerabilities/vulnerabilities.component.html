@@ -44,7 +44,7 @@
       </nb-card>
       <br>
 
-      <div class="pagination col-md-4 offset-md-8">
+      <div class="col-md-4 offset-md-8">
         <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
           <nb-option value="10">10</nb-option>
           <nb-option value="50">50</nb-option>
@@ -54,12 +54,12 @@
         <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
           <nb-icon icon="arrow-left-outline"></nb-icon>
         </button>
+        <nb-select placeholder="Select page" (selectedChange)="goToPage($event)">
+          <nb-option *ngFor="let item of [].constructor(total_pages); let i = index" value="{{i+1}}">{{i+1}}</nb-option>
+        </nb-select>
         <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
           <nb-icon icon="arrow-right-outline"></nb-icon>
         </button>
-        <div class="page">
-          page {{page}} of {{total_pages}} pages
-        </div>
       </div>
 
        <table >
@@ -80,26 +80,18 @@
         </tr>
        
       </table>
-      <div class="pagination">
-        <div class="col-md-3">
-          <nb-select  placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
-            <nb-option value="10">10</nb-option>
-            <nb-option value="50">50</nb-option>
-            <nb-option value="100">100</nb-option>
-            <nb-option value="-1">All</nb-option>
-          </nb-select>
-        </div>
-        <div class="pagination col-md-4 offset-md-5">
+
+        <div class="pagination col-md-1 offset-md-11">
           <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
             <nb-icon icon="arrow-left-outline"></nb-icon>
           </button>
           <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
             <nb-icon icon="arrow-right-outline"></nb-icon>
           </button>
-          <div class="page">
-            page {{page}} of {{total_pages}} pages
-          </div>
-        </div>
+      </div>
+      <br>
+      <div class="page">
+        page {{page}} of {{total_pages}} pages
       </div>
 
       <div class="actionDelete" style="{{selectedVuln.length>0?'right:-10px':''}}" >
