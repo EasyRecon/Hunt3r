@@ -20,6 +20,9 @@ export class VulnerabilitiesComponent implements OnInit {
   page=1
   total_pages=1
   criticity=''
+  checkedAll=false
+  selectedVuln:Vulnerabilities[]=<any>[]
+
   
 
   constructor(private vulnerabilitiesService : VulnerabilitiesService,private messageService: MessageService) {
@@ -38,7 +41,29 @@ export class VulnerabilitiesComponent implements OnInit {
       this.messageService.showToast(err.message, 'danger');
     })
   }
+  selectAll(checked: boolean){
+    this.checkedAll = checked;
+    if(checked)this.selectedVuln=this.vulnerabilitiesList
+    else this.selectedVuln=<any>[]
+  }
+  selectOne(checked: boolean,id:number){
+    if(checked) this.addVuln(id)
+    else this.removeVuln(id)
+    console.log(this.selectedVuln)
+  }
 
+  addVuln(id:number){
+    this.vulnerabilitiesList.forEach(item=>{
+      if(id==item.id){
+        this.selectedVuln.push(item)
+      }
+    })
+  }
+  removeVuln(id:number){
+    this.selectedVuln= this.selectedVuln.filter((item)=> {
+      return id!=item.id
+    })
+  }
   deleteVulnerabilities(id:number){
     this.loading=true
     this.vulnerabilitiesService.deleteVulnerabilities(id).subscribe((result)=> {
@@ -50,7 +75,12 @@ export class VulnerabilitiesComponent implements OnInit {
       this.messageService.showToast(err.message, 'danger');
     })
   }
-
+  deleteSelectedVulnerabilities(){
+    this.selectedVuln.forEach(item => {
+      this.deleteVulnerabilities(item.id)
+    })
+    this.selectedVuln=<any>[]
+  }
   ngOnInit(): void {
 
    
