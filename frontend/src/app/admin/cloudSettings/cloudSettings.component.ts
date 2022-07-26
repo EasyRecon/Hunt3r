@@ -29,12 +29,9 @@ export class CloudSettingsComponent implements OnInit {
   awsExist      = false;
   aws = {
     "access_key":"",
-			"secret_key":"",
-			"organization_id":"",
-			"project_id":"",
-			"region":"",
-			"zone":"",
-      "ssh_key": ""
+		"secret_key":"",
+		"region":"",
+    "ssh_key": ""
   }
 
   loading = true;
@@ -83,21 +80,21 @@ export class CloudSettingsComponent implements OnInit {
     })
   }
 
-  updatescaleway(event:any) {
+  updatecloud(event:any,type:'scaleway'|'aws') {
     event.preventDefault()
     this.loading = true;
-    let data = this.scalewayForm.value
+    let data = this[`${type}Form`].value
     data.ssh_key=btoa(data.ssh_key)
-    let finalData = {"provider": {"name":"scaleway","infos":data}}
+    let finalData = {"provider": {"name":type,"infos":data}}
     if(finalData.provider.infos.secret_key.charAt(1) == '*') delete finalData.provider.infos.secret_key
     let action:'create'|'update'='create'
-    if(this.scalewayExist) action='update'
+    if(this[`${type}Exist`]) action='update'
       Object.keys(finalData.provider.infos).forEach(key => {
         if (finalData.provider.infos[key] === '') {
           delete finalData.provider.infos[key];
         }
       });
-      this.cloudService[`${action}Scaleway`](finalData).subscribe( (result) => {
+      this.cloudService[`${action}Cloud`](finalData).subscribe( (result) => {
         this.loading = false;
         this.messageService.showToast(result.message,'success')
         this.getCloudProvider()
@@ -107,11 +104,11 @@ export class CloudSettingsComponent implements OnInit {
       })
   }
 
-  deletescaleway() {
+  deletecloud(type:'aws'|'scaleway') {
     this.loading = true;
-    this.cloudService.deleteScaleway().subscribe( (result) => {
-      this.messageService.showToast('Cloud provider scaleway has been deleted','success')
-      this.scalewayExist=false
+    this.cloudService.deleteCloud(type).subscribe( (result) => {
+      this.messageService.showToast(`Cloud provider ${type} has been deleted`,'success')
+      this[`${type}Exist`]=false
       this.loading = false;
       this.getCloudProvider()
     },(err) =>{

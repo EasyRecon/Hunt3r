@@ -141,7 +141,7 @@ def ssh_key_valid?(provider)
   FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
 
   ssh_key = Base64.decode64(provider.infos['ssh_key'])
-  return false unless ssh_key.match?(/-----BEGIN OPENSSH PRIVATE KEY-----.*-----END OPENSSH PRIVATE KEY-----/m)
+  return false unless ssh_key.match?(/-----BEGIN (OPENSSH|RSA) PRIVATE KEY-----.*-----END (OPENSSH|RSA) PRIVATE KEY-----/m)
 
   ssh_key += "\n" unless ssh_key.end_with?("\n")
 

@@ -4,7 +4,7 @@
     <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
   </nb-layout-header>
 
-  <nb-sidebar left tag="left" state="expanded">
+  <nb-sidebar left tag="left" state="expanded" responsive>
     <nb-menu-services></nb-menu-services>
   </nb-sidebar>
 
@@ -22,15 +22,16 @@
             <nb-card-body>
            
             <br><br>
-            <input nbInput type="text" #searchText>
-            <nb-select placeholder="Select platform"   [(selected)]="selectedPlateform">
-              <nb-option selected value="all">All</nb-option>
-              <nb-option value="intigriti">Intigriti</nb-option>
-              <nb-option value="yeswehack">YesWeHack</nb-option>
-              <nb-option value="hackerone">HackerOne</nb-option>
-            </nb-select>
-            <button type="button" class="col" (click)="getProgram(searchText.value,selectedPlateform)"  nbButton status="success"><nb-icon icon="search-outline"></nb-icon></button>
-
+            <div class="btnGrp">
+              <input nbInput type="text" #searchText>
+              <nb-select placeholder="Select platform"   [(selected)]="selectedPlateform">
+                <nb-option selected value="all">All</nb-option>
+                <nb-option value="intigriti">Intigriti</nb-option>
+                <nb-option value="yeswehack">YesWeHack</nb-option>
+                <nb-option value="hackerone">HackerOne</nb-option>
+              </nb-select>
+              <button type="button" class="col" (click)="getProgram(searchText.value,selectedPlateform)"  nbButton status="success"><nb-icon icon="search-outline"></nb-icon></button>
+            </div>
             <table >
               <tr>
                 <th>Id</th>

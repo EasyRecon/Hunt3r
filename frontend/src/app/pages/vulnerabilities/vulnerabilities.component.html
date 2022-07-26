@@ -4,7 +4,7 @@
     <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
   </nb-layout-header>
 
-  <nb-sidebar left tag="left" state="expanded">
+  <nb-sidebar left tag="left" state="expanded" responsive>
     <nb-menu-services></nb-menu-services>
   </nb-sidebar>
 
@@ -37,13 +37,14 @@
               </div>
             </div>
             <div class="searchButton">
+              <button type="button"  nbButton status="basic" (click)="this.criticity='';getVulnerabilities()">reset</button>
               <button type="button"  nbButton status="success" (click)="getVulnerabilities()"><nb-icon icon="search-outline" ></nb-icon></button>
             </div>
         </nb-card-body>
       </nb-card>
       <br>
 
-      <div class="pagination col-md-4 offset-md-8">
+      <div class="col-md-4 offset-md-8">
         <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
           <nb-option value="10">10</nb-option>
           <nb-option value="50">50</nb-option>
@@ -53,57 +54,51 @@
         <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
           <nb-icon icon="arrow-left-outline"></nb-icon>
         </button>
+        <nb-select placeholder="Select page" (selectedChange)="goToPage($event)">
+          <nb-option *ngFor="let item of [].constructor(total_pages); let i = index" value="{{i+1}}">{{i+1}}</nb-option>
+        </nb-select>
         <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
           <nb-icon icon="arrow-right-outline"></nb-icon>
         </button>
-        <div class="page">
-          page {{page}} of {{total_pages}} pages
-        </div>
       </div>
 
        <table >
         <tr>
+          <th><nb-checkbox (checkedChange)="selectAll($event)"></nb-checkbox></th>
           <th>Name</th>
           <th>Severity</th>
           <th>Domain</th>
           <th>Creation date</th>
-          <th>Actions</th>
         </tr>
         <tr *ngFor="let item of this.vulnerabilitiesList">
+          <td><nb-checkbox class="vulnSelect" checked="{{checkedAll}}" (checkedChange)="selectOne($event,item.id)"></nb-checkbox></td>
           <td>{{ item.name }}</td>
           <td><nb-badge class="badgeSub" text="{{item.severity}}" status="{{item.severity=='critical'? 'danger' : item.severity=='high'? 'warning':item.severity=='medium'? 'primary':item.severity=='low'? 'info':'basic' }}" ></nb-badge></td>
           <td>{{ item.matched_at }}</td>
           <td>{{ item.created_at }}</td>
-          <td>
-            <div class="row actionGrp" >
-              <div class="col">
-                 <button type="button" (click)="deleteVulnerabilities(item.id)" nbButton status="danger"><nb-icon icon="trash-outline" ></nb-icon></button>
-              </div>
-            </div>
-          </td>
 
         </tr>
        
       </table>
 
-      <div class="pagination col-md-4 offset-md-8">
-        <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
-          <nb-option value="10">10</nb-option>
-          <nb-option value="50">50</nb-option>
-          <nb-option value="100">100</nb-option>
-          <nb-option value="-1">All</nb-option>
-        </nb-select>
-        <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
-          <nb-icon icon="arrow-left-outline"></nb-icon>
-        </button>
-        <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
-          <nb-icon icon="arrow-right-outline"></nb-icon>
-        </button>
-        <div class="page">
-          page {{page}} of {{total_pages}} pages
-        </div>
+        <div class="pagination col-md-1 offset-md-11">
+          <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
+            <nb-icon icon="arrow-left-outline"></nb-icon>
+          </button>
+          <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
+            <nb-icon icon="arrow-right-outline"></nb-icon>
+          </button>
+      </div>
+      <br>
+      <div class="page">
+        page {{page}} of {{total_pages}} pages
       </div>
 
+      <div class="actionDelete" style="{{selectedVuln.length>0?'right:-10px':''}}" >
+        <div class="col">
+           <button type="button" (click)="deleteSelectedVulnerabilities()" nbButton status="danger"><nb-icon icon="trash-outline" ></nb-icon></button>
+        </div>
+      </div>
 
       </nb-card-body>
     </nb-card>
