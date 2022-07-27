@@ -9,6 +9,7 @@ packages:
   - ruby-dev
   - make
   - gcc
+  - whois
 
 runcmd:
   # Allow root connection on AWS
@@ -63,6 +64,8 @@ runcmd:
   - gem install typhoeus
   # Concurrent Ruby
   - gem install concurrent-ruby
+  # PublicSuffix
+  - gem install public_suffix
   # Wappalyzer
   - curl -sL https://deb.nodesource.com/setup_14.x | bash -
   - apt -y install nodejs
