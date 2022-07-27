@@ -19,15 +19,15 @@ class Amass
 
     system(cmd)
   end
-end
 
-def self.intel
-  cmd = "amass intel -whois -d #{domain} -config #{config_path}"
-  cmd += " -o #{OPTIONS[:output]}/amass_intel.txt"
+  def self.intel
+    cmd = "amass intel -whois -d #{OPTIONS[:domain]} -config #{config_path}"
+    cmd += " -o #{OPTIONS[:output]}/amass_intel.txt"
 
-  system(cmd)
+    system(cmd)
 
-  Whois.check('amass')
+    Whois.check('amass')
+  end
 end
 
 private

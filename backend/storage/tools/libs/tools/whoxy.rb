@@ -1,7 +1,7 @@
 class Whoxy
   def self.intel
     response = Typhoeus::Request.get(
-      "http://api.whoxy.com/?key=#{OPTIONS[:whoxy_token]}&history=#{OPTIONS[:domain]}"
+      "https://api.whoxy.com/?key=#{OPTIONS[:whoxy_token]}&history=#{OPTIONS[:domain]}"
     )
     return unless response&.code == 200
 
@@ -12,11 +12,11 @@ class Whoxy
     email = Set[]
 
     response_json['whois_records'].each do |result|
-      if result['registrant_contact']['company_name']&.match?(/#{OPTIONS[:domain].sub(/\..*/, '')}/i)
+      if result['registrant_contact']['company_name']&.match?(/#{OPTIONS[:domain].split('.')[0]}/i)
         company << result['registrant_contact']['company_name'].gsub(' ', '+')
       end
 
-      if result['registrant_contact']['email_address']&.match?(OPTIONS[:domain])
+      if result['registrant_contact']['email_address']&.match?(OPTIONS[:domain].split('.')[0])
         email << result['registrant_contact']['email_address']
       end
     end
