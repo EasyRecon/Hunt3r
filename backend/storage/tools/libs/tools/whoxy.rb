@@ -1,5 +1,5 @@
 class Whoxy
-  def self.get_domains
+  def self.intel
     response = Typhoeus::Request.get(
       "http://api.whoxy.com/?key=#{OPTIONS[:whoxy_token]}&history=#{OPTIONS[:domain]}"
     )
@@ -30,13 +30,13 @@ end
 private
 
 def reverse(data, type)
-  subdomains = []
+  whois_domains = []
 
   data.each do |value|
     next if value.end_with?(".#{OPTIONS[:domain]}")
 
     response = Typhoeus::Request.get(
-      "http://api.whoxy.com/?key=#{OPTIONS[:whoxy_token]}&reverse=whois&#{type}=#{value}"
+      "https://api.whoxy.com/?key=#{OPTIONS[:whoxy_token]}&reverse=whois&#{type}=#{value}"
     )
     next unless response&.code == 200
 
@@ -44,11 +44,16 @@ def reverse(data, type)
     next unless response_json.key?('search_result')
 
     response_json['search_result'].each do |result|
-      subdomains << result['domain_name']
+      next if result['domain_name'] == OPTIONS[:domain]
+      next if whois_domains.include?(result['domain_name'])
+
+      whois_domains << result['domain_name']
     end
   end
 
-  File.open("#{OPTIONS[:output]}/whoxy_domains.txt", 'w+') do |f|
-    f.puts(subdomains)
+  File.open("#{OPTIONS[:output]}/whoxy_intel.txt", 'w+') do |f|
+    f.puts(whois_domains)
   end
+
+  Whois.check('whoxy')
 end

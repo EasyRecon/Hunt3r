@@ -21,6 +21,15 @@ class Amass
   end
 end
 
+def self.intel
+  cmd = "amass intel -whois -d #{domain} -config #{config_path}"
+  cmd += " -o #{OPTIONS[:output]}/amass_intel.txt"
+
+  system(cmd)
+
+  Whois.check('amass')
+end
+
 private
 
 def update_permutation_list
