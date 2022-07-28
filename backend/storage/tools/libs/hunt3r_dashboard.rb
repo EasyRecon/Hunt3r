@@ -28,6 +28,7 @@ class InteractDashboard
   end
 
   def self.delete_server
+    InteractDashboard.update_scan_status('Stopped')
     request = Typhoeus::Request.new(
       File.join(OPTIONS[:url], "/servers/#{OPTIONS[:srv_uid]}/outside?token=#{OPTIONS[:hunt3r_token]}"),
       method: :delete,

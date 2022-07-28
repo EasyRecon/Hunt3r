@@ -39,10 +39,10 @@ runcmd:
   - mv naabu /usr/local/bin/
   - rm naabu_2.0.9_linux_amd64.zip
   # HTTPX
-  - wget https://github.com/projectdiscovery/httpx/releases/download/v1.2.3/httpx_1.2.3_linux_amd64.zip
-  - unzip httpx_1.2.3_linux_amd64.zip
+  - wget https://github.com/projectdiscovery/httpx/releases/download/v1.2.2/httpx_1.2.2_linux_amd64.zip
+  - unzip httpx_1.2.2_linux_amd64.zip
   - mv httpx /usr/local/bin/
-  - rm LICENSE.md README.md httpx_1.2.3_linux_amd64.zip
+  - rm LICENSE.md README.md httpx_1.2.2_linux_amd64.zip
   # Subfinder
   - wget https://github.com/projectdiscovery/subfinder/releases/download/v2.5.2/subfinder_2.5.2_linux_amd64.zip
   - unzip subfinder_2.5.2_linux_amd64.zip
