@@ -67,27 +67,40 @@ export class VulnerabilitiesComponent implements OnInit {
       return id!=item.id
     })
   }
-  deleteVulnerabilities(id:number){
-    this.loading=true
-    this.vulnerabilitiesService.deleteVulnerabilities(id).subscribe((result)=> {
-      this.loading=false
-      this.messageService.showToast(result.message, 'success');
-      this.getVulnerabilities()
-    },(err)=> {
-      this.loading=false
-      this.messageService.showToast(err.message, 'danger');
+  async deleteVulnerabilities(id:number){
+    new Promise((resolve, reject) =>{
+      this.loading=true
+      this.vulnerabilitiesService.deleteVulnerabilities(id).subscribe((result)=> {
+        this.loading=false
+        this.messageService.showToast(result.message, 'success');
+        resolve(true)
+      },(err)=> {
+        this.loading=false
+        this.messageService.showToast(err.message, 'danger');
+        reject(false)
+      })
     })
   }
   deleteSelectedVulnerabilities(){
-    this.selectedVuln.forEach(item => {
-      this.deleteVulnerabilities(item.id)
+    let last = this.selectedVuln[this.selectedVuln.length-1]
+   this.selectedVuln.forEach(async item => {
+      await this.deleteVulnerabilities(item.id).then(async x => {
+          if(item.id==last.id){
+              await new Promise(f => setTimeout(f, 1000));
+              this.selectAll(false)
+              this.getVulnerabilities()
+          }
+      })
+
     })
-    this.selectedVuln=<any>[]
   }
   ngOnInit(): void {
 
    
   }
+  delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+}
   changeCriticity(event:any){
     this.criticity=event
   }
