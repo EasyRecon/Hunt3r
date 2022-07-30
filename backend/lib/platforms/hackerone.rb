@@ -39,6 +39,8 @@ class Hackerone
 
   def self.parse_programs(programs, platform)
     programs.each do |program|
+      next unless program['attributes']['submission_state'] == 'open'
+
       slug = program['attributes']['handle']
 
       # In case it is not yet present in the database we add the program
@@ -76,6 +78,8 @@ class Hackerone
   def self.parse_scopes(scopes, slug, platform)
     program = Program.find_by(slug: slug)
     scopes.each do |scope|
+      next unless scope['attributes']['eligible_for_submission']
+
       endpoint = scope['attributes']['asset_identifier']
       type = scope['attributes']['asset_type']
       next unless type == 'URL'

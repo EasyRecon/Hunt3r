@@ -73,6 +73,8 @@ class Intigriti
 
   def self.parse_programs(programs, platform)
     programs.each do |program|
+      next if program['status'] == 4
+      
       # In case it is not yet present in the database we add the program
       if Program.find_by(slug: program['handle']).nil?
         vdp = !(program['maxBounty']['value']).positive?
