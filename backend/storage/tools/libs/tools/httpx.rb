@@ -5,7 +5,7 @@ class Httpx
     file = File.read("#{OPTIONS[:output]}/naabu.json")
     data = JSON.parse(file)
 
-    pool = Concurrent::FixedThreadPool.new(8 * OPTIONS[:concurrency])
+    pool = Concurrent::FixedThreadPool.new(6 * OPTIONS[:concurrency])
 
     urls = []
     data.each do |host, infos|
@@ -37,7 +37,7 @@ class Httpx
 
           # Allows not to pollute the recon with useless domains
           # Ex http://www.domain.tld 302 to https://www.domain.tld
-          next if url.start_with?('http://') && result_json['location'].match?(%r{https://(www\.)?#{host}(:443)?/?})
+          next if url.start_with?('http://') && result_json['location']&.match?(%r{https://(www\.)?#{host}(:443)?/?})
           next if url.start_with?('https://') && url.end_with?(':80')
           next if url.start_with?('http://') && url.end_with?(':443')
 
@@ -48,7 +48,7 @@ class Httpx
 
           begin
             wappalyzer = JSON.load(`node /root/Tools/wappalyzer/src/drivers/npm/cli.js #{url}`)
-            wappalyzer['technologies'].each do |technology|
+            wappalyzer['technologies']&.each do |technology|
               technologies << technology['name']
             end
           rescue
