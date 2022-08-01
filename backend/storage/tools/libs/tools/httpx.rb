@@ -47,7 +47,7 @@ class Httpx
           technologies = []
 
           begin
-            wappalyzer = JSON.load(`node /root/Tools/wappalyzer/src/drivers/npm/cli.js #{url}`)
+            wappalyzer = JSON.load(`node /root/Tools/wappalyzer/src/drivers/npm/cli.js #{url} -w 10000`)
             wappalyzer['technologies']&.each do |technology|
               technologies << technology['name']
             end
