@@ -1,7 +1,7 @@
 class Whoxy
-  def self.get_domains
+  def self.intel
     response = Typhoeus::Request.get(
-      "http://api.whoxy.com/?key=#{OPTIONS[:whoxy_token]}&history=#{OPTIONS[:domain]}"
+      "https://api.whoxy.com/?key=#{OPTIONS[:whoxy_token]}&history=#{OPTIONS[:domain]}"
     )
     return unless response&.code == 200
 
@@ -12,11 +12,13 @@ class Whoxy
     email = Set[]
 
     response_json['whois_records'].each do |result|
-      if result['registrant_contact']['company_name']&.match?(/#{OPTIONS[:domain].sub(/\..*/, '')}/i)
+      registrant_company = result['registrant_contact']['company_name']
+      if registrant_company&.match?(/#{OPTIONS[:domain].split('.')[0]}/i)
         company << result['registrant_contact']['company_name'].gsub(' ', '+')
       end
 
-      if result['registrant_contact']['email_address']&.match?(OPTIONS[:domain])
+      registrant_email = result['registrant_contact']['email_address']
+      if registrant_email&.include?('@') && !registrant_email&.include?('anonymised') && registrant_email&.match?(OPTIONS[:domain].split('.')[0])
         email << result['registrant_contact']['email_address']
       end
     end
@@ -30,25 +32,36 @@ end
 private
 
 def reverse(data, type)
-  subdomains = []
+  whois_domains = []
 
   data.each do |value|
-    next if value.end_with?(".#{OPTIONS[:domain]}")
-
-    response = Typhoeus::Request.get(
-      "http://api.whoxy.com/?key=#{OPTIONS[:whoxy_token]}&reverse=whois&#{type}=#{value}"
-    )
-    next unless response&.code == 200
-
-    response_json = JSON.parse(response.body)
-    next unless response_json.key?('search_result')
-
-    response_json['search_result'].each do |result|
-      subdomains << result['domain_name']
-    end
+    get_whoxy_results(type, value, whois_domains)
   end
 
-  File.open("#{OPTIONS[:output]}/whoxy_domains.txt", 'w+') do |f|
-    f.puts(subdomains)
+  File.open('whoxy_intel.txt', 'w+') do |f|
+    f.puts(whois_domains)
   end
+
+  Whois.check('whoxy')
+end
+
+def get_whoxy_results(type, value, whois_domains, page=1)
+  response = Typhoeus::Request.get(
+    "https://api.whoxy.com/?key=#{OPTIONS[:whoxy_token]}&reverse=whois&#{type}=#{value}&page=#{page}"
+  )
+  return unless response&.code == 200
+
+  response_json = JSON.parse(response.body)
+  return unless response_json.key?('search_result')
+
+  total_pages = response_json['total_pages']
+
+  response_json['search_result'].each do |result|
+    next if result['domain_name'] == OPTIONS[:domain]
+    next if whois_domains.include?(result['domain_name'])
+
+    whois_domains << result['domain_name']
+  end
+
+  get_whoxy_results(type, value, whois_domains, page + 1) unless page == total_pages
 end

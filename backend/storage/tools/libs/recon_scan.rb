@@ -17,7 +17,12 @@ class ReconScan
 
     if OPTIONS[:intel]
       InteractDashboard.update_scan_status('Recon - Intel')
-      Whoxy.get_domains
+      Amass.intel
+      Assetfinder.intel
+      Whoxy.intel
+
+      system("cat #{OPTIONS[:output]}/*_intel_valid.txt | sort -u > #{OPTIONS[:output]}/intel_domains.txt")
+
       C99.check_domains
     end
 

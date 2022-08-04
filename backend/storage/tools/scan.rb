@@ -4,6 +4,7 @@ require 'typhoeus'
 require 'json'
 require 'base64'
 require 'concurrent'
+require 'public_suffix'
 
 require_relative 'libs/hunt3r_dashboard'
 require_relative 'libs/slack'
@@ -11,6 +12,7 @@ require_relative 'libs/recon_scan'
 require_relative 'libs/nuclei_scan'
 
 require_relative 'libs/tools/amass'
+require_relative 'libs/tools/assetfinder'
 require_relative 'libs/tools/c99'
 require_relative 'libs/tools/dehashed'
 require_relative 'libs/tools/gau'
@@ -19,6 +21,7 @@ require_relative 'libs/tools/httpx'
 require_relative 'libs/tools/mesh'
 require_relative 'libs/tools/naabu'
 require_relative 'libs/tools/nuclei'
+require_relative 'libs/tools/whois'
 require_relative 'libs/tools/whoxy'
 
 OPTIONS = {}

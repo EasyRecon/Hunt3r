@@ -77,11 +77,7 @@ export class NbSidebarToggleComponent implements OnInit {
 
       if(result.data.length>0)this.notif=[{ "title": 'Delete all notifications',"icon":"trash-outline"}]
       result.data.forEach((element)=> {
-        let icon=''
-        if(element.message_type=='success') icon='checkmark-circle-outline'
-        if(element.message_type=='warning') icon='alert-circle-outline'
-        if(element.message_type=='danger') icon='close-circle-outline'
-        this.notif.push({"title":element.message,"icon":icon})
+        this.notif.push({"title":element.message,"badge":{dotMode: true, status: element.message_type}})
       })
     })
   }

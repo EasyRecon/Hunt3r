@@ -7,7 +7,9 @@
 }
 
 
-
+::ng-deep .menu-title{
+  flex: 1 0!important;
+}
 
 
 
@@ -72,6 +74,7 @@
       text-decoration: none;
     }
   }
+
 
 
   @include media-breakpoint-down(sm) {

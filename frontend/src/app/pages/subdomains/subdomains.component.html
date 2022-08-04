@@ -64,7 +64,7 @@
           </div>       
           <table class="subdomainTable">
             <tr>
-              <th>ID</th>
+              <!--<th>ID</th>-->
               <th>URL</th>
               <th>IP</th>
               <th>Ports</th>
@@ -76,9 +76,9 @@
               
             </tr>
             <tr *ngFor="let item of this.subdomainsList">
-              <td>{{ item.id }}</td>
+            <!--  <td>{{ item.id }}</td>-->
               <td>
-                <a href="{{ item.url }}" target="_blank">{{ item.url }}</a>
+                <a href="{{ item.url }}" rel="noreferrer" target="_blank">{{ item.url }}</a>
                 <br *ngIf="item.infos.title">
                 <div class="badgeSubDiv">
                   <nb-badge *ngIf="item.infos.title" class="badgeSub breakSentance" text="Title: {{item.infos.title}}" status="info" ></nb-badge>
