@@ -27,7 +27,22 @@ export class EnginesComponent implements OnInit {
   templatList:string[]=<any>[]
   modelEngine:Engine=<Engine>{}
 
+  scalewayInstance:any={
+    "DEV1-S":"DEV1_S: 2vCPUs 2GB RAM 0.01/hour",
+    "DEV1-M":"DEV1_M: 3vCPUs 4GB RAM 0.02/hour",
+    "DEV1-L":"DEV1_L: 4vCPUs 8GB RAM 0.04/hour",
+    "DEV1-XL":"DEV1_XL: 4vCPUs 12GB RAM 0.06/hour"
+  }
 
+  awsInstance:any={
+    "t2.small"  :"t2.small: 1CPU 2GB/RAM 12 Credit/H",
+    "t2.medium" :"t2.medium: 2CPU 4GB/RAM 24 Credit/H",
+    "t2.large"  :"t2.large: 2CPU 8GB/RAM 36 Credit/H",
+    "t2.xlarge" :"t2.xlarge: 4CPU 16GB/RAM 6 Credit/H"
+  }
+
+
+  currentInstance:any={"":""}
   constructor(private enginesService : EnginesService,
               private messageService: MessageService,
               private fbuilder: FormBuilder,
@@ -125,9 +140,12 @@ initEmptyEngine():any{
     this.engineModal.close()
   }
   toggle(checked: any,name:string) {
-
     this.addEngineForm.get(name)!.setValue(checked)
-    console.log(this.addEngineForm.value)
+    if(name=='provider'){
+      let cloudProvider:'aws'|'scaleway'= this.addEngineForm.get(name)!.value
+      this.addEngineForm.get('instance_type')!.setValue('')
+      this.currentInstance=this[`${cloudProvider}Instance`]
+    } 
   }
 
   addEngine(event:any,name:string){

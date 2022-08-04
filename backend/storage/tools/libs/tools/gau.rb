@@ -7,7 +7,7 @@ class Gau
       valid_urls = Set[]
 
       random = (0...8).map { rand(65..90).chr }.join
-      `gau --blacklist png,jpg,jpeg,gif,svg,js,css,ttf,woff,woff2 --o #{OPTIONS[:output]}/gau_#{random}.txt #{url}`
+      `gau --blacklist png,jpg,jpeg,gif,svg,js,css,ttf,woff,woff2,icon,tiff --o #{OPTIONS[:output]}/gau_#{random}.txt #{url}`
 
       gau_results = File.open("#{OPTIONS[:output]}/gau_#{random}.txt").read
       gau_results.each_line do |line|

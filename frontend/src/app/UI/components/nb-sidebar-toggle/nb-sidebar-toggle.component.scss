@@ -7,6 +7,12 @@
 }
 
 
+::ng-deep .menu-title{
+  flex: 1 0!important;
+}
+
+
+
 @include nb-install-component() {
   display: flex;
   justify-content: space-between;
@@ -68,6 +74,7 @@
       text-decoration: none;
     }
   }
+
 
 
   @include media-breakpoint-down(sm) {

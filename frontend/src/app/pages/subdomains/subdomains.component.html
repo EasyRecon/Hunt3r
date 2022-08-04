@@ -4,7 +4,7 @@
     <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
   </nb-layout-header>
 
-  <nb-sidebar left tag="left" state="expanded">
+  <nb-sidebar left tag="left" state="expanded" responsive>
     <nb-menu-services></nb-menu-services>
   </nb-sidebar>
 
@@ -45,31 +45,26 @@
                 </div>
             </nb-card-body>
           </nb-card>
-
-            
-            <div class="pagination col-md-4 offset-md-8">
-              <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
-                <nb-option value="10">10</nb-option>
-                <nb-option value="50">50</nb-option>
-                <nb-option value="100">100</nb-option>
-                <nb-option value="-1">All</nb-option>
-              </nb-select>
-              <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
-                <nb-icon icon="arrow-left-outline"></nb-icon>
-              </button>
-              <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
-                <nb-icon icon="arrow-right-outline"></nb-icon>
-              </button>
-              <div class="page">
-                page {{page}} of {{total_pages}} pages
-              </div>
-            </div>
- 
-         
-
+          <div class="col-md-4 offset-md-8">
+            <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
+              <nb-option value="10">10</nb-option>
+              <nb-option value="50">50</nb-option>
+              <nb-option value="100">100</nb-option>
+              <nb-option value="-1">All</nb-option>
+            </nb-select>
+            <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
+              <nb-icon icon="arrow-left-outline"></nb-icon>
+            </button>
+            <nb-select placeholder="Select page" (selectedChange)="goToPage($event)">
+              <nb-option *ngFor="let item of [].constructor(total_pages); let i = index" value="{{i+1}}">{{i+1}}</nb-option>
+            </nb-select>
+            <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
+              <nb-icon icon="arrow-right-outline"></nb-icon>
+            </button>
+          </div>       
           <table class="subdomainTable">
             <tr>
-              <th>ID</th>
+              <!--<th>ID</th>-->
               <th>URL</th>
               <th>IP</th>
               <th>Ports</th>
@@ -81,9 +76,9 @@
               
             </tr>
             <tr *ngFor="let item of this.subdomainsList">
-              <td>{{ item.id }}</td>
+            <!--  <td>{{ item.id }}</td>-->
               <td>
-                <a href="{{ item.url }}" target="_blank">{{ item.url }}</a>
+                <a href="{{ item.url }}" rel="noreferrer" target="_blank">{{ item.url }}</a>
                 <br *ngIf="item.infos.title">
                 <div class="badgeSubDiv">
                   <nb-badge *ngIf="item.infos.title" class="badgeSub breakSentance" text="Title: {{item.infos.title}}" status="info" ></nb-badge>
@@ -136,23 +131,18 @@
               <td><img (click)="screenModal(apiUrl+'/screenshots/'+item.id)" class="screenpreview" id='screen{{item.id}}' appLazyLoad [src]="item.id.toString()" loading="lazy"></td>
             </tr>
           </table>
-          <div class="pagination col-md-4 offset-md-8">
-            <nb-select placeholder="Select limit" [(selected)]="this.limit" (selectedChange)="changeLimit($event)">
-              <nb-option value="10">10</nb-option>
-              <nb-option value="50">50</nb-option>
-              <nb-option value="100">100</nb-option>
-              <nb-option value="-1">All</nb-option>
-            </nb-select>
+          <div class="pagination col-md-1 offset-md-11">
             <button [disabled]="page==1" (click)="goToPage(page-1)" nbButton ghost status="basic">
               <nb-icon icon="arrow-left-outline"></nb-icon>
             </button>
             <button [disabled]="page==total_pages" nbButton ghost status="basic" (click)="goToPage(page+1)">
               <nb-icon icon="arrow-right-outline"></nb-icon>
-            </button><br>
-            <div class="page">
-              page {{page}} of {{total_pages}} pages
-            </div>
-          </div>
+            </button>
+        </div>
+        <br>
+        <div class="page">
+          page {{page}} of {{total_pages}} pages
+        </div>
 
       </nb-card-body>
 

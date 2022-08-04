@@ -4,7 +4,7 @@
     <nb-sidebar-toggle style="width:100vw"></nb-sidebar-toggle>
   </nb-layout-header>
 
-  <nb-sidebar left tag="left" state="expanded">
+  <nb-sidebar left tag="left" state="expanded" responsive>
     <nb-menu-services></nb-menu-services>
   </nb-sidebar>
 
@@ -95,17 +95,15 @@
                   <div class="col-sm-8">
                     <nb-select placeholder="Select provider"   [selected]="modelEngine.infos.provider" (selectedChange)="toggle($event,'provider')">
                       <nb-option value="scaleway">Scaleway</nb-option>
+                      <nb-option value="aws">Aws</nb-option>
                     </nb-select>
                   </div>
                 </div>
                 <div class="form-group ">
                   <label for="inputEmail1" class="label col-sm-4 col-form-label">Instance type</label>
                   <div class="col-sm-8">
-                    <nb-select placeholder="Select server type"  [selected]="modelEngine.infos.instance_type"  (selectedChange)="toggle($event,'instance_type')">
-                      <nb-option value="DEV1-S">DEV1_S: 2vCPUs 2GB RAM 0.01/hour</nb-option>
-                      <nb-option value="DEV1-M">DEV1_M: 3vCPUs 4GB RAM 0.02/hour</nb-option>
-                      <nb-option value="DEV1-L">DEV1_L: 4vCPUs 8GB RAM 0.04/hour</nb-option>
-                      <nb-option value="DEV1-XL">DEV1_XL: 4vCPUs 12GB RAM 0.06/hour</nb-option>
+                    <nb-select placeholder="Select server type"  [selected]="modelEngine.infos.instance_type"  (selectedChange)="toggle($event,'instance_type')" >
+                      <nb-option *ngFor="let intance of this.currentInstance | keyvalue" value="{{intance.key}}">{{intance.value}}</nb-option>
                     </nb-select>
                   </div>
                 </div>

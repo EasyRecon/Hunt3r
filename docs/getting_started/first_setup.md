@@ -8,10 +8,6 @@ The first thing to do is to change your login information by going to your profi
 
 ## Configure a Cloud Provider
 
-!!! warning "Cloud Provider Support"
-
-    Version 1.0 comes with Scaleway support only at the moment, other cloud providers will be added in the following versions with AWS first
-
 !!! info "SSH Key"
 
     An SSH key will be required by Hunt3r to deploy and manage your servers, however it is possible to configure a specific SSH key for Hunt3r and by provider
@@ -27,6 +23,26 @@ First of all it is necessary to add an SSH key on https://console.scaleway.com/p
 As well as a Keys API for Hunt3r, still on the same page
 
 ![](../assets/images/Scaleway_API_Keys_Configuration.png)
+
+### AWS configuration
+
+You need to add a user [here](https://console.aws.amazon.com/iamv2/home#/users) with EC2 rights
+
+![](../assets/images/aws_new_user.png)
+
+You have to register your SSH key (without passphrase) [here](https://eu-west-1.console.aws.amazon.com/ec2/v2/home?region=eu-west-1#KeyPairs:) with the name 'hunt3r' (required), the key must be registered in the same region as the region used on the dashboard.
+
+![](../assets/images/aws_ssh_key.png)
+
+The default group security must be modified to allow SSH connections (Inbound rules) at least [here](https://eu-west-1.console.aws.amazon.com/ec2/v2/home?region=eu-west-1#SecurityGroups:)
+
+![](../assets/images/aws_inbound_rules.png)
+
+### Nuclei configuration
+
+If you want to use Nuclei, we advise you to use a custom configuration file to add template exclusions on [/admin/tools/settings](http://0.0.0.0/admin/tools/). In case no file is filled in, all templates will be used
+
+If necessary, you can use our [suggested configuration](https://docs.hunt3r.ovh/assets/files/nuclei_config.yml)
 
 ### Amass configuration
 

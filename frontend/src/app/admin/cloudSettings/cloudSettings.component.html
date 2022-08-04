@@ -55,7 +55,7 @@
        <nb-tabset>
         <nb-tab tabTitle="Scaleway">
           <nb-form-field>
-            <form  [formGroup]="scalewayForm" (ngSubmit)="updatescaleway($event)">
+            <form  [formGroup]="scalewayForm" (ngSubmit)="updatecloud($event,'scaleway')">
               <div class="form-group row">
                 <label for="inputEmail1" class="label col-sm-3 col-form-label">Access key</label>
                 <div class="col-sm-9">
@@ -105,7 +105,7 @@
                     <button type="submit" class="col" nbButton status="success">Update</button>
                   </div>
                   <div class="col end">
-                    <button type="button" class="col " (click)="deletescaleway()" nbButton status="danger">Delete</button>
+                    <button type="button" class="col " (click)="deletecloud('scaleway')" nbButton status="danger">Delete</button>
                   </div>
                 </div>
            
@@ -114,11 +114,11 @@
         </nb-tab>
         <nb-tab tabTitle="AWS">
           <nb-form-field>
-            <form  [formGroup]="awsForm" (ngSubmit)="updateaws($event)">
+            <form  [formGroup]="awsForm" (ngSubmit)="updatecloud($event,'aws')">
               <div class="form-group row">
                 <label for="inputEmail1" class="label col-sm-3 col-form-label">Access key</label>
                 <div class="col-sm-9">
-                  <input class="col" nbInput type="text" name="access_key" [value]="aws.access_key" id="access_key">
+                  <input class="col" nbInput type="text" name="access_key" [value]="aws.access_key" formControlName="access_key" id="access_key">
                 </div>
               </div>
               <div class="form-group row">
@@ -128,38 +128,23 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label for="inputEmail1" class="label col-sm-3 col-form-label">Role</label>
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Region</label>
                 <div class="col-sm-9">
-                  <input class="col" nbInput type="text" name="organisation_id" id="organisation_id" [value]="aws.organization_id">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="inputEmail1" class="label col-sm-3 col-form-label">Project ID</label>
-                <div class="col-sm-9">
-                  <input class="col" nbInput type="text"  name="created_at" id="created_at"  [value]="aws.project_id">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="inputEmail1" class="label col-sm-3 col-form-label">Creation date</label>
-                <div class="col-sm-9">
-                  <input class="col" nbInput type="text"  name="region" id="region"  [value]="aws.region">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="inputEmail1" class="label col-sm-3 col-form-label">Creation date</label>
-                <div class="col-sm-9">
-                  <input class="col" nbInput type="text"  name="zone" id="zone"  [value]="aws.zone">
+                  <input class="col" nbInput type="text"  name="region" id="region"  formControlName="region" [value]="aws.region">
                 </div>
               </div>
               <div class="form-group row">
                 <label for="inputEmail1" class="label col-sm-3 col-form-label">SSH key (private)</label>
                 <div class="col-sm-9">
-                  <textarea nbInput fullWidth  formControlName="ssh_key" >{{scaleway.ssh_key}}</textarea>
+                  <textarea nbInput fullWidth  formControlName="ssh_key" >{{aws.ssh_key}}</textarea>
                 </div>
               </div>
               <div class="form-group row">
                 <div class="offset-sm-3 col-sm-9">
                   <button type="submit" nbButton status="success">Update</button>
+                </div>
+                <div class="col end">
+                  <button type="button" class="col " (click)="deletecloud('scaleway')" nbButton status="danger">Delete</button>
                 </div>
               </div>
             </form>

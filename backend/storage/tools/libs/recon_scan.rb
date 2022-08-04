@@ -1,6 +1,7 @@
 class ReconScan
   def self.start
     InteractDashboard.update_scan_status('Recon - Start')
+    Slack.notify(":new: Recon scan started for #{OPTIONS[:domain]}")
 
     if OPTIONS[:leak]
       InteractDashboard.update_scan_status('Recon - Get Leaks')
@@ -16,7 +17,12 @@ class ReconScan
 
     if OPTIONS[:intel]
       InteractDashboard.update_scan_status('Recon - Intel')
-      Whoxy.get_domains
+      Amass.intel
+      Assetfinder.intel
+      Whoxy.intel
+
+      system("cat #{OPTIONS[:output]}/*_intel_valid.txt | sort -u > #{OPTIONS[:output]}/intel_domains.txt")
+
       C99.check_domains
     end
 
@@ -41,15 +47,33 @@ class ReconScan
       Nuclei.check_domains
     end
 
-    return unless OPTIONS[:gau]
-
-    InteractDashboard.update_scan_status('Recon - GAU')
-    Gau.get_urls
+    if OPTIONS[:gau]
+      InteractDashboard.update_scan_status('Recon - GAU')
+      Gau.get_urls
+    end
     # **-- END OF THE ACTIVE CHECK PHASE
+
+    Slack.notify(build_end_message)
   end
 end
 
 private
+
+def build_end_message
+  nb_domains = `wc -l #{OPTIONS[:output]}/all_domains.txt`.strip.split(' ')[0]
+  nb_domains_alive = `wc -l #{OPTIONS[:output]}/httpx.txt`.strip.split(' ')[0]
+
+  output = ":stopwatch: Recon scan finished for #{OPTIONS[:domain]} :"
+  output += "\n  - Number of detected domains : #{nb_domains}"
+  output += "\n  - Number of detected and accessible domains : #{nb_domains_alive}"
+
+  if OPTIONS[:nuclei]
+    nb_vulns = `wc -l #{OPTIONS[:output]}/nuclei.json`.strip.split(' ')[0]
+    output += "\n  - Number of detected vulnerabilities : #{nb_vulns}"
+  end
+
+  output
+end
 
 def clean_domains
   regex_string = OPTIONS[:excludes].split(',')

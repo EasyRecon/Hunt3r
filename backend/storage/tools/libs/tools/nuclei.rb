@@ -12,7 +12,7 @@ class Nuclei
 
     cmd = "nuclei -l #{OPTIONS[:output]}/#{file}.txt -silent -t #{templates_path}"
     cmd += " -severity #{OPTIONS[:nuclei_severity]}" if OPTIONS[:nuclei_severity]
-    cmd += " -config /tmp/tools/nuclei/config.yaml"
+    cmd += ' -config /tmp/tools/nuclei/config.yaml' if File.file?('/tmp/tools/nuclei/config.yaml')
 
     if OPTIONS[:interactsh_url]
       cmd += " -iserver #{OPTIONS[:interactsh_url]}"
@@ -40,6 +40,7 @@ def parse_result
 
     next unless name && severity && matched_at
 
+    Slack.notify(":bug: New vuln : #{name} | #{severity} | #{matched_at}")
     InteractDashboard.send_vulnerability(name, severity, matched_at)
   end
 end

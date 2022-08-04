@@ -64,6 +64,12 @@ hr { display: block;
     border-top-right-radius: 0px;
     border-bottom-left-radius: 0px;
 }
+.searchButton button:first-child {
+    border-bottom-right-radius: 0px;
+}
+.searchButton button:last-child {
+    border-top-left-radius: 0px;
+}
 .badgeSub {
     position: relative;
     border-radius: 10px;
@@ -78,4 +84,21 @@ hr { display: block;
 }
 .pagination{
     margin-top: 20px;
+}
+
+.actionDelete {
+    position: fixed;
+    top:250px;
+    right:-200px;
+    border:black;
+    border-radius: 10px;
+    background-color: var(--card-background-color);
+    transition: right 0.4s ease-in-out;
+    border: var(--card-border-width) var(--card-border-style) var(--card-border-color);
+    div{
+        padding:10px 25px 10px 10px;
+        button{
+
+        }
+    }
 }

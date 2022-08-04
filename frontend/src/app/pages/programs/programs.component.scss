@@ -55,3 +55,17 @@ hr { display: block;
         
     }
 }
+::ng-deep .btnGrp .select-button {
+    border-radius: 0px!important;
+}
+::ng-deep .btnGrp input:first-child{
+    border-bottom-right-radius: 0px;
+    border-top-right-radius: 0px;
+}
+.btnGrp button:last-child{
+    border-bottom-left-radius: 0px!important;
+    border-top-left-radius: 0px!important;
+    padding-bottom: calc( (100% - 20px) /2);
+    padding-top: calc( (100% - 20px) /2);
+    margin-top:-3px
+}

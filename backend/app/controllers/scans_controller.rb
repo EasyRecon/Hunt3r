@@ -83,7 +83,8 @@ class ScansController < ApplicationController
 
     scan_cmd[:cmd] += " --scan-id #{scan.id} --type-scan #{scan.type_scan} -d #{scan.domain}"
 
-    slack_webhook = Tool.find_by(name: 'slack')
+    slack_webhook = Tool.find_by(name: 'slack')&.infos
+    scan_cmd[:cmd] += " --slack #{slack_webhook['webhook']}"
     scan_cmd[:errors] = 'missing_webhook' if scan.notifs && slack_webhook.nil?
 
     scan_cmd = build_recon_scan_cmd(scan, scan_cmd) if scan.type_scan == 'recon'
@@ -142,8 +143,6 @@ class ScansController < ApplicationController
   end
 
   def build_nuclei_scan_cmd(scan, scan_cmd)
-    scan_cmd[:errors] = 'missing_nuclei' unless File.exist?(File.join(scan_config_files, 'nuclei/config.yaml'))
-
     scan_cmd[:cmd] += " --nuclei #{scan.nuclei}"
 
     unless (scan.custom_templates && !scan.custom_templates.empty?) || scan.all_templates
@@ -205,14 +204,20 @@ class ScansController < ApplicationController
   def launch_server(scan)
     server_infos = {}
 
-    unless scan.provider == 'scaleway'
+    unless scan.provider == 'scaleway' || scan.provider == 'aws'
       server_infos[:error] = 'unknown_provider'
       return server_infos
     end
 
-    # Force default value to DEV1-S
-    scan.update(instance_type: 'DEV1-S') unless scan[:instance_type]
-    cmd_output = launch_scaleway_server(scan)
+    cmd_output = if scan.provider == 'scaleway'
+                   # Force default value to DEV1-S
+                   scan.update(instance_type: 'DEV1-S') unless scan[:instance_type]
+                   launch_scaleway_server(scan)
+                 else
+                   # Force default value to t2.small
+                   scan.update(instance_type: 't2.small') unless scan[:instance_type]
+                   launch_aws_server(scan)
+                 end
 
     begin
       cmd_output_json = JSON.parse(cmd_output)
@@ -223,13 +228,29 @@ class ScansController < ApplicationController
 
     scan.update(state: 'Deploy In Progress')
 
-    server_infos[:infos] = {
-      uid: cmd_output_json['id'],
-      name: cmd_output_json['name'],
-      ip: cmd_output_json['public_ip']['address'],
-      state: 'Launched',
-      scan_id: scan.id
-    }
+    case scan.provider
+    when 'scaleway'
+      server_infos[:infos] = {
+        uid: cmd_output_json['id'],
+        name: cmd_output_json['name'],
+        ip: cmd_output_json['public_ip']['address'],
+        state: 'Launched',
+        scan_id: scan.id
+      }
+    when 'aws'
+      server_infos[:infos] = {
+        uid: cmd_output_json['Instances'][0]['InstanceId'],
+        name: cmd_output_json['Instances'][0]['Tags'][0]['Value'],
+        state: 'Launched',
+        scan_id: scan.id
+      }
+
+      sleep 1
+
+      cmd_output = `aws ec2 describe-instances --instance-ids #{server_infos[:infos][:uid]}`
+      json_data = JSON.parse(cmd_output)
+      server_infos[:infos][:ip] = json_data['Reservations'][0]['Instances'][0]['PublicIpAddress']
+    end
 
     server_infos
   end
@@ -243,7 +264,7 @@ class ScansController < ApplicationController
     Scope.find_by(scope: base_domain)&.update(last_scan: Time.now) unless scan.type_scan == 'nuclei'
     Thread.start do
       # Sleep until the server starts and install the necessary tools
-      sleep(360)
+      sleep(420)
 
       begin
         Net::SCP.start(server.ip, 'root', keys: "/root/.ssh/#{scan.provider}_id_rsa") do |scp|
@@ -299,4 +320,11 @@ class ScansController < ApplicationController
 
     `scw instance server create type=#{scan.instance_type} image=ubuntu_jammy name=scw-hunt3r-#{random_name} cloud-init=@#{cloud_init_file} -o json`.strip
   end
+
+  def launch_aws_server(scan)
+    return unless scan.instance_type_valid?
+
+    `aws ec2 run-instances --image-id ami-0d75513e7706cf2d9 --count 1 --instance-type #{scan.instance_type} --key-name hunt3r --user-data file://#{cloud_init_file} --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=aws-#{random_name}}]'`
+  end
+
 end

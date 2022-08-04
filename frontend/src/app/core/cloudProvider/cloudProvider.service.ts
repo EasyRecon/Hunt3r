@@ -8,15 +8,16 @@ import {HttpService} from '../../shared/http.service'
 
     constructor(private httpService:HttpService)  {
     }
-  createScaleway(data:UpdateCloudProvider): Observable<UpdateProviderResponse> {
+  createCloud(data:UpdateCloudProvider): Observable<UpdateProviderResponse> {
     return this.httpService.post<UpdateProviderResponse>('/admin/providers',data)
   }
-  deleteScaleway(): Observable<DeleteProviderResponse> {
-    return this.httpService.delete<DeleteProviderResponse>('/admin/providers/scaleway')
+  deleteCloud(platform:string): Observable<DeleteProviderResponse> {
+    return this.httpService.delete<DeleteProviderResponse>('/admin/providers/'+platform)
   }
-  updateScaleway(data:UpdateCloudProvider): Observable<UpdateProviderResponse> {
+  updateCloud(data:UpdateCloudProvider): Observable<UpdateProviderResponse> {
     return this.httpService.patch<UpdateProviderResponse>('/admin/providers',data)
   }
+
   getCloudProvider(): Observable<DataCloudProvider> {
     return this.httpService.get<DataCloudProvider>('/admin/providers')
   }

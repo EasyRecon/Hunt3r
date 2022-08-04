@@ -37,7 +37,7 @@ export class NbSidebarToggleComponent implements OnInit {
       name: 'Dark',
     },
   ];
-
+  screen = 0
   currentTheme:any = 'default';
   backgroundColor ='black'
 
@@ -68,6 +68,8 @@ export class NbSidebarToggleComponent implements OnInit {
           this.router.navigateByUrl('/auth/login');
         }
       });
+
+
   }
 
  async getNotification(){
@@ -75,11 +77,7 @@ export class NbSidebarToggleComponent implements OnInit {
 
       if(result.data.length>0)this.notif=[{ "title": 'Delete all notifications',"icon":"trash-outline"}]
       result.data.forEach((element)=> {
-        let icon=''
-        if(element.message_type=='success') icon='checkmark-circle-outline'
-        if(element.message_type=='warning') icon='alert-circle-outline'
-        if(element.message_type=='danger') icon='close-circle-outline'
-        this.notif.push({"title":element.message,"icon":icon})
+        this.notif.push({"title":element.message,"badge":{dotMode: true, status: element.message_type}})
       })
     })
   }
@@ -104,6 +102,10 @@ toggleTheme(){
 }
 
   async ngOnInit() {
+    this.screen = window.screen.width
+    if(this.screen < 960){
+      this.toggleLeft()
+    }
     await this.getNotification()
     this.nbMenuService.onItemClick()
     .pipe(
@@ -138,8 +140,10 @@ toggleTheme(){
       .subscribe(themeName => this.currentTheme = themeName);
   }
 
-  toggleLeft(event:any) {
-    event.preventDefault()
+  toggleLeft(event:any="") {
+    if(event !=""){
+      event.preventDefault()
+    }
     this.sidebarService.toggle(true, 'left');
     return false
   }
