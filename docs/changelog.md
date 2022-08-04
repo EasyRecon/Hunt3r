@@ -2,14 +2,27 @@
 
 ## Version 1.5.0
 
+**Frontend Improvements :**
+
+- Improve Mobile Version
+- Redirect to login when unauthorized
+- Fix notifications box size
+- Remove referer when clicking on a subdomain link
+- Improve pagination
+- Add multiples vulnerabilities deletion
+
 **Backend Improvements :**
 
 - Add AWS as cloud provider
 - Improve Nuclei configuration managements
+- Improve platforms sync
 
 **Scan Improvements :**
 
+- Tools update
 - Add Slack notifications
+- Add more exclusions to GAU
+- Intel recon improvements
 
 ## Version 1.4.0
 
