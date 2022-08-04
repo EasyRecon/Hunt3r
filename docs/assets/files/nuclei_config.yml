@@ -52,14 +52,20 @@ exclude-templates: [
   misconfiguration/xss-deprecated-header.yaml,
   misconfiguration/iis-internal-ip-disclosure.yaml,
   misconfiguration/aspx-debug-mode.yaml,
+  misconfiguration/front-page-misconfig.yaml,
+  misconfiguration/unauthenticated-varnish-cache-purge.yaml,
   miscellaneous/robots-txt-endpoint.yaml,
   exposures/configs/keycloak-openid-config.yaml,
   exposures/files/readme-md.yaml,
   exposures/configs/azure-domain-tenant.yaml,
+  exposures/apis/drupal-jsonapi-user-listing.yaml,
+  exposed-panels/drupal-login.yaml,
   vulnerabilities/generic/cors-misconfig.yaml,
   vulnerabilities/generic/request-based-interaction.yaml,
   vulnerabilities/generic/oob-header-based-interaction.yaml,
-  vulnerabilities/other/openvpn-hhi.yaml
+  vulnerabilities/other/openvpn-hhi.yaml,
+  cves/2000/CVE-2000-0114.yaml,
+  exposed-panels/key-cloak-admin-panel.yaml
 ]
 
 # templates to run based on severity. possible values: info, low, medium, high, critical
