@@ -1,6 +1,6 @@
 class Gau
   def self.get_urls
-    data = File.read("#{OPTIONS[:output]}/httpx.txt")
+    data = File.read("#{OPTIONS[:output]}/wappago.txt")
 
     data.each_line do |url|
       url.chomp!
