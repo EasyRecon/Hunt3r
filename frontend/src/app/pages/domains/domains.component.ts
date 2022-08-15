@@ -19,10 +19,8 @@ import {
 export class DomainsComponent implements OnInit {
 
   loadingDomain=true
-  searchTechno=''
   searchDomain=''
-  searchUrl=''
-  searchStatusCode=''
+
 
   confirmDialogModal:any;
   @ViewChild('dialogConfirm', { read: TemplateRef }) dialogConfirm:any;
@@ -43,7 +41,7 @@ export class DomainsComponent implements OnInit {
 
   getDomains() {
     this.loadingDomain=true
-    this.domainService.getDomain(this.limit,this.page,this.searchDomain,this.searchUrl,this.searchStatusCode,this.searchTechno).subscribe( (result)=> {
+    this.domainService.getDomain(this.limit,this.page,this.searchDomain).subscribe( (result)=> {
       this.loadingDomain=false
       this.domainsList=result.data
       this.total_pages=result.total_pages
@@ -67,11 +65,8 @@ export class DomainsComponent implements OnInit {
     this.getDomains()
   }
 
-  searchDomainInit(technologieSearch:string,urlSearch:string,statusCodeSearch:string,domainSearch:string){
+  searchDomainInit(domainSearch:string){
     this.searchDomain=domainSearch
-    this.searchTechno=technologieSearch
-    this.searchUrl=urlSearch
-    this.searchStatusCode=statusCodeSearch
     this.getDomains() 
   }
 
