@@ -3,17 +3,22 @@ class WappaGo
     # TODO : Add others ports
     ports = '80,443'
 
-    cmd = "cat #{OPTIONS[:output]}/all_domains.txt | wappaGo -ports #{ports}"
+    cmd = "cat #{OPTIONS[:output]}/all_domains.txt | wappago -ports #{ports}"
     cmd += " -resolvers #{resolver_path} -screenshot #{OPTIONS[:output]}/screenshots"
     cmd += " > #{OPTIONS[:output]}/wappago.json"
 
     system(cmd)
 
     urls = []
-    subdomains = []
 
     File.readlines("#{OPTIONS[:output]}/wappago.json").each do |line|
       result = JSON.parse(line)
+
+      filename = "#{subdomain.gsub(%r{://}, '_').gsub(':', '_')}.png"
+      screenshot = if File.exist?("#{OPTIONS[:output]}/screenshots/#{filename}")
+                     data = File.open("#{OPTIONS[:output]}/screenshots/#{filename}").read
+                     Base64.encode64(data)
+                   end
 
       subdomain = {
         url: result['url'],
@@ -26,23 +31,22 @@ class WappaGo
           ip: result['ip'],
           cname: result.dig('cnames', 0),
           cdn: result['cdn'],
-          ports: result['ports']
+          ports: result['ports'],
+          screenshot: screenshot
         }
       }
 
       urls << result['url']
-      subdomains << subdomain
+      InteractDashboard.send_subdomain(subdomain)
+    end
+
+    if urls.empty?
+      InteractDashboard.send_notification('danger', "ScanID : #{OPTIONS[:scan_id]} | The file wappago.txt is empty")
+      InteractDashboard.delete_server
     end
 
     File.open("#{OPTIONS[:output]}/wappago.txt", 'w+') do |f|
       f.puts(urls)
     end
-
-    if File.zero?("#{OPTIONS[:output]}/wappago.txt")
-      InteractDashboard.send_notification('danger', "ScanID : #{OPTIONS[:scan_id]} | The file wappago.txt is empty")
-      InteractDashboard.delete_server
-    end
-
-    InteractDashboard.send_subdomain(subdomains)
   end
 end
