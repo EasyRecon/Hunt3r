@@ -39,10 +39,16 @@ class SubdomainsController < ApplicationController
     domain = Domain.find_by_name(infos[:domain])
 
     current_subdomain = Subdomain.find_by(url: infos[:subdomain][:url])
+    screenshot = infos[:subdomain][:infos][:screenshot]
+
     if current_subdomain.nil?
-      Subdomain.create(url: infos[:subdomain][:url], infos: infos[:subdomain][:infos], domain_id: domain.id)
+      infos = infos[:subdomain][:infos].except(:screenshot)
+
+      subdomain = Subdomain.create(url: infos[:subdomain][:url], infos: infos, domain_id: domain.id)
+      Screenshot.create(screenshot: screenshot, subdomain_id: subdomain.id)
     else
       current_subdomain.update(infos: infos[:subdomain][:infos])
+      Screenshot.update(screenshot: screenshot, subdomain_id: current_subdomain.id)
     end
   end
 
