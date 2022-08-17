@@ -32,15 +32,8 @@ class ReconScan
     clean_domains if OPTIONS[:excludes]
 
     # **-- START OF THE ACTIVE CHECK PHASE
-    InteractDashboard.update_scan_status('Recon - Port Scanning')
-    Naabu.check_domains
-    Naabu.normalize
-
-    InteractDashboard.update_scan_status('Recon - HTTPX')
-    Httpx.check_domains
-
-    InteractDashboard.update_scan_status('Recon - Screenshots')
-    GoWitness.get_screenshots
+    InteractDashboard.update_scan_status('Recon - WappaGo')
+    WappaGo.check_domains
 
     if OPTIONS[:nuclei]
       InteractDashboard.update_scan_status('Recon - Nuclei')
@@ -61,7 +54,7 @@ private
 
 def build_end_message
   nb_domains = `wc -l #{OPTIONS[:output]}/all_domains.txt`.strip.split(' ')[0]
-  nb_domains_alive = `wc -l #{OPTIONS[:output]}/httpx.txt`.strip.split(' ')[0]
+  nb_domains_alive = `wc -l #{OPTIONS[:output]}/wappago.txt`.strip.split(' ')[0]
 
   output = ":stopwatch: Recon scan finished for #{OPTIONS[:domain]} :"
   output += "\n  - Number of detected domains : #{nb_domains}"

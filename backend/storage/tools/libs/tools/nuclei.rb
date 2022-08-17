@@ -1,5 +1,5 @@
 class Nuclei
-  def self.check_domains(file = 'httpx')
+  def self.check_domains(file = 'wappago')
 
     if OPTIONS[:nuclei_all_templates] && OPTIONS[:nuclei_custom_templates]
       update_templates
