@@ -1,5 +1,19 @@
 # Changelog
 
+## Version 1.6.0
+
+**Frontend Improvements :**
+
+- Fix domains UI filtering
+
+**Backend Improvements :**
+
+- Improvements on domain registration during a scan
+
+**Scan Improvements :**
+
+- Replace Naabu / HTTPX / Wappalyzer & GoWitness by WappaGo
+
 ## Version 1.5.0
 
 **Frontend Improvements :**
