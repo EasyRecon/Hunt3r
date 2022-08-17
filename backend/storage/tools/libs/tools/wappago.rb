@@ -1,5 +1,5 @@
 class WappaGo
-  def self.get_screenshots
+  def self.check_domains
     # TODO : Add others ports
     ports = '80,443'
 
@@ -14,24 +14,25 @@ class WappaGo
     File.readlines("#{OPTIONS[:output]}/wappago.json").each do |line|
       result = JSON.parse(line)
 
-      filename = "#{subdomain.gsub(%r{://}, '_').gsub(':', '_')}.png"
+      filename = "#{result['url'].gsub(%r{://|\.|:}, '_')}.png"
       screenshot = if File.exist?("#{OPTIONS[:output]}/screenshots/#{filename}")
                      data = File.open("#{OPTIONS[:output]}/screenshots/#{filename}").read
                      Base64.encode64(data)
                    end
 
+      detected_tech = result['infos']['technologies'].nil? ? [] : result['infos']['technologies']
       subdomain = {
         url: result['url'],
         infos: {
-          title: result['title'],
-          status_code: result['status_code'],
-          content_length: result['content_length'],
-          location: result['location'],
-          technologies: result['technologies'],
-          ip: result['ip'],
-          cname: result.dig('cnames', 0),
-          cdn: result['cdn'],
-          ports: result['ports'],
+          title: result['infos']['title'],
+          status_code: result['infos']['status_code'],
+          content_length: result['infos']['content_length'],
+          location: result['infos']['location'],
+          technologies: detected_tech,
+          ip: result['infos']['ip'],
+          cname: result.dig('infos', 'cname', 0),
+          cdn: result['infos']['cdn'],
+          ports: result['infos']['ports'],
           screenshot: screenshot
         }
       }
