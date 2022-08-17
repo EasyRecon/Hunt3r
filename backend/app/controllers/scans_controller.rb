@@ -264,7 +264,7 @@ class ScansController < ApplicationController
     Scope.find_by(scope: base_domain)&.update(last_scan: Time.now) unless scan.type_scan == 'nuclei'
     Thread.start do
       # Sleep until the server starts and install the necessary tools
-      sleep(420)
+      sleep(300)
 
       begin
         Net::SCP.start(server.ip, 'root', keys: "/root/.ssh/#{scan.provider}_id_rsa") do |scp|
