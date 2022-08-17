@@ -3,7 +3,6 @@ require 'optparse'
 require 'typhoeus'
 require 'json'
 require 'base64'
-require 'concurrent'
 require 'public_suffix'
 
 require_relative 'libs/hunt3r_dashboard'
