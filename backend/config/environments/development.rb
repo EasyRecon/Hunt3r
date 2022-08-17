@@ -53,7 +53,7 @@ Rails.application.configure do
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = false
 
-  config.logger = Logger.new("#{RAILS_ROOT}/log/#{ENV['RAILS_ENV']}.log", 1, 10_485_760)
+  config.logger = Logger.new("#{Rails.root}/log/#{ENV['RAILS_ENV']}.log", 1, 10_485_760)
 
 
   # Raises error for missing translations.
