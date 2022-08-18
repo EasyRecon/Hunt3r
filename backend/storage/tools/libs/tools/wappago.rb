@@ -44,6 +44,7 @@ class WappaGo
     if urls.empty?
       InteractDashboard.send_notification('danger', "ScanID : #{OPTIONS[:scan_id]} | The file wappago.txt is empty")
       InteractDashboard.delete_server
+      exit
     end
 
     File.open("#{OPTIONS[:output]}/wappago.txt", 'w+') do |f|
