@@ -96,8 +96,6 @@ Rails.application.routes.draw do
 
       # Screenshot management
       get 'screenshots/:subdomain_id', to: 'screenshots#index'
-      post 'screenshots', to: 'screenshots#create_outside'
-      post 'screenshots/mesh', to: 'screenshots#index_outside'
 
       # Vulnerabilities management
       get 'vulnerabilities', to: 'vulnerabilities#index'

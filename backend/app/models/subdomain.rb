@@ -1,6 +1,5 @@
 class Subdomain < ApplicationRecord
   belongs_to :domain
-  has_one :screenshot, dependent: :destroy
 
   scope :filtered_by_subdomain, ->(subdomain) { where('url LIKE ?', "%#{subdomain}%") }
   scope :filtered_by_technology, ->(technology) { where('infos @> ?', "{\"technologies\": [\"#{technology}\"]}") }
