@@ -29,6 +29,11 @@ class ReconScan
     # **-- END OF THE HARVESTING PHASE OF SUBDOMAINS
 
     `cat #{OPTIONS[:output]}/*_domains.txt | sort -u >> #{OPTIONS[:output]}/all_domains.txt`
+    if File.zero?("#{OPTIONS[:output]}/all_domains.txt")
+      InteractDashboard.send_notification('danger', "ScanID : #{OPTIONS[:scan_id]} | The domains file is empty")
+      InteractDashboard.delete_server
+      exit
+    end
     clean_domains if OPTIONS[:excludes]
 
     # **-- START OF THE ACTIVE CHECK PHASE
