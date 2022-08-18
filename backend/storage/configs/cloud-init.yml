@@ -25,19 +25,20 @@ runcmd:
   - mv assetfinder /usr/local/bin/
   - rm -r assetfinder-linux-amd64-0.1.1.tgz
   # Findomain
-  - wget https://github.com/findomain/findomain/releases/latest/download/findomain-linux
-  - mv findomain-linux /usr/local/bin/findomain
+  - wget https://github.com/Findomain/Findomain/releases/download/8.2.0/findomain-linux.zip
+  - unzip findomain-linux.zip && rm findomain-linux.zip
+  - mv findomain /usr/local/bin/findomain
   - chmod +x /usr/local/bin/findomain
   # Nuclei
-  - wget https://github.com/projectdiscovery/nuclei/releases/download/v2.7.5/nuclei_2.7.5_linux_amd64.zip
-  - unzip nuclei_2.7.5_linux_amd64.zip
+  - wget https://github.com/projectdiscovery/nuclei/releases/download/v2.7.6/nuclei_2.7.6_linux_amd64.zip
+  - unzip nuclei_2.7.6_linux_amd64.zip
   - mv nuclei /usr/local/bin
-  - rm nuclei_2.7.5_linux_amd64.zip
+  - rm nuclei_2.7.6_linux_amd64.zip
   # Subfinder
-  - wget https://github.com/projectdiscovery/subfinder/releases/download/v2.5.2/subfinder_2.5.2_linux_amd64.zip
-  - unzip subfinder_2.5.2_linux_amd64.zip
+  - wget https://github.com/projectdiscovery/subfinder/releases/download/v2.5.3/subfinder_2.5.3_linux_amd64.zip
+  - unzip subfinder_2.5.3_linux_amd64.zip
   - mv subfinder /usr/local/bin
-  - rm subfinder_2.5.2_linux_amd64.zip
+  - rm subfinder_2.5.3_linux_amd64.zip
   # GAU
   - wget https://github.com/lc/gau/releases/download/v2.1.2/gau_2.1.2_linux_amd64.tar.gz
   - tar -xzvf gau_2.1.2_linux_amd64.tar.gz

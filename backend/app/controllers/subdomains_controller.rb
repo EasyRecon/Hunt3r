@@ -23,32 +23,19 @@ class SubdomainsController < ApplicationController
   # POST /subdomains
   # Accessible from outside
   def create_outside
-    infos = params.require(:subdomain).permit(:token, :domain, subdomain: [
-                                                          :url,
-                                                          {
-                                                            infos: [:title, :status_code, :content_length, :location,
-                                                                    :ip, :cname, :body_hash, :cdn, :screenshot,
-                                                                    technologies: [], ports: []]
-                                                          }
-                                                        ])
+    infos = params[:subdomain]
 
     unless hunt3r_token_valid?(infos[:token])
       return render status: 422, json: { message: I18n.t('errors.controllers.subdomains.invalid'), data: nil }
     end
 
     domain = Domain.find_by_name(infos[:domain])
-
     current_subdomain = Subdomain.find_by(url: infos[:subdomain][:url])
-    screenshot = infos[:subdomain][:infos][:screenshot]
 
     if current_subdomain.nil?
-      infos = infos[:subdomain][:infos].except(:screenshot)
-
-      subdomain = Subdomain.create(url: infos[:subdomain][:url], infos: infos, domain_id: domain.id)
-      Screenshot.create(screenshot: screenshot, subdomain_id: subdomain.id)
+      Subdomain.create(url: infos[:subdomain][:url], infos: infos[:subdomain][:infos], domain_id: domain.id)
     else
       current_subdomain.update(infos: infos[:subdomain][:infos])
-      Screenshot.update(screenshot: screenshot, subdomain_id: current_subdomain.id)
     end
   end
 
