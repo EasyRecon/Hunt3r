@@ -86,9 +86,9 @@
           <nb-form-field>
             <form  [formGroup]="hackeroneForm" (ngSubmit)="updateOrCreate($event,'hackerone')">
               <div class="form-group row">
-                <label for="inputEmail1" class="label col-sm-3 col-form-label">Email</label>
+                <label for="inputEmail1" class="label col-sm-3 col-form-label">Username</label>
                 <div class="col-sm-9">
-                  <input class="col" nbInput type="text" name="email" [value]="hackerone.email" formControlName="email">
+                  <input class="col" nbInput type="text" name="email" [value]="hackerone.hunter_username" formControlName="hunter_username">
                 </div>
               </div>
               <div class="form-group row">

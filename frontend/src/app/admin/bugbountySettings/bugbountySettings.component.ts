@@ -15,24 +15,26 @@ export class BugbountySettingsComponent implements OnInit {
 
   yeswehackForm: FormGroup = <FormGroup> {};
   yeswehack = {
-    "email":"",
-    "password":"",
-    "otp":""
+      "email":"",
+      "hunter_username":"",
+      "password":"",
+      "otp":""
   }
   
   intigritiForm: FormGroup = <FormGroup> {};
   intigriti = {
-    "email":"",
-    "hunter_username":"",
-    "password":"",
-    "otp":""
+      "email":"",
+      "hunter_username":"",
+      "password":"",
+      "otp":""
   }
 
   hackeroneForm: FormGroup = <FormGroup> {};
   hackerone = {
-    "email":"",
-    "password":"",
-    "otp":""
+      "email":"",
+      "hunter_username":"",
+      "password":"",
+      "otp":""
   }
 
 
@@ -46,15 +48,18 @@ export class BugbountySettingsComponent implements OnInit {
       this.yeswehackForm = this.fbuilder.group({
           email:'',
           password:'',
+          hunter_username:'',
           otp:''
       });
       this.intigritiForm = this.fbuilder.group({
         email:'',
         password:'',
+        hunter_username:'',
         otp:''
     });
     this.hackeroneForm = this.fbuilder.group({
         email:'',
+        hunter_username:'',
         password:'',
         otp:''
     });
@@ -74,18 +79,19 @@ export class BugbountySettingsComponent implements OnInit {
     this.yeswehack = {
       "email":"",
       "password":"",
+      "hunter_username":"",
       "otp":""
     }
     this.hackerone = {
+      "hunter_username":"",
       "email":"",
       "password":"",
       "otp":""
     }
-    this.bugbountyPlatform.getPlatform().subscribe( (result) => {
-      
+    this.bugbountyPlatform.getPlatform().subscribe( (result) => {  
       result.data.forEach( (element:any) => {
         let name:'yeswehack'|'hackerone'|'intigriti'=element.name
-        this[name].email=element.email
+         this[name].email=element.email        
       });     
       this.loading = false;
     },(err) =>{
@@ -102,8 +108,10 @@ export class BugbountySettingsComponent implements OnInit {
     data.name=platform
     console.log(data)
     if(data.otp == "" ) delete data.otp
+    if(data.email == "" ) delete data.email
+    if(data.hunter_username == "" ) delete data.hunter_username
     let finalData = {"platform": data}
-    if(this[platform].email!='' ){
+    if( this[platform].email!='' || this[platform].hunter_username!='' ){
       this.updatePlatform(finalData)
     } else {
       this.createPlatform(finalData)
