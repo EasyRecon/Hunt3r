@@ -145,7 +145,7 @@ class Hackerone
   def self.api_request(platform, url)
     Typhoeus::Request.get(
       url,
-      userpwd: "#{platform.hunter_username}:#{platform.jwt}",
+      userpwd: "#{platform.hunter_username}:#{platform.password}",
       headers: { 'Accept': 'application/json' }
     )
   end
