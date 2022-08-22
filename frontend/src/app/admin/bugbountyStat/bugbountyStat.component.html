@@ -18,7 +18,7 @@
 
        <nb-tabset>
         <nb-tab tabTitle="yeswehack">
-          <button type="submit" class="col" (click)="syncYWH()" [nbSpinner]="loadSyncYwh" nbSpinnerStatus="primary" nbButton status="success"><nb-icon icon="sync-outline"></nb-icon></button>
+          <button type="submit" class="col" (click)="sync('yeswehack')" [nbSpinner]="loadSyncYWH" nbSpinnerStatus="primary" nbButton status="success"><nb-icon icon="sync-outline"></nb-icon></button>
           <div class="globalStat col-12">
             <div class="inline col-12 metric">
 
@@ -85,7 +85,7 @@
          
         </nb-tab>
         <nb-tab tabTitle="intigriti">
-          <button type="submit" class="col" (click)="syncINTI()" [nbSpinner]="loadSyncYwh" nbSpinnerStatus="primary" nbButton status="success"><nb-icon icon="sync-outline"></nb-icon></button>
+          <button type="submit" class="col" (click)="sync('intigriti')" [nbSpinner]="loadSyncINTI" nbSpinnerStatus="primary" nbButton status="success"><nb-icon icon="sync-outline"></nb-icon></button>
           <div class="globalStat col-12">
             <div class="inline col-12 metric">
 
@@ -144,6 +144,73 @@
                 
                   <nb-card  class="col" [nbSpinner]="loadingINTIGlobal" nbSpinnerStatus="primary">
                     <div echarts  [options]="optionsINTIPieReportStatus" class="pie-chart"  ></div>
+                  </nb-card>
+                </div>
+              </div>
+            </div>
+          </div>
+         
+        </nb-tab>
+        <nb-tab tabTitle="hackerone">
+          <button type="submit" class="col" (click)="sync('hackerone')" [nbSpinner]="loadSyncH1" nbSpinnerStatus="primary" nbButton status="success"><nb-icon icon="sync-outline"></nb-icon></button>
+          <div class="globalStat col-12">
+            <div class="inline col-12 metric">
+
+              <nb-card class="col" [nbSpinner]="loadingH1Global" nbSpinnerStatus="primary">
+                <div class="icon-card-global col-4">
+                  <nb-icon class="globalIcon" icon="file-outline"></nb-icon>
+                </div>
+                <div class="dataCard col-8" >
+                  <div class="globalTitle">Total rapport</div>
+                  <div class="globalData">{{statH1.total_rapports}}</div>
+                </div>
+              </nb-card>
+              <nb-card class="col" [nbSpinner]="loadingH1Global" nbSpinnerStatus="primary">
+                <div class="icon-card-global col-4">
+                  <nb-icon class="globalIcon" icon="pie-chart-outline"></nb-icon>
+                </div>
+                <div class="dataCard col-8" >
+                  <div class="globalTitle">Average per rapport</div>
+                  <div class="globalData">{{statH1.average_per_rapport}}</div>
+                </div>
+              </nb-card>
+              <nb-card class="col" [nbSpinner]="loadingH1Global" nbSpinnerStatus="primary">
+   
+                <div class="icon-card-global col-4">
+                 $
+               </div>
+               <div class="dataCard col-8">
+                 <div class="globalTitle">Total earned</div>
+                 <div class="globalData">{{statH1.earnedEuro}}</div>
+               </div>
+            </nb-card>
+              </div>
+            <div class="inline col-12">
+              <div class="col-8">
+                <div class="inline col-12 barreGlobal">
+                  <nb-card class="col" [nbSpinner]="loadingH1Global" nbSpinnerStatus="primary">
+                    <div echarts  [options]="optionsH1Barre" class="barre-chart"  ></div>
+                  </nb-card>
+                </div>
+                <div class="inline col-12 barreGlobal">
+                  <nb-card class="col" [nbSpinner]="loadingH1Global" nbSpinnerStatus="primary">
+                    <div echarts  [options]="optionsH1EarnedByMonth" class="barre-chart"  ></div>
+                  </nb-card>
+                </div>
+            
+     
+              </div>
+              <div class="col-4">
+                <div class="inline col-12 donutsGlobal">
+                  <nb-card  class="col" [nbSpinner]="loadingH1Global" nbSpinnerStatus="primary">
+                    <div echarts  [options]="optionsH1Pie" class="pie-chart"  ></div>
+                  </nb-card>
+                </div>
+                 <div class="inline col-12 donutsGlobal">
+
+                
+                  <nb-card  class="col" [nbSpinner]="loadingH1Global" nbSpinnerStatus="primary">
+                    <div echarts  [options]="optionsH1PieReportStatus" class="pie-chart"  ></div>
                   </nb-card>
                 </div>
               </div>
