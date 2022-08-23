@@ -142,6 +142,7 @@ export class BugbountySettingsComponent implements OnInit {
     this.loading = true;
     this.bugbountyPlatform.deletePlatform(platform).subscribe( (result) => {
       this.loading=false
+      
       this.messageService.showToast(result.message,'success')
       this.getPlatform()
     },(err) =>{
