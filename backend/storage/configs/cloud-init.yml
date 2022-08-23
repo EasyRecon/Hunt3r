@@ -25,56 +25,35 @@ runcmd:
   - mv assetfinder /usr/local/bin/
   - rm -r assetfinder-linux-amd64-0.1.1.tgz
   # Findomain
-  - wget https://github.com/findomain/findomain/releases/latest/download/findomain-linux
-  - mv findomain-linux /usr/local/bin/findomain
+  - wget https://github.com/Findomain/Findomain/releases/download/8.2.0/findomain-linux.zip
+  - unzip findomain-linux.zip && rm findomain-linux.zip
+  - mv findomain /usr/local/bin/findomain
   - chmod +x /usr/local/bin/findomain
   # Nuclei
-  - wget https://github.com/projectdiscovery/nuclei/releases/download/v2.7.5/nuclei_2.7.5_linux_amd64.zip
-  - unzip nuclei_2.7.5_linux_amd64.zip
+  - wget https://github.com/projectdiscovery/nuclei/releases/download/v2.7.6/nuclei_2.7.6_linux_amd64.zip
+  - unzip nuclei_2.7.6_linux_amd64.zip
   - mv nuclei /usr/local/bin
-  - rm nuclei_2.7.5_linux_amd64.zip
-  # Naabu
-  - wget https://github.com/projectdiscovery/naabu/releases/download/v2.0.9/naabu_2.0.9_linux_amd64.zip
-  - unzip naabu_2.0.9_linux_amd64.zip
-  - mv naabu /usr/local/bin/
-  - rm naabu_2.0.9_linux_amd64.zip
-  # HTTPX
-  - wget https://github.com/projectdiscovery/httpx/releases/download/v1.2.2/httpx_1.2.2_linux_amd64.zip
-  - unzip httpx_1.2.2_linux_amd64.zip
-  - mv httpx /usr/local/bin/
-  - rm LICENSE.md README.md httpx_1.2.2_linux_amd64.zip
+  - rm nuclei_2.7.6_linux_amd64.zip
   # Subfinder
-  - wget https://github.com/projectdiscovery/subfinder/releases/download/v2.5.2/subfinder_2.5.2_linux_amd64.zip
-  - unzip subfinder_2.5.2_linux_amd64.zip
+  - wget https://github.com/projectdiscovery/subfinder/releases/download/v2.5.3/subfinder_2.5.3_linux_amd64.zip
+  - unzip subfinder_2.5.3_linux_amd64.zip
   - mv subfinder /usr/local/bin
-  - rm subfinder_2.5.2_linux_amd64.zip
+  - rm subfinder_2.5.3_linux_amd64.zip
   # GAU
   - wget https://github.com/lc/gau/releases/download/v2.1.2/gau_2.1.2_linux_amd64.tar.gz
   - tar -xzvf gau_2.1.2_linux_amd64.tar.gz
   - mv gau /usr/local/bin/
   - rm LICENSE README.md gau_2.1.2_linux_amd64.tar.gz
-  # GoWitness
-  - wget https://github.com/sensepost/gowitness/releases/download/2.4.0/gowitness-2.4.0-linux-amd64
-  - mv gowitness-2.4.0-linux-amd64 /usr/local/bin/gowitness
-  - chmod +x /usr/local/bin/gowitness
+  # WappaGo
+  - wget https://github.com/EasyRecon/wappaGo/releases/download/release-0.0.4/wappaGo_linux_x64
+  - mv wappaGo_linux_x64 /usr/local/bin/wappago
+  - chmod +x /usr/local/bin/wappago
   - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   - apt install ./google-chrome-stable_current_amd64.deb -y
   - rm google-chrome-stable_current_amd64.deb
   # Typhoeus
   - gem install typhoeus
-  # Concurrent Ruby
-  - gem install concurrent-ruby
   # PublicSuffix
   - gem install public_suffix
-  # Wappalyzer
-  - curl -sL https://deb.nodesource.com/setup_14.x | bash -
-  - apt -y install nodejs
-  - curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-  - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-  - apt update -y && apt install yarn -y
-  - export PUPPETEER_SKIP_DOWNLOAD='true'
-  - mkdir /root/Tools && cd /root/Tools && git clone https://github.com/AliasIO/wappalyzer
-  - cd /root/Tools/wappalyzer && yarn install && yarn run link
-  - apt-get install -y libxss1
 
 final_message: "The system is finally up, after $UPTIME seconds"

@@ -117,12 +117,17 @@
                 <div class="badge">
                   <div class="ImageTech">
                     <span>
-                      <img src="/assets/icons/{{getImgTech(techno)}}">
+                      <img src="/assets/icons/{{getImgTech(techno.name)}}">
                     </span>
                   </div>
                   <div class="name">
                     <span>
-                      {{techno}}
+                      {{techno.name}}
+                    </span>
+                  </div>
+                    <div *ngIf="techno.version" class="version">
+                    <span>
+                      {{techno.version}}
                     </span>
                   </div>
                 </div>

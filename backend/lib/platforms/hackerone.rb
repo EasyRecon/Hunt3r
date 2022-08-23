@@ -12,7 +12,7 @@ class Hackerone
     jwt = get_jwt(platform)
     return if jwt.nil?
 
-    platform.email
+    platform.hunter_username
   end
 
   def self.update_programs(platform, page_id = 1)
@@ -145,7 +145,7 @@ class Hackerone
   def self.api_request(platform, url)
     Typhoeus::Request.get(
       url,
-      userpwd: "#{platform.email}:#{platform.jwt}",
+      userpwd: "#{platform.hunter_username}:#{platform.password}",
       headers: { 'Accept': 'application/json' }
     )
   end

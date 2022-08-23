@@ -4,16 +4,16 @@ export interface Subdomain {
     url:string
     infos:{
       ip:string
+      cdn:string
       cname:string
       ports:number[]
       title:string
-      body_hash:string
-      screenshot:string
-      status_code:number
-      technologies:string[]
-      content_length:number
       location:number
-      cdn:string
+      status_code:number
+      technologies:technologie[]   
+      content_length:number
+      
+      
 
     }
  }
@@ -22,6 +22,12 @@ export interface Subdomain {
     message:string
     data:Subdomain[]
     total_pages:number
+ }
+
+  export interface technologie {
+    name:string
+    cpe:string
+    version:string
  }
 
   
