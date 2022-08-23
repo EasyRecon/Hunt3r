@@ -183,12 +183,19 @@ div.badge {
       background: var( --bs-gray-300);
   }
   .ImageTech span img {
-      height: 16px;
-      width: 16px;
+      height: 23px;
+      width: 23px;
   }
     .badge .version {
       background: var( --bs-gray-300);
       color:black;
       text-shadow: none;
       font-size: 13px;
+  }
+      .badge .name,.badge .version {
+      padding-top:3px;
+      padding-bottom:3px;
+  }
+ td,th {
+  padding: 0.875rem 0.3rem !important;
   }
