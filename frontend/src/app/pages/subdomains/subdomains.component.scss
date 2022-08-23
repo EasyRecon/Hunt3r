@@ -162,6 +162,7 @@ div.badge {
     //height: 35px;
     //padding: 6px 5px;
     font-size: 13px;
+    text-shadow: none;
   }
   .badge .status.green {
     background: #44cc11;
@@ -182,6 +183,12 @@ div.badge {
       background: var( --bs-gray-300);
   }
   .ImageTech span img {
-      height: 15px;
-      width: 15px;
+      height: 16px;
+      width: 16px;
+  }
+    .badge .version {
+      background: var( --bs-gray-300);
+      color:black;
+      text-shadow: none;
+      font-size: 13px;
   }
