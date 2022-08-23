@@ -68,6 +68,9 @@ export class BugbountyStatComponent implements OnInit {
         if(element.name == 'intigriti'){
           this.getStatsPlatform('intigriti')
         } 
+        if(element.name == 'hackerone'){
+          this.getStatsPlatform('hackerone')
+        } 
       });     
       this.loading = false;
     },(err) =>{
@@ -90,6 +93,7 @@ export class BugbountyStatComponent implements OnInit {
   }
   getCriticity(platform:"intigriti"|"yeswehack"|"hackerone"){
      if(platform=='intigriti')return {"C":0,"H":0,"M":0,"L":0,"E":0}
+     //else if(platform=='hackerone') return {"critical":0,"high":0,"medium":0,"low":0}
      else return {"C":0,"H":0,"M":0,"L":0,}
   }
   scopeTemplate(){
@@ -106,6 +110,7 @@ export class BugbountyStatComponent implements OnInit {
     ]
   }
   countSeverity(severity:string,rapport_severity:any,plateform:'YWH'|'INTI'|'H1'){
+    if(severity!=null) severity=severity[0].toUpperCase() + severity.substr(1).toLowerCase()
     if(severity=="Low")rapport_severity.L++
     if(severity=="Medium")rapport_severity.M++
     if(severity=="High")rapport_severity.H++
@@ -117,9 +122,9 @@ export class BugbountyStatComponent implements OnInit {
     this[`stat${platform}`] = this.globalStat(this[`scope${platform}`],platform)
     this[`loading${platform}Global`]=false
     if(platform=='YWH'){
-      this[`options${platform}Pie`] = this.pieCriticity(this[`stat${platform}`].rapport_severity.L,this[`stat${platform}`].rapport_severity.M,this[`stat${platform}`].rapport_severity.H,this[`stat${platform}`].rapport_severity.C)
-    } else {
       this[`options${platform}Pie`] = this.pieCriticity(this[`stat${platform}`].rapport_severity.L,this[`stat${platform}`].rapport_severity.M,this[`stat${platform}`].rapport_severity.H,this[`stat${platform}`].rapport_severity.C,this[`stat${platform}`].rapport_severity.E)
+    } else {
+      this[`options${platform}Pie`] = this.pieCriticity(this[`stat${platform}`].rapport_severity.L,this[`stat${platform}`].rapport_severity.M,this[`stat${platform}`].rapport_severity.H,this[`stat${platform}`].rapport_severity.C)
     }
     let data = this.initBarreData(this[`stat${platform}`])
     this[`options${platform}Barre`] = this.chartService.barreGraph(data.report_by_month,data.label,'Number of rapport','Number of report')
@@ -141,7 +146,8 @@ export class BugbountyStatComponent implements OnInit {
     _.each(scope, (element) => {
       console.log(returnData,element)
       //total earned
-      returnData.earnedEuro +=  parseInt(element.reward)
+      if(element.reward!=null) returnData.earnedEuro +=  parseInt(element.reward)
+      else returnData.earnedEuro += 0
       // collab repport
       if(element.collab){
         returnData.collab_number++
