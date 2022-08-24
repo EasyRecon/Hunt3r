@@ -98,10 +98,14 @@ export class SubdomainsComponent implements OnInit {
   }
   getAllProperties(){
     this.httpClient.get<{}>('/assets/json/icon.json').subscribe( (result)=> {
+      if(this.techno_icon != null)
      this.techno_icon=result
     })
   }
   getImgTech(techno:any){
-    return this.techno_icon[techno as keyof typeof this.techno_icon]
+    let icon=this.techno_icon[techno as keyof typeof this.techno_icon]
+    if(icon != null )  return icon
+    else return "noPicture.png"
+
   }
 }
