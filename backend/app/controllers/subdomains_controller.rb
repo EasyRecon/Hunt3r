@@ -15,11 +15,7 @@ class SubdomainsController < ApplicationController
     end
 
     limit = params[:limit] == '-1' ? @subdomains.count : params[:limit]
-    @subdomains = if @subdomains.is_a?(Array)
-                    Kaminari.paginate_array(@subdomains).page(params[:page]).per(limit)
-                  else
-                    @subdomains.page(params[:page]).per(limit)
-                  end
+    @subdomains = @subdomains.page(params[:page]).per(limit)
 
     render status: 200, template: 'subdomains/index'
   end
