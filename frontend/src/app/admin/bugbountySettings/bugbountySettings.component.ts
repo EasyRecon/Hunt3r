@@ -91,7 +91,8 @@ export class BugbountySettingsComponent implements OnInit {
     this.bugbountyPlatform.getPlatform().subscribe( (result) => {  
       result.data.forEach( (element:any) => {
         let name:'yeswehack'|'hackerone'|'intigriti'=element.name
-         this[name].email=element.email        
+         this[name].email=element.email
+         this[name].hunter_username=element.username        
       });     
       this.loading = false;
     },(err) =>{
@@ -142,7 +143,7 @@ export class BugbountySettingsComponent implements OnInit {
     this.loading = true;
     this.bugbountyPlatform.deletePlatform(platform).subscribe( (result) => {
       this.loading=false
-      
+
       this.messageService.showToast(result.message,'success')
       this.getPlatform()
     },(err) =>{
