@@ -12,7 +12,6 @@ You just have to launch a scan, either directly via the scope of a program or fr
 
     Just indicate the desired pattern to exclude. If you indicate `cdn`, the following regex will be created : `.*cdn.*` thus excluding all domains containing this pattern.
 
-
 The following specific tools are used during a recon scan :
 
   - [Dehashed](https://dehashed.com/) : Queries the Dehashed API to retrieve known leaks associated with the domain
@@ -23,9 +22,11 @@ The following specific tools are used during a recon scan :
   - [C99](https://api.c99.nl/) : C99 is a good source of data, before relaunching Amass on each target retrieved via Whoxy we check if there are at least 3 subdomains to avoid launching Amass for nothing and waste time / use API keys
   - [GAU](https://github.com/lc/gau) : Fetch known URLs from AlienVault's Open Threat Exchange, the Wayback Machine, and Common Crawl.
     - The following extensions are excluded : `png,jpg,jpeg,gif,svg,js,css,ttf,woff,woff`
-  - [GoWitness](https://github.com/sensepost/gowitness) : Certainly the best tool currently available for taking screenshots
-  - [Naabu](https://github.com/projectdiscovery/naabu) : Performs a port scan (80,443 if CDN otherwise top 1000) before checking if the detected ports are reachable in HTTP or HTTPS
-  - [HTTPX](https://github.com/projectdiscovery/httpx) : To check if targets are responding in HTTP/HTTPS and retrieve information such as the status code
+  - [WappaGo](https://github.com/EasyRecon/WappaGo)
+    - Performs a port scan (80,443 if CDN otherwise top 100) before checking if the detected ports are reachable in HTTP or HTTPS
+    - Check if targets are responding in HTTP/HTTPS and retrieve information such as the status code
+    - Retrieve technologies with Chrome Headless
+    - Take a screenshot
   - [Nuclei](https://github.com/projectdiscovery/nuclei) : Vulnerability scanner
     - Possible to launch Nuclei with a custom config file, with all the templates or your own templates
 

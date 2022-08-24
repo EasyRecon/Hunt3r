@@ -1,5 +1,28 @@
 # Changelog
 
+## Version 1.6.0
+
+**Frontend Improvements :**
+
+- Fix domains UI filtering
+- Improve mobile version
+- Improves the display of technologies with the versions
+- Added statistics for Hackerone
+
+**Backend Improvements :**
+
+- Add case insensitive search on programs
+- Improvements on domain registration during a scan
+- Fix H1 API login
+- Adding versions for detected technologies
+- Add log rotation to avoid overloading the disk space
+
+**Scan Improvements :**
+
+- Update all tools versions
+- Replace Naabu / HTTPX / Wappalyzer & GoWitness by WappaGo
+- Fix of a case where the status of a server is updated after its removal
+
 ## Version 1.5.0
 
 **Frontend Improvements :**

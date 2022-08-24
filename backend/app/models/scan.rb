@@ -51,6 +51,6 @@ class Scan < ApplicationRecord
   end
 
   def instance_type_valid?
-    %w[DEV1-S DEV1-M DEV1-M DEV1-XL t2.small t2.medium t2.large t2.xlarge].include?(instance_type)
+    %w[DEV1-S DEV1-M DEV1-L DEV1-XL t2.small t2.medium t2.large t2.xlarge].include?(instance_type)
   end
 end

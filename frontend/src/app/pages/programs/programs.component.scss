@@ -2,6 +2,25 @@
 .form-group {
     padding: 20px;
 }
+.regexGroup {
+    input{
+        border-radius: 0px;
+    }
+    input:last-child {
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+    }
+    ::ng-deep button {
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+    ::ng-deep button:first-child{
+        border-top-right-radius: 0px;
+    }
+    ::ng-deep button:nth-child(2){
+        border-top-left-radius: 0px;
+    }
+}
   table {
     margin-top:20px;
     line-height: 1.5em;

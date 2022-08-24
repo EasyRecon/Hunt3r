@@ -28,7 +28,7 @@ class InteractDashboard
   end
 
   def self.delete_server
-    InteractDashboard.update_scan_status('Stopped')
+    update_scan_status('Stopped')
     request = Typhoeus::Request.new(
       File.join(OPTIONS[:url], "/servers/#{OPTIONS[:srv_uid]}/outside?token=#{OPTIONS[:hunt3r_token]}"),
       method: :delete,
@@ -51,27 +51,13 @@ class InteractDashboard
     request.run
   end
 
-  def self.send_subdomain(subdomains)
-    return unless subdomains
+  def self.send_subdomain(subdomain)
+    return unless subdomain
 
-    data = { subdomains: { token: OPTIONS[:hunt3r_token], domain: OPTIONS[:domain], subdomains: subdomains } }.to_json
+    data = { subdomain: { token: OPTIONS[:hunt3r_token], domain: OPTIONS[:domain], subdomain: subdomain } }.to_json
 
     request = Typhoeus::Request.new(
       File.join(OPTIONS[:url], '/subdomains'),
-      method: :post,
-      body: data,
-      headers: { 'Content-Type': 'application/json' }
-    )
-    request.run
-  end
-
-  def self.send_screenshot(subdomain, screenshot)
-    return unless subdomain && screenshot
-
-    data = { screenshot: { token: OPTIONS[:hunt3r_token], subdomain: subdomain, screenshot: screenshot } }.to_json
-
-    request = Typhoeus::Request.new(
-      File.join(OPTIONS[:url], '/screenshots'),
       method: :post,
       body: data,
       headers: { 'Content-Type': 'application/json' }

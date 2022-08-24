@@ -19,8 +19,9 @@ import { ChartService  } from './chart.service';
 })
 export class BugbountyStatComponent implements OnInit {
 
-  loadSyncInti=false
-  loadSyncYwh=false
+  loadSyncINTI=false
+  loadSyncYWH=false
+  loadSyncH1=false
   scopeYWH = this.scopeTemplate()
 
   statYWH = this.statTemplate('yeswehack')
@@ -38,6 +39,15 @@ export class BugbountyStatComponent implements OnInit {
 
   statINTI = this.statTemplate('intigriti')
   scopeINTI = this.scopeTemplate()
+    //H1 part
+  loadingH1Global=true
+  optionsH1Pie:any ;
+  optionsH1PieReportStatus: any;
+  optionsH1Barre: any = {};
+  optionsH1EarnedByMonth: any = {};
+
+  statH1 = this.statTemplate('hackerone')
+  scopeH1 = this.scopeTemplate()
   loading=true
   //other
   themeSubscription: any;
@@ -58,6 +68,9 @@ export class BugbountyStatComponent implements OnInit {
         if(element.name == 'intigriti'){
           this.getStatsPlatform('intigriti')
         } 
+        if(element.name == 'hackerone'){
+          this.getStatsPlatform('hackerone')
+        } 
       });     
       this.loading = false;
     },(err) =>{
@@ -66,7 +79,7 @@ export class BugbountyStatComponent implements OnInit {
     })
 
   }
-  statTemplate(platform:"intigriti"|"yeswehack"){
+  statTemplate(platform:"intigriti"|"yeswehack"|"hackerone"){
     return {
       earnedEuro:0,
       collab_number:0,
@@ -78,8 +91,9 @@ export class BugbountyStatComponent implements OnInit {
       earn_by_month:{}
     };
   }
-  getCriticity(platform:"intigriti"|"yeswehack"){
+  getCriticity(platform:"intigriti"|"yeswehack"|"hackerone"){
      if(platform=='intigriti')return {"C":0,"H":0,"M":0,"L":0,"E":0}
+     //else if(platform=='hackerone') return {"critical":0,"high":0,"medium":0,"low":0}
      else return {"C":0,"H":0,"M":0,"L":0,}
   }
   scopeTemplate(){
@@ -95,7 +109,8 @@ export class BugbountyStatComponent implements OnInit {
       }
     ]
   }
-  countSeverity(severity:string,rapport_severity:any,plateform:'YWH'|'INTI'){
+  countSeverity(severity:string,rapport_severity:any,plateform:'YWH'|'INTI'|'H1'){
+    if(severity!=null) severity=severity[0].toUpperCase() + severity.substr(1).toLowerCase()
     if(severity=="Low")rapport_severity.L++
     if(severity=="Medium")rapport_severity.M++
     if(severity=="High")rapport_severity.H++
@@ -103,13 +118,13 @@ export class BugbountyStatComponent implements OnInit {
     if(plateform=='INTI' && severity=="Exceptional") rapport_severity.E++
     return rapport_severity
   }
-  computeStat(platform:'YWH'|'INTI') {
+  computeStat(platform:'YWH'|'INTI'|'H1') {
     this[`stat${platform}`] = this.globalStat(this[`scope${platform}`],platform)
     this[`loading${platform}Global`]=false
     if(platform=='YWH'){
-      this[`options${platform}Pie`] = this.pieCriticity(this[`stat${platform}`].rapport_severity.L,this[`stat${platform}`].rapport_severity.M,this[`stat${platform}`].rapport_severity.H,this[`stat${platform}`].rapport_severity.C)
-    } else {
       this[`options${platform}Pie`] = this.pieCriticity(this[`stat${platform}`].rapport_severity.L,this[`stat${platform}`].rapport_severity.M,this[`stat${platform}`].rapport_severity.H,this[`stat${platform}`].rapport_severity.C,this[`stat${platform}`].rapport_severity.E)
+    } else {
+      this[`options${platform}Pie`] = this.pieCriticity(this[`stat${platform}`].rapport_severity.L,this[`stat${platform}`].rapport_severity.M,this[`stat${platform}`].rapport_severity.H,this[`stat${platform}`].rapport_severity.C)
     }
     let data = this.initBarreData(this[`stat${platform}`])
     this[`options${platform}Barre`] = this.chartService.barreGraph(data.report_by_month,data.label,'Number of rapport','Number of report')
@@ -117,7 +132,7 @@ export class BugbountyStatComponent implements OnInit {
     this[`options${platform}PieReportStatus`] = this.pieRepport(dataTwo)
     this[`options${platform}EarnedByMonth`] = this.chartService.barreGraph(data.earn_by_month,data.label,"Earn by month",'value')
   }
-  globalStat(scope:any,platform:'YWH'|'INTI'):any{
+  globalStat(scope:any,platform:'YWH'|'INTI'|'H1'):any{
     let returnData:{report_by_month:any,earn_by_month:any,report_by_status:any,earnedEuro:number,collab_number:number,rapport_severity:any,average_per_rapport:number,total_rapports:number}={
       "report_by_month":{},
       "earn_by_month":{},
@@ -131,7 +146,8 @@ export class BugbountyStatComponent implements OnInit {
     _.each(scope, (element) => {
       console.log(returnData,element)
       //total earned
-      returnData.earnedEuro +=  parseInt(element.reward)
+      if(element.reward!=null) returnData.earnedEuro +=  parseInt(element.reward)
+      else returnData.earnedEuro += 0
       // collab repport
       if(element.collab){
         returnData.collab_number++
@@ -156,15 +172,33 @@ export class BugbountyStatComponent implements OnInit {
     console.log(returnData)
     return returnData
   }
-  syncYWH() {
-    this.loadSyncYwh=true
-    this.bugbountyPlatform.syncScope('yeswehack').subscribe( (result)=>{
-      this.loadSyncYwh=false
-      this.getStatsPlatform('yeswehack')
+
+  sync(platform:'hackerone'|'intigriti'|'yeswehack') {
+    let shortname = this.getShortName(platform)
+    this[`loadSync${shortname}`]=true
+    this.bugbountyPlatform.syncScope(platform).subscribe( (result)=>{
+      this[`loadSync${shortname}`]=false
+      this.getStatsPlatform(platform)
     },(err) =>{
-      this.loadSyncYwh=false
+      this[`loadSync${shortname}`]=false
       this.messageService.showToast(err.message,'danger')
     })
+  }
+  getShortName(platform:'hackerone'|'intigriti'|'yeswehack'):'INTI'|'YWH'|'H1'{
+     switch(platform) { 
+       case "hackerone": { 
+          return "H1"
+          break; 
+       } 
+       case "intigriti": { 
+          return "INTI"
+          break; 
+       }
+      case "yeswehack": { 
+          return "YWH"
+          break; 
+       } 
+    } 
   }
   initPie(stat:any){
     let data=Array()
@@ -199,29 +233,14 @@ export class BugbountyStatComponent implements OnInit {
     return {"report_by_month":data,"earn_by_month":data2,"label":label}
   }
 
-  getStatsPlatform(platform:string){
+  getStatsPlatform(platform:'hackerone'|'intigriti'|'yeswehack'){
     this.bugbountyPlatform.getScope(platform).subscribe( (result) => {
-      if(platform=='yeswehack'){
-        this.scopeYWH=result.data
-        this.computeStat('YWH')
-      }
-      if(platform=='intigriti'){
-        this.scopeINTI=result.data
-        this.computeStat('INTI')
-      }
+        let shortname = this.getShortName(platform)
+        this[`scope${shortname}`]=result.data
+        this.computeStat(shortname)
     })
   }
-  syncINTI() {
-    this.loadSyncInti=true
-    this.bugbountyPlatform.syncScope('intigriti').subscribe( (result)=>{
-      this.loadSyncInti=false
-      this.getStatsPlatform('intigriti')
-    },(err) =>{
-      this.loadSyncInti=false
-      this.loadingINTIGlobal = false;
-      this.messageService.showToast(err.message,'danger')
-    })
-  }
+ 
   pieRepport(data:any[]){
     return this.chartService.pieChart(data,'Report by status')
   }
@@ -245,5 +264,4 @@ export class BugbountyStatComponent implements OnInit {
         'Report by criticity')
     }
     }
-    
 }

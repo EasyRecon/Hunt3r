@@ -3,6 +3,8 @@ import {CanActivate, Router} from "@angular/router";
 import {NbAuthService,NbAuthToken} from "@nebular/auth";
 import { NbToastrService, NbComponentStatus } from '@nebular/theme';
 import {tap} from "rxjs";
+import {UserService} from '../core/user/user.service';
+import {User} from '../core/user/user';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,8 @@ export class AuthGuardService implements CanActivate {
 
   constructor(private authService: NbAuthService,
               private router: Router,
-              private toastrService: NbToastrService) {
+              private toastrService: NbToastrService,
+              private userService : UserService,) {
                 //this.authService.isAuthenticated().subscribe( (x) => {console.log(x)})
                 this.authService.onTokenChange() 
                 .subscribe( (token: NbAuthToken) => {
@@ -27,6 +30,13 @@ export class AuthGuardService implements CanActivate {
                       localStorage.clear();
                       this.router.navigateByUrl('/auth/login');
                     }
+                    this.userService.getCurrentUser().subscribe( (result) => {
+                    },(err) =>{
+                      if(err.status==401){
+                      localStorage.clear();
+                      this.router.navigateByUrl('/auth/login');
+                      }
+                    })
                 } else {
                   localStorage.clear();
                   this.router.navigateByUrl('/auth/login');
