@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 1.6.1
+
+**Scan Improvements :**
+
+- Fix Whoxy file output on intel scan
+
 ## Version 1.6.0
 
 **Frontend Improvements :**
