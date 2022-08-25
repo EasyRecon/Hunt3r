@@ -38,7 +38,7 @@ def reverse(data, type)
     get_whoxy_results(type, value, whois_domains)
   end
 
-  File.open('whoxy_intel.txt', 'w+') do |f|
+  File.open("#{OPTIONS[:output]}/whoxy_intel.txt", 'w+') do |f|
     f.puts(whois_domains)
   end
 
