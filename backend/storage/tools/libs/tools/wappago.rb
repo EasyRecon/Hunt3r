@@ -4,7 +4,7 @@ class WappaGo
 
     cmd = "cat #{OPTIONS[:output]}/all_domains.txt | wappago -ports #{ports}"
     cmd += " -resolvers #{resolver_path} -screenshot #{OPTIONS[:output]}/screenshots"
-    cmd += " -threads-chrome #{15 * OPTIONS[:concurrency]} -threads-ports #{50 * OPTIONS[:concurrency]}"
+    cmd += " -threads #{10 * OPTIONS[:concurrency]}"
     cmd += " > #{OPTIONS[:output]}/wappago.json"
 
     system(cmd)
