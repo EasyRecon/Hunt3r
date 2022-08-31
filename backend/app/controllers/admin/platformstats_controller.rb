@@ -30,23 +30,23 @@ class Admin::PlatformstatsController < ApplicationController
 
     render status: 200, json: { message: I18n.t('success.controllers.admin.platformstats.updated'), data: nil }
   end
-end
 
-private
+  private
 
-def set_platform
-  return @platform if @platform
+  def set_platform
+    return @platform if @platform
 
-  @platform = Platform.find_by(name: params[:name])
-  if @platform.nil?
-    return render status: 422, json: { message: I18n.t('errors.controllers.admin.platforms.unknown'), data: nil }
+    @platform = Platform.find_by(name: params[:name])
+    if @platform.nil?
+      return render status: 422, json: { message: I18n.t('errors.controllers.admin.platforms.unknown'), data: nil }
+    end
+
+    @platform
   end
 
-  @platform
-end
+  def query_params
+    query_params = { from: params[:from], to: params[:to] }
 
-def query_params
-  query_params = { from: params[:from], to: params[:to] }
-
-  query_params[:from] && query_params[:to] ? query_params : { from: '2014-01-01', to: '2030-12-31' }
+    query_params[:from] && query_params[:to] ? query_params : { from: '2014-01-01', to: '2030-12-31' }
+  end
 end

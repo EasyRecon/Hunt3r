@@ -27,30 +27,30 @@ class ProgramsController < ApplicationController
       render status: 429, json: { message: I18n.t('errors.controllers.programs.rate_limited'), data: rate_limited }
     end
   end
-end
 
-private
+  private
 
-def launch_sync(platforms)
-  rate_limited = []
-  platforms.each do |platform|
-    rate_limited << rate_limited?(platform)
-    next if rate_limited.include?(platform.name)
+  def launch_sync(platforms)
+    rate_limited = []
+    platforms.each do |platform|
+      rate_limited << rate_limited?(platform)
+      next if rate_limited.include?(platform.name)
 
-    update_programs(platform)
-    platform.programs.last.update(updated_at: Time.now) if platform.programs.last
+      update_programs(platform)
+      platform.programs.last.update(updated_at: Time.now) if platform.programs.last
+    end
+
+    rate_limited
   end
 
-  rate_limited
-end
+  # In order to avoid that several refreshes are launched at the same time so as not to overload the platform's API
+  def rate_limited?(platform)
+    return unless platform.programs.last && Time.now - platform.programs.last.updated_at < 1800
 
-# In order to avoid that several refreshes are launched at the same time so as not to overload the platform's API
-def rate_limited?(platform)
-  return unless platform.programs.last && Time.now - platform.programs.last.updated_at < 1800
+    platform.name
+  end
 
-  platform.name
-end
-
-def query_params
-  params[:program] || ''
+  def query_params
+    params[:program] || ''
+  end
 end
