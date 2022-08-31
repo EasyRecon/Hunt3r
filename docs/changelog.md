@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 1.6.3
+
+**Backend Improvements :**
+
+- Fix namespace confusion when calling methods
+
 ## Version 1.6.2
 
 **Scan Improvements :**
