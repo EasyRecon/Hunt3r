@@ -84,8 +84,11 @@ class ScansController < ApplicationController
     scan_cmd[:cmd] += " --scan-id #{scan.id} --type-scan #{scan.type_scan} -d #{scan.domain}"
 
     slack_webhook = Tool.find_by(name: 'slack')&.infos
-    scan_cmd[:cmd] += " --slack #{slack_webhook['webhook']}"
-    scan_cmd[:errors] = 'missing_webhook' if scan.notifs && slack_webhook.nil?
+    if scan.notifs && slack_webhook.nil?
+      scan_cmd[:errors] = 'missing_webhook'
+    else
+      scan_cmd[:cmd] += " --slack #{slack_webhook['webhook']}"
+    end
 
     scan_cmd = build_recon_scan_cmd(scan, scan_cmd) if scan.type_scan == 'recon'
     scan_cmd = build_nuclei_scan_cmd(scan, scan_cmd) if scan.nuclei || scan.type_scan == 'nuclei'
