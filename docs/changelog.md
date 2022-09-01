@@ -6,6 +6,14 @@
 
 - Fix namespace confusion when calling methods
 
+**Scan Improvements :**
+
+- Update WappaGo
+
+**Backend Improvements :**
+
+- Fix error when webhook is missing
+
 ## Version 1.6.2
 
 **Scan Improvements :**
