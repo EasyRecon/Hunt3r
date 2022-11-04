@@ -1,5 +1,15 @@
 # Changelog
 
+## Version 1.6.4
+
+**Backend Improvements :**
+
+- Handle new Intigriti login workflow
+
+**Scan Improvements :**
+
+- Update WappaGo
+
 ## Version 1.6.3
 
 **Backend Improvements :**
