@@ -45,7 +45,7 @@ runcmd:
   - mv gau /usr/local/bin/
   - rm LICENSE README.md gau_2.1.2_linux_amd64.tar.gz
   # WappaGo
-  - wget https://github.com/EasyRecon/wappaGo/releases/download/release-0.0.8/wappaGo_linux_x64
+  - wget https://github.com/EasyRecon/wappaGo/releases/download/release-0.1.0/wappaGo_linux_x64
   - mv wappaGo_linux_x64 /usr/local/bin/wappago
   - chmod +x /usr/local/bin/wappago
   - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
