@@ -1,0 +1,30 @@
+version: "3.6"
+
+services:
+  traefik:
+    image: "traefik:v2.6.6"
+    container_name: "traefik"
+    networks:
+      - traefik-global-proxy
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - "./traefik.toml:/etc/traefik/traefik.toml"
+      - "./letsencrypt:/letsencrypt"
+      - "./logs:/logs"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    logging:
+      options:
+        max-file: "1"
+        max-size: "2m"
+    labels:
+      - "traefik.enable=false"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.domain.tld`)"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.traefik.service=api@internal"
+
+networks:
+  traefik-global-proxy:
+    name: "traefik-global-proxy"
