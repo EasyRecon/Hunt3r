@@ -28,8 +28,10 @@ class Intigriti
     form = login_page.forms.first
 
     form.field_with(id: 'Input_Email').value = platform.email
-    form.field_with(id: 'Input_Password').value = platform.password
+    resp = form.submit
+    form = resp.forms.first
 
+    form.field_with(id: 'Input_Password').value = platform.password
     form.submit
   end
 
