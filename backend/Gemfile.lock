@@ -164,7 +164,7 @@ GEM
       timeout
     net-ssh (7.0.0.beta1)
     nio4r (2.5.8)
-    nokogiri (1.13.6-x86_64-linux)
+    nokogiri (1.13.9-x86_64-linux)
       racc (~> 1.4)
     pdfkit (0.8.7.2)
     pg (1.3.5)
